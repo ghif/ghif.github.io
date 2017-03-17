@@ -144,6 +144,8 @@ Dapat dicek bahwa matriks $\mathbf{R}$ pada persamaan ($\ref{eq:rot}$) merupakan
 
 # Solusi 
 
+Solusi untuk orthogonal Procrustes problem (\ref{eq:probls}) dikemas dalam teorema berikut ini.
+
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
 **Teorema 1** (Matriks Rotasi). \\
 Diberikan 2 buah rigid body yang berkorespondensi $  \mathbf{X}, \mathbf{Y} \in \mathbb{R}^{3 \times m} $, 

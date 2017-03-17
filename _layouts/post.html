@@ -66,4 +66,7 @@ data-via="d1ca1">Tweet</a>
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
+{% if jekyll.environment == 'production' %}
+{% include analytics.html %}
+{% endif %}
 </article>

@@ -6,7 +6,7 @@ categories: jekyll update
 ---
 
 
-![Sumber: www.kwo3d.com/theory/jkinem/rotmat.html](assets/rotmat_f01.gif)
+![Sumber: www.kwo3d.com/theory/jkinem/rotmat.html](https://ghif.github.io/assets/rotmat_f01.gif)
 {: style="font-size: 80%; text-align: center;"}
 
 **Gambar 1**. Rotasi pada rigid body (sumber: [www.kwo3d.com/theory/jkinem/rotmat.html](www.kwo3d.com/theory/jkinem/rotmat.html))

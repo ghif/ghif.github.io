@@ -19,12 +19,12 @@ Beberapa kisah sukses terkait hal ini antara lain AlexNet ([Krizhevsky et al. 20
 {: style="text-align: justify;"}
 
 
-Misalnya kita punya sebuah *neural network* $$f_{\theta} : \mathcal{X} \rightarrow \mathcal{Y}$$, dimana $$\theta$$ merupakan parameter yang nantinya akan disetel berdasarkan data yang dipelajari -- pada *neural networks* parameter ini terdiri dari *weights* dan *bias*.
-Asumsikan kondisi *supervised learning*, yaitu $$f_\theta$$ belajar dari pasangan data $$(x, y)$$ dan definisikan fungsi *loss* $$ \ell: \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$$. 
-Salah satu bentuk fungsi *loss*, jika $$\mathcal{Y} \subseteq \mathbb{R}$$, adalah *least-square error* $$\ell(f_\theta(x), y) = (f_\theta(x) - y)^2$$.
-Tulis $$ $$
+Misalnya kita punya sebuah *neural network* $$\displaystyle f_{\theta} : \mathcal{X} \rightarrow \mathcal{Y}$$, dimana $$\theta$$ merupakan parameter yang nantinya akan disetel berdasarkan data yang dipelajari -- pada *neural networks* parameter ini terdiri dari *weights* dan *bias*.
+Asumsikan kondisi *supervised learning*, yaitu $$f_\theta$$ belajar dari pasangan data $$(x, y)$$ dan definisikan fungsi *loss* $$\displaystyle \ell: \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$$. 
+Salah satu bentuk fungsi *loss*, untuk $$\mathcal{Y} \subseteq \mathbb{R}$$, adalah *least-square error* $$\ell(f_\theta(x), y) = (f_\theta(x) - y)^2$$. 
+{: style="text-align: justify;"}
 
-
+Tulis $$\ell(\theta) := \ell(f_\theta(x), y)$$. Kita definisikan *gradient* dari fungsi *loss* terhadap $\theta$ dengan notasi $$\nabla_\theta \ell$$.
 
 
 

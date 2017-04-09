@@ -57,7 +57,8 @@ $$
 </div>
 
 
-Parameter $$\theta$$ dapat diilustrasikan sebagai sebuah titik pada ruang solusi (lihat Gambar 1).
+Gambar 1 mengilustrasikan parameter dengan ruang solusi berdimensi dua -- parameter pada *neural networks* umumnya berdimensi banyak.
+Parameter $$\theta$$ dapat diilustrasikan sebagai sebuah titik pada ruang solusi.
 Secara intuitif, GD memindah-mindahkan titik tersebut berdasarkan arahan dari *gradient*, 
 yang menginformasikan **jalur tercuram/tercepat** dari suatu posisi tertentu ke posisi tujuan.
 Harapannyai, akumulasi informasi dari *gradient* pada tiap-tiap posisi mampu mengantarkan ke solusi optimal.
@@ -89,10 +90,13 @@ i) menggunakan *momentum* dan ii) mengatur kecepatan *gradient* menjadi adaptif.
 
 
 # GD dengan Classical Momentum (CM)
-M
+Momentum ([Polyak, 1964](https://www.researchgate.net/profile/Boris_Polyak2/publication/243648538_Some_methods_of_speeding_up_the_convergence_of_iteration_methods/links/5666fa3808ae34c89a01fda1.pdf)) merupakan sebuah metode untuk mengakselerasi GD dengan memanfaatkan informasi *gradient* dari langkah-langkah sebelumnya.
+Akumulasi informasi dari *gradient* berguna untuk mengurangi efek osilisasi sehingga jalur optimisasi menjadi lebih stabil.
+Algoritma 2 di bawah ini merupakan modifikasi dari GD dengan penambahan strategi momentum.
+
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
-**Algoritma 2** (Gradient Descent dengan Momentum). \\
+**Algoritma 2** (Gradient Descent dengan Classical Momentum (CM)). \\
 $$
 \text{1: } \theta_0 = \mathrm{rand()} \\
 \text{2: } m_0 = 0 \\
@@ -104,8 +108,20 @@ $$
 $$
 </div>
 
+Kita sebut saja algoritma ini dengan *Classical Momentum* (CM) -- pada bagian berikutnya akan dibahas metode momentum yang lebih terkini.
+Jika dibandingkan dengan GD, CM hanya melakukan satu penambahan, yaitu $$ \beta m_{t-1}$$, 
+dimana $$ \beta $$ merupakan konstanta yang mengatur seberapa besar kontribusi dari *gradient* sebelumnya -- $$ \beta = 0.9 $$ merupakan best practice dari CM.
+
+Bayangkan gradient $$ g_t $$ merupakan sebuah vektor berdimensi banyak.
+Secara intuitif, CM akan memberikan bobot yang lebih pada dimensi tertentu yang memiliki nilai yang konsisten untuk tiap langkah.
+Sebaliknya, untuk dimensi yang tidak stabil CM akan memberikan bobot yang lebih kecil.
+Halinilah yang menstabilkan jalur optimisasi dari parameter $$ \theta $$.
+
+Perbedaan antara GD dan CM dapat dijelaskan dengan analogi sebagai berikut: GD seperti seseorang yang berjalan kaki di perbukitan dan mencoba turun ke daratan, 
+sedangkan CM seperti bola yang menggelinding ke bawah.
 
 
 # Nesterov Accelerated Gradient (NAG)
+
 
 # 

@@ -87,12 +87,14 @@ Mungkin saja jalur yang benar adalah dengan cara menaiki bukit-bukit kecil terle
 
 Dapatkah GD diperbaiki sehingga mampu membentuk jalur optimisasi yang lebih efisien? Secara umum terdapat 2 strategi: 
 i) menggunakan *momentum* dan ii) mengatur kecepatan *gradient* menjadi adaptif.
+{: style="text-align: justify;"}
 
 
 # GD dengan Classical Momentum (CM)
 Momentum ([Polyak, 1964](https://www.researchgate.net/profile/Boris_Polyak2/publication/243648538_Some_methods_of_speeding_up_the_convergence_of_iteration_methods/links/5666fa3808ae34c89a01fda1.pdf)) merupakan sebuah metode untuk mengakselerasi GD dengan memanfaatkan informasi *gradient* dari langkah-langkah sebelumnya.
 Akumulasi informasi dari *gradient* berguna untuk mengurangi efek osilisasi sehingga jalur optimisasi menjadi lebih stabil.
 Algoritma 2 di bawah ini merupakan modifikasi dari GD dengan penambahan strategi momentum.
+{: style="text-align: justify;"}
 
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
@@ -112,17 +114,51 @@ Kita sebut saja algoritma ini dengan *Classical Momentum* (CM) -- pada bagian be
 Jika dibandingkan dengan GD, CM hanya melakukan satu penambahan, yaitu $$ \beta m_{t-1}$$, 
 dimana $$ \beta $$ merupakan konstanta yang mengatur seberapa besar kontribusi dari *gradient* sebelumnya. 
 $$ \beta = 0.9 $$ merupakan best practice dari CM -- perhatikan bahwa $$ \beta = 0$$ akan membuat CM sama persis dengan GD.
+{: style="text-align: justify;"}
 
-Bayangkan gradient $$ g_t $$ merupakan sebuah vektor berdimensi banyak.
+
+Andaikan gradient $$ g_t $$ merupakan sebuah vektor berdimensi banyak.
 Secara intuitif, CM akan memberikan bobot yang lebih pada dimensi tertentu yang memiliki nilai yang konsisten untuk tiap langkah.
 Sebaliknya, untuk dimensi yang tidak stabil CM akan memberikan bobot yang lebih kecil.
 Hal inilah yang menstabilkan jalur optimisasi dari parameter $$ \theta $$ sehingga menimbulkan efek akselerasi.
+{: style="text-align: justify;"}
+
 
 Perbedaan antara GD dan CM dapat dijelaskan dengan analogi sebagai berikut: GD seperti seseorang yang berjalan kaki di perbukitan dan mencoba turun ke daratan, 
 sedangkan CM seperti bola yang menggelinding ke bawah.
+Bagi yang tertarik mendalami lebih lanjut tentang CM bisa membaca sebuah tulisan brilian di sini: [http://distill.pub/2017/momentum](http://distill.pub/2017/momentum/).
+{: style="text-align: justify;"}
+
 
 
 # Nesterov Accelerated Gradient (NAG)
+<div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+**Algoritma 3.1** (Nesterov's Accelerated Gradient (NAG)). \\
+$$
+\text{1: } \theta_0 = \mathrm{rand()} \\
+\text{2: } m_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad g_t := \nabla_{\theta_{t-1}} L(\theta_{t-1} - \beta m_{t-1})  \\
+\text{5: } \quad m_t := g_t + \beta m_{t-1} \\
+\text{6: } \quad \theta_t := \theta_{t-1} - \alpha m_t \\
+\text{7: } \textbf{until}\quad\text{convergence}
+$$
+</div>
+
+
+<div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+**Algoritma 3.2** (Nesterov's Accelerated Gradient (NAG)). \\
+$$
+\text{1: } \theta_0 = \mathrm{rand()} \\
+\text{2: } m_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad g_t := \nabla_{\theta_{t-1}} L(\theta_{t-1})  \\
+\text{5: } \quad m_t := g_t + \beta m_{t-1} \\
+\text{6: } \quad \hat{m}_t := g_t + \beta m_t \\
+\text{7: } \quad \theta_t := \theta_{t-1} - \alpha \hat{m}_t \\
+\text{8: } \textbf{until}\quad\text{convergence}
+$$
+</div>
 
 
 # 

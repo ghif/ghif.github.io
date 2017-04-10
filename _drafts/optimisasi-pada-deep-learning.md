@@ -110,12 +110,13 @@ $$
 
 Kita sebut saja algoritma ini dengan *Classical Momentum* (CM) -- pada bagian berikutnya akan dibahas metode momentum yang lebih terkini.
 Jika dibandingkan dengan GD, CM hanya melakukan satu penambahan, yaitu $$ \beta m_{t-1}$$, 
-dimana $$ \beta $$ merupakan konstanta yang mengatur seberapa besar kontribusi dari *gradient* sebelumnya -- $$ \beta = 0.9 $$ merupakan best practice dari CM.
+dimana $$ \beta $$ merupakan konstanta yang mengatur seberapa besar kontribusi dari *gradient* sebelumnya. 
+$$ \beta = 0.9 $$ merupakan best practice dari CM -- perhatikan bahwa $$ \beta = 0$$ akan membuat CM sama persis dengan GD.
 
 Bayangkan gradient $$ g_t $$ merupakan sebuah vektor berdimensi banyak.
 Secara intuitif, CM akan memberikan bobot yang lebih pada dimensi tertentu yang memiliki nilai yang konsisten untuk tiap langkah.
 Sebaliknya, untuk dimensi yang tidak stabil CM akan memberikan bobot yang lebih kecil.
-Halinilah yang menstabilkan jalur optimisasi dari parameter $$ \theta $$.
+Hal inilah yang menstabilkan jalur optimisasi dari parameter $$ \theta $$ sehingga menimbulkan efek akselerasi.
 
 Perbedaan antara GD dan CM dapat dijelaskan dengan analogi sebagai berikut: GD seperti seseorang yang berjalan kaki di perbukitan dan mencoba turun ke daratan, 
 sedangkan CM seperti bola yang menggelinding ke bawah.

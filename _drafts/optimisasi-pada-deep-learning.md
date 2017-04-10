@@ -121,17 +121,38 @@ Andaikan gradient $$ g_t $$ merupakan sebuah vektor berdimensi banyak.
 Secara intuitif, CM akan memberikan bobot yang lebih pada dimensi tertentu yang memiliki nilai yang konsisten untuk tiap langkah.
 Sebaliknya, untuk dimensi yang tidak stabil CM akan memberikan bobot yang lebih kecil.
 Hal inilah yang menstabilkan jalur optimisasi dari parameter $$ \theta $$ sehingga menimbulkan efek akselerasi.
+Gambar 2 mengilustrasikan perbedaan antara GD dan CM.
 {: style="text-align: justify;"}
 
 
-Perbedaan antara GD dan CM dapat dijelaskan dengan analogi sebagai berikut: GD seperti seseorang yang berjalan kaki di perbukitan dan mencoba turun ke daratan, 
+Perbedaan antara GD dan CM juga dapat dijelaskan dengan analogi sebagai berikut: GD seperti seseorang yang berjalan kaki di perbukitan dan mencoba turun ke daratan, 
 sedangkan CM seperti bola yang menggelinding ke bawah.
 Bagi yang tertarik mendalami lebih lanjut tentang CM bisa membaca sebuah tulisan brilian di sini: [http://distill.pub/2017/momentum](http://distill.pub/2017/momentum/).
 {: style="text-align: justify;"}
 
+<div markdown="1" style="text-align: center;">
+<img src="http://sebastianruder.com/content/images/2015/12/without_momentum.gif" width="300"/> <img src="http://sebastianruder.com/content/images/2015/12/with_momentum.gif" width="300"/>
+</div>
+**Gambar 2**. Gradient Descent tanpa Momentum (kiri) vs dengan Momentum (kanan) (sumber: [http://sebastianruder.com/optimizing-gradient-descent/](http://sebastianruder.com/optimizing-gradient-descent/))
+{: style="font-size: 80%; text-align: center;"}
 
 
-# Nesterov Accelerated Gradient (NAG)
+# Nesterov's Accelerated Gradient (NAG)
+
+Jika kita perhatikan Algoritma 2, CM menghitung vektor gradient $$ g_t$$ terlebih dahulu, lalu menghitung vektor momentum $$ m_t$$.
+([Sutskever et al. 2013](http://www.cs.toronto.edu/~fritz/absps/momentum.pdf)) melakukan *look-ahead* terhadap vektor parameter $$ \theta_t$$ dengan menggunakan 
+momentum sebelum menghitung vektor gradient $$ g_t $$:
+{: style="text-align: justify;"}
+
+$$
+g_t = \nabla_{\theta_{t-1}} L(\theta_{t-1} - \beta m_{t-1}).
+$$
+
+Strategi ini dinamakan dengan Nesterov's Accelerated Gradient (NAG) ([Nesterov 1983]).
+Secara lengkapnya langkah-langkah NAG dapat dilihat pada Algoritma 3.1.
+{: style="text-align: justify;"}
+
+
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
 **Algoritma 3.1** (Nesterov's Accelerated Gradient (NAG)). \\
 $$
@@ -144,6 +165,20 @@ $$
 \text{7: } \textbf{until}\quad\text{convergence}
 $$
 </div>
+
+Perbedaan antara CM dan NAG diilustrasikan pada Gambar 3.
+Dapat dilihat bahwa NAG terlebih dahulu 'memindahkan' parameter mengikuti vektor momentum, lalu barulah menghitung vektor gradient.
+Sedangkan CM menghitung vektor gradient di awal, dan posisi akhir parameter berdasarkan akumulasi antara vektor gradient tersebut dengan vektor momentum.
+{: style="text-align: justify;"}
+
+Walaupun perubahan yang dilakukan nyaris *innocent*, NAG menghasilkan performa yang lebih baik dibandingkan CM baik secara empiris maupun dari sisi teori.
+
+![NAG](http://cs231n.github.io/assets/nn3/nesterov.jpeg)
+**Gambar 3**. Classical Momentum vs Nesterov's Accelerated Gradient (sumber: [http://cs231n.github.io/assets/nn3/nesterov.jpeg](http://cs231n.github.io/assets/nn3/nesterov.jpeg))
+{: style="font-size: 80%; text-align: center;"}
+
+
+Untuk kemudahan implementasi, kita dapat menulis ulang algoritma NAG seperti pada Algoritma 3.2.
 
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">

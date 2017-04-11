@@ -62,7 +62,7 @@ $$
 Gambar 1 mengilustrasikan parameter dengan ruang solusi berdimensi dua -- parameter pada *neural networks* umumnya berdimensi banyak.
 Parameter $$\boldsymbol{\theta}$$ dapat diilustrasikan sebagai sebuah titik pada ruang solusi.
 Secara intuitif, GD memindah-mindahkan titik tersebut berdasarkan arahan dari *gradient*, 
-yang menginformasikan **jalur tercuram/tercepat** dari suatu posisi tertentu ke posisi tujuan.
+yang menginformasikan **jalur tercuram** dari suatu posisi tertentu ke posisi tujuan.
 Harapannya, akumulasi informasi dari *gradient* pada tiap-tiap posisi mampu mengantarkan ke solusi optimal.
 {: style="text-align: justify;"}
 
@@ -275,6 +275,6 @@ $$
 
 Dapat kita lihat pada Algoritma 6, baris ke-5 merupakan unsur *momentum* dan baris ke-7 merupakan unsur *adaptive subgradient*.
 Adam juga menggunakan teknik *bias correction* yang memberikan aproksimasi lebih baik untuk $$ \mathbf{m}_t$$ dan $$\mathbf{n}_t $$.
-Saat ini Adam menjadi pilihan favorit sebagai alat optimisasi pada deep learning.
+Saat ini Adam menjadi pilihan favorit sebagai alat optimisasi pada deep learning. 
 {: style="text-align: justify;"}
 

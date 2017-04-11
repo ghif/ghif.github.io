@@ -196,4 +196,53 @@ $$
 </div>
 
 
-# 
+# AdaGrad dan RMSProp
+Cara lain untuk memperbaiki GD selain dengan momentum adalah dengan memberikan kecepatan *update* yang berbeda pada tiap dimensi vektor parameter $$ \theta_t $$, pada langkah tertentu.
+
+<div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+**Algoritma 4** (AdaGrad). \\
+$$
+\text{1: } \theta_0 = \mathrm{rand()} \\
+\text{2: } n_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad g_t := \nabla_{\theta_{t-1}} L(\theta_{t-1})  \\
+\text{5: } \quad n_t := g^2_t + n_{t-1} \\
+\text{6: } \quad \theta_t := \theta_{t-1} - \alpha \frac{g_t}{ \sqrt{n_t} + \varepsilon} \\
+\text{7: } \textbf{until}\quad\text{convergence}
+$$
+</div>
+
+<div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+**Algoritma 5** (RMSProp). \\
+$$
+\text{1: } \theta_0 = \mathrm{rand()} \\
+\text{2: } n_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad g_t := \nabla_{\theta_{t-1}} L(\theta_{t-1})  \\
+\text{5: } \quad n_t := (1 - \gamma) g^2_t + \gamma n_{t-1} \\
+\text{6: } \quad \theta_t := \theta_{t-1} - \alpha \frac{g_t}{ \sqrt{n_t} + \varepsilon} \\
+\text{7: } \textbf{until}\quad\text{convergence}
+$$
+</div>
+
+
+# Adam
+*Adaptive moment estimation* (Adam) mengkombinasikan RMSProp dengan *classical momentum*
+
+<div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+**Algoritma 6** (Adam). \\
+$$
+\text{1: } \theta_0 = \mathrm{rand()} \\
+\text{2: } n_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad g_t := \nabla_{\theta_{t-1}} L(\theta_{t-1})  \\
+\text{5: } \quad m_t := (1 - \beta) g_t + \beta m_{t-1} \\
+\text{6: } \quad \hat{m}_t := \frac{m_t}{1 - \beta^t} \\
+\text{7: } \quad n_t := (1 - \gamma) g^2_t + \gamma n_{t-1} \\
+\text{8: } \quad \hat{n}_t := \frac{n_t}{1 - \gamma^t}
+\text{9: } \quad \theta_t := \theta_{t-1} - \alpha \frac{\hat{m}_t}{ \sqrt{\hat{n}_t} + \varepsilon}  \\
+\text{10: } \textbf{until}\quad\text{convergence}
+$$
+</div>
+
+

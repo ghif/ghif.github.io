@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Optimisasi pada Deep Learning"
-date: 2017-03-25 08:13:15 +1300
+date: 2017-04-11 23:38:06 +1300
 categories: aiml
 ---
 

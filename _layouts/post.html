@@ -33,14 +33,30 @@ layout: default
   });
 </script>
 
-<a href="https://twitter.com/share" class="twitter-share-button"
-data-via="d1ca1">Tweet</a>
+<!--<a href="https://twitter.com/share" class="twitter-share-button"
+data-via="d1ca1">Tweet</a>-->
+
+<!-- Twitter -->
+<a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<!-- Google+ -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<div class="g-plus" data-action="share"></div>
+
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}
   </div>
+
+
+<!-- Twitter -->
+<a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<!-- Google+ -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<div class="g-plus" data-action="share"></div>
 
   {% if site.disqus.shortname %}
     {% include disqus_comments.html %}
@@ -68,6 +84,7 @@ data-via="d1ca1">Tweet</a>
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
 
 
 </article>

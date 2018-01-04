@@ -526,7 +526,7 @@ Kontur awal berbentuk elips yang dibuat secara manual. Lalu algoritma Snakes men
 
 <img src="http://localhost:4000/assets/snakes_opt.gif" />
 <br/>
-**Gambar 3**. Progres dari algoritma Snakes (54 iterasi) 
+**Gambar 3**. Progres deformasi dari kontur Snakes (54 iterasi) 
 {: style="font-size: 80%; text-align: center;"}
 
 

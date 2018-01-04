@@ -319,7 +319,7 @@ Komputasi persamaan di atas dilakukan berulang-ulang hingga tidak terjadi peruba
 
 Secara rinci, algoritma Snakes/Active Contour Model dapat ditulis dalam *pseudo-code* di bawah ini:
 
-![Algoritma Snakes](http://localhost:4000/assets/snakes_alg.png)
+![Algoritma Snakes](/assets/snakes_alg.png)
 {: style="font-size: 80%; text-align: center;"}
 
 
@@ -516,15 +516,15 @@ Ada beberapa hal teknis yang perlu diperhatikan yaitu:
 Gambar-gambar berikut ini merupakan hasil segmentasi bibir dari algoritma Snakes. 
 Kontur awal berbentuk elips yang dibuat secara manual. Lalu algoritma Snakes mengarahkan elips tersebut agar merekat di bibir bagian luar.
 
-|<img src="http://localhost:4000/assets/lip.jpg" width="300"/> <br/>(a) Original |  <img src="http://localhost:4000/assets/gim.jpg" width="300"/> <br/>(b) Gaussian smoothed |
-|<img src="http://localhost:4000/assets/map.jpg" width="300"/> <br/>(c) External energy (edge) | <img src="http://localhost:4000/assets/snake.jpg" width="300"/> <br/>(d) Snakes |
+|<img src="/assets/lip.jpg" width="300"/> <br/>(a) Original |  <img src="/assets/gim.jpg" width="300"/> <br/>(b) Gaussian smoothed |
+|<img src="/assets/map.jpg" width="300"/> <br/>(c) External energy (edge) | <img src="/assets/snake.jpg" width="300"/> <br/>(d) Snakes |
 {: style="font-size: 80%; text-align: center;"}
 **Gambar 2**. Segmentasi bibir dengan Snakes. Gambar (a) merupakan gambar asli; (b) merupakan gambar *grayscale* dari (a) dan juga dihaluskan dengan Gaussian filter;
 (c) merupakan gambar *edge* hasil dari operasi sobel; (d) menampilkan kontur awal (biru) dan kontur akhir (merah) hasil algoritma Snakes.
 {: style="font-size: 80%; text-align: center;"}
 
 
-<img src="http://localhost:4000/assets/snakes_opt.gif" />
+<img src="/assets/snakes_opt.gif" />
 <br/>
 **Gambar 3**. Progres deformasi dari kontur Snakes (54 iterasi) 
 {: style="font-size: 80%; text-align: center;"}

@@ -12,7 +12,7 @@ Snakes telah banyak diaplikasikan untuk kebutuhan object tracking, segmentation,
 {: style="text-align: justify;"}
 
 <!-- intuitive explanation, possibly with pictures -->
-![Sumber: https://en.wikipedia.org/wiki/Active_contour_model](http://localhost:4000/assets/Snake-contour-example.jpg)
+![Sumber: https://en.wikipedia.org/wiki/Active_contour_model](/assets/Snake-contour-example.jpg)
 {: style="font-size: 80%; text-align: center;"}
 **Gambar 1**. Active Contour Model/Snakes (sumber: [https://en.wikipedia.org/wiki/Active_contour_model](https://en.wikipedia.org/wiki/Active_contour_model))
 {: style="font-size: 80%; text-align: center;"}

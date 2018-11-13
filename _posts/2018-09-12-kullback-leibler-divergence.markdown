@@ -162,6 +162,8 @@ Kita akan mendapatkan angka entropi sebesar $$ H_P(X) \approx 1.79$$ (silakan di
 
 Dari contoh sederhana ini kita dapat menyimpulkan bahwa kejadian melempar dadu (6 kemungkinan kejadian) memiliki rata-rata ketidakpastian / *surprisal* yang lebih tinggi dibandingkan melempar koin.
 
+Contoh lain, bagaimana nilai entropi atau derajat kekacauan dari kumpulan berita *hoax*? Dapat dipastikan sangat tinggi!
+
 
 #### __Lintas-Entropi__
 Penghitungan entropi di atas menggunakan distribusi probabilitas yang sama, $$P(x)$$, baik untuk mengukur informasi maupun nilai rata-rata/ekspektasi. Dan fungsi probabilitas $$P$$ berasosiasi langsung dengan variabel random $$X$$, dimana kerjadian-kejadian $$ x_1, \ldots, x_n \in X$$ merupakan sampel dari $$P$$.

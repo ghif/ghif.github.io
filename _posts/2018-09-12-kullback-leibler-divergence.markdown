@@ -195,6 +195,7 @@ Diketahui $n$ buah sampel yang bersumber dari distribusi $$ P $$, yaitu $$ x_1, 
 
 $$
 \begin{eqnarray}
+\displaystyle
  Q(x) = \mathcal{N}(x | \mu, \sigma) = 
  \frac{1}{ \sqrt{2 \pi \sigma^2 }} \exp \left(- \frac{(x - \mu)^2}{2 \sigma^2} \right)
  \end{eqnarray}
@@ -205,7 +206,7 @@ Lalu kita "paksa" fungsi probabilitas $$ Q $$ supaya *mirip-mirip* dengan $$ P $
 $$
 \begin{eqnarray}
 \label{eq:opt_h}
-Q^* := \arg \min_{Q}  \left[ \hat{H}_{[P, Q]} = - \frac{1}{n} \sum_{i=1}^n \log Q(x_i) \right]
+Q^* := \arg \min_{Q}  \left[ H_{[P, Q]} = - \frac{1}{n} \sum_{i=1}^n \log Q(x_i) \right]
 \end{eqnarray}
 $$
 

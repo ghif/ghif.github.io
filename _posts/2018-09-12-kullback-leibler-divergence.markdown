@@ -11,6 +11,7 @@ Diberikan dua buah fungsi distribusi probabilitas diskrit $P(x)$ dan $Q(x)$, bag
 
 $$
 \begin{equation}
+\label{eq:kl}
 \displaystyle \mathrm{KL}( P \| Q) = \sum_x P(x) \log \frac{ P(x) }{ Q(x) }
 \end{equation}
 $$
@@ -243,7 +244,7 @@ $$ H_{[P, P]} $$ akan memberikan nilai yang berbeda pula untuk bentuk fungsi $$ 
 
 
 #### __Kullback-Leibler Divergence__
-*Kullback-Leibler Divergence* $$ \mathrm{KL}(P \| Q) $$ memiliki makna yang analog dengan *lintas-entropi*, yaitu mengukur kedekatan antar 2 distribusi probabilitas, lihat kembali persamaan ().
+*Kullback-Leibler Divergence* $$ \mathrm{KL}(P \| Q) $$ memiliki makna yang analog dengan *lintas-entropi*, yaitu mengukur kedekatan antar 2 distribusi probabilitas, lihat kembali persamaan (\req{eq:kl}).
 Namun fungsi $$ \mathrm{KL} $$ mengatasi permasalahan yang ada pada *lintas-entropi*, yaitu memiliki karakteristik $$ \mathrm{KL}(P \| Q) = 0 $$ untuk $$ P = Q $$.
 
 $$

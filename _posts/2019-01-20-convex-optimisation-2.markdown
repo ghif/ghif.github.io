@@ -283,10 +283,7 @@ $$
 yang kontradiktif dengan pernyataan $$ f(x^*) < f(x_l) $$.
 
 Dengan demikian, fungsi konveks $$ f $$ tidak memiliki solusi optimum lokal.
-
 </div>
-
-
 
 #### __Kondisi Konveksitas Orde II__
 Kita pun dapat menghubungkan konveksitas dengan turunan kedua.
@@ -340,7 +337,6 @@ Dengan demikian terbukti bahwa $$f^{''} \geq > 0 $$ berimplikasi bahwa fungsi $$
 Sebagai catatan terakhir, baik derivatif orde I atau orde II keduanya dapat digunakan sebagai alat untuk mengidentifikasi konveksitas sebuah fungsi $$ f $$. 
 Penggunaan derivatif orde II bahkan tampak lebih simpel, yaitu hanya cukup mengecek $$ f^{''} > 0 $$ atau matriks Hessian $$ \nabla^2 f(\mathbf{x}) \succeq 0 $$, apabila turunan kedua terdefinisi pada fungsi $$ f $$.
 Namun demikian, untuk kasus berdimensi banyak, penghitungan matriks Hessian akan memakan waktu dan memori yang cukup besar pada komputer. 
-
 
 #### __Referensi__
 

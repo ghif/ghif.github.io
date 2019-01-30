@@ -177,7 +177,7 @@ Teorema berikut ini secara eksplisit menyatakan hubungan antara derivatif dan ko
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify; background-color:lightgrey">
 **Teorema 1: Fungsi Terdiferensiasi Konveks** \\
-Fungsi terdiferensiasi $$ f: \mathcal{X} \rightarrow \mathbb{R} $$ merupakan fungsi konveks *jika dan hanya* jika pertidaksamaan di bawah ini terpenuhi:
+Fungsi terdiferensiasi $$ f: \mathcal{X} \rightarrow \mathbb{R} $$ merupakan fungsi konveks *jika dan hanya jika* pertidaksamaan di bawah ini terpenuhi:
 
 $$
 \begin{equation}
@@ -291,7 +291,7 @@ Teorema di bawah ini menjelaskan hubungan tersebut.
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify; background-color:lightgrey">
 **Teorema 3: Fungsi Terdiferensiasi Konveks (Orde II)** \\
-Fungsi terdiferensiasi orde II $$ f: \mathcal{X} \rightarrow \mathbb{R} $$ merupakan fungsi konveks *jika dan hanya* jika pertidaksamaan di bawah ini terpenuhi:
+Fungsi terdiferensiasi orde II $$ f: \mathcal{X} \rightarrow \mathbb{R} $$ merupakan fungsi konveks *jika dan hanya jika* pertidaksamaan di bawah ini terpenuhi:
 
 $$
 \begin{equation}
@@ -330,7 +330,7 @@ $$
 $$
 
 Perhatikan bahwa baris terakhir pada pertidaksamaan di atas merupakan definisi dari konveksitasi fungsi $$f$$.
-Dengan demikian terbukti bahwa $$f^{''} \geq > 0 $$ berimplikasi bahwa fungsi $$f$$ merupakan fungsi konveks.
+Dengan demikian terbukti bahwa $$f^{''} \geq 0 $$ berimplikasi bahwa fungsi $$f$$ merupakan fungsi konveks.
 </div>
 
 #### __Caveat__

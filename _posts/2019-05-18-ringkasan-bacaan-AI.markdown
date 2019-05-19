@@ -35,8 +35,10 @@ Algoritma yang diusulkan akan menghasilkan sebuah *sub-network* yang disebut den
 3. Pangkas $$ p\%$$ dari parameter $$ \theta_j $$ sehingga menghasilkan *mask* $$ m $$.
 4. Kembalikan nilai parameter yang tersisa ke nilai pada $$\theta_0$$, yang menghasilkan *winning ticket* $$ f(x; m \odot \theta_0) $$.
 
-Berbagai hasil eksperimen yang dilaporkan pada paper tersebut menunjukkan bahwa hasilnya mendukung *lottery ticket hypothesis* dan secara konsisten mampu menghasilkan *sub-network* yang berukuran 10-20% lebih kecil dibandingkan model aslinya melalui proses pelatihan pada dataset MNIST dan CIFAR10.
-Manfaat utama dari algoritma ini adalah membuat proses pelatihan secara keseluruhan lebih efisien dibandingkan cara konvensional.
+Berbagai hasil eksperimen yang dilaporkan pada paper tersebut menunjukkan bahwa hasilnya mendukung *lottery ticket hypothesis* dan secara konsisten mampu menghasilkan *sub-network* yang berukuran ~90% lebih kecil dibandingkan model aslinya melalui proses pelatihan pada dataset MNIST dan CIFAR10.
+<!-- Manfaat utama dari algoritma ini adalah membuat proses pelatihan secara keseluruhan lebih efisien dibandingkan cara konvensional. -->
+Model dengan parameter yang jauh lebih sedikit mengakibatkan proses inferensi menjadi lebih efisien. 
+
 
 ### __2. A Meta-Transfer Objective for Learning to Disentangle Causal Mechanisms__
 ---

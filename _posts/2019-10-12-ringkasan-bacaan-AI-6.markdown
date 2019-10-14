@@ -25,7 +25,7 @@ Informasi-informasi hiperbolis tersebut membuat *deep learning* seolah-olah menj
 Hal tersebut bisa membuat kesan yang salah atau ekspektasi yang terlalu tertinggi terhadap AI atau *deep learning*, terutama dari sudut pandang awam.
 
 
-Jika impresi tersebut mempengaruhi para pelaku bisnis atau investor sehingga terlalu percaya diri untuk berinvestasi besar-besaran dalam pengembangan AI, maka bersiaplah untuk mengalami kekecawan karena bisa jadi apa yang diinvestasikan jauh tidak sebanding dengan yang dihasilkan.
+Jika impresi tersebut mempengaruhi para pelaku bisnis atau investor sehingga terlalu percaya diri untuk berinvestasi besar-besaran dalam pengembangan AI, maka bersiaplah untuk mengalami kekecewaan karena bisa jadi apa yang diinvestasikan jauh tidak sebanding dengan yang dihasilkan.
 Ini salah satu penyebab terjadinya *AI winter* pada tahun 1970-an, dimana para pemegang dana (pemerintah maupun swasta) berbalik menjadi pesimis untuk berinvestasi, yang menyebabkan riset dan pengembangan AI menjadi stagnan.
 
 

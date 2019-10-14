@@ -2,7 +2,7 @@
 layout: post
 title:  "Ringkasan Mingguan Bacaan AI (12 Oktober 2019)"
 date: 2019-10-12 00:00 +0000
-categories: artificial-intelligence
+categories: artificial-intelligence	
 ---
 
 ---

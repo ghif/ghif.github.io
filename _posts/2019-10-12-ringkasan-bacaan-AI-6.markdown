@@ -51,7 +51,7 @@ Sumber-sumber lain mengenai kajian kritis mengenai AI / DL semacam ini dapat dil
 #### __2. The Neuro-Symbolic Concept Learner: Interpreting Scenes, Words, and Sentences from Natural Supervision__
 
 
-__Source__: https://arxiv.org/pdf/1801.00631.pdf
+__Source__: https://openreview.net/pdf?id=rJgMlhRctm
 
 __Authors__: Jiayuan Mao, Chuang Gan, Pushmeet Kohli, Joshua B. Tenenbaum, Jiajun Wu
 

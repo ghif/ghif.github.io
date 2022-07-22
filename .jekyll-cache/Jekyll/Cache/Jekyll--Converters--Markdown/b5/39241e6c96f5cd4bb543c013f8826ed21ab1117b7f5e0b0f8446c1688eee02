@@ -1,0 +1,109 @@
+I"�,<p>Ada sebuah fenomena yang menarik dari kemampuan otak manusia dalam mempelajari hal baru. Otak kita dapat belajar berkesinambungan akan kemampuan yang baru tanpa (benar-benar) melupakan hal-hal yang telah dipelajari sebelumnya. Lebih hebatnya lagi, kita dapat mentransfer kemampuan yang sudah ada sehingga lebih mudah untuk mempelajari hal-hal baru yang berkaitan.</p>
+
+<p>Salah satu contoh fenomena ini adalah proses belajar berbahasa. Bayangkan Anda baru mulai belajar, misalnya, bahasa Spanyol. Di fase awal Anda mempelajari huruf-huruf / unsur-unsur terkecil dari bahasa Spanyol. Kemudian Anda menghafal berbagai kosa kata. Selanjutnya Anda belajar menyusun frasa dan kalimat dari kosa kota tersebut.</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="/assets/lifelong-learning.jpg" width="750" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 1</strong>. Sumber: http://netprofitgrowth.com/business-learning/</p>
+
+<p>Kesemuanya itu berkesinambungan: ketika belajar merangkai kalimat, Anda tidak melupakan bagaimana caranya menyusun frasa dan arti dari kosa kata yang sudah dihafal. Sebaliknya, justru yang sudah Anda pelajari sebelumnya, yaitu menyusun frasa, akan sangat membantu kefasihan merangkai kalimat. Bandingkan jika Anda langsung melompat untuk mempelajari kalimat tanpa tahu frasa dan kosa kata.</p>
+
+<p>Sekarang bayangkan Anda sudah mahir berbahasa Spanyol. Selanjutnya Anda ingin mempelajari bahasa Italia. Dikarenakan bahasa Spanyol dan Italia <a href="https://bigthink.com/strange-maps/a-map-of-lexical-distances-between-europes-languages">cukup dekat</a>, Anda akan merasa bahasa Italia relatif lebih mudah dipahami, dibandingkan orang lain yang langsung belajar bahasa Italia tanpa tahu bahasa Spanyol. Disaat yang bersamaan Anda tidak lupa dengan berbahasa Spanyol selagi belajar bahasa Italia.</p>
+
+<p>Kemampuan otak manusia yang luar biasa ini dikenal dengan istilah <strong><em>continual learning</em></strong> (CL) atau <strong><em>lifelong learning</em></strong> atau <strong><em>incremental learning</em></strong>. Studi neurosains mengindikasikan bahwa continual learning benar-benar terjadi secara biologis pada otak mamalia [<a href="https://www.ncbi.nlm.nih.gov/pubmed/25822789">Cichon &amp; Gan, 2015</a>].</p>
+
+<p>Inilah salah satu aspek yang masih belum dimiliki oleh teknik kecerdasan buatan atau pemelajaran mesin saat ini. Deep neural networks yang sangat sukses dalam 1 dekade terakhir di berbagai aplikasi pun belum memiliki kemampuan ini. Algoritma pemelajaran konvensional pada deep neural networks mengalami apa yang disebut sebagai <em>catastrophic forgetting</em> [<a href="https://www.sciencedirect.com/science/article/pii/S0079742108605368">McCloskey and Cohen 1989</a>, <a href="https://arxiv.org/abs/1312.6211">Goodfellow et al. 2014</a>]: ketika algoritma pembelajaran menerima data yang baru, deep neural networks akan dengan cepat melupakan hal yang lama.</p>
+
+<h4 id="continual-learning-pada-kecerdasan-buatan"><strong>Continual Learning pada Kecerdasan Buatan</strong></h4>
+
+<p>Saat ini Continual Learning (CL) sudah mulai mendapat perhatian serius oleh komunitas kecerdasan buatan dan pemelajaran mesin. DARPA (Defense Advanced Research Projects Agency) meluncurkan proyek riset khusus bernama <a href="https://www.darpa.mil/program/lifelong-learning-machines">Lifelong Learning Machines (L2M)</a> untuk mengembangkan agen kecerdasan buatan yang lebih mumpuni.
+Dalam beberapa tahun terakhir, Neural Information Processing Systems (NeurIPS), yang merupakan salah satu konferensi yang paling bereputasi dan berpengaruh di bidang pembelajaran mesin, mengadakan <a href="https://sites.google.com/view/continual2018"><em>workshop</em> khusus dengan tema Continual Learning</a>.</p>
+
+<p>Perkembangan CL akan mendorong cara belajar kecerdasan buatan semakin mendekati cara belajar otak biologis.
+Lalu apa keuntungan dari sisi praktis? Paling tidak, akan ada dua keuntungan:</p>
+
+<ol>
+  <li>
+    <p><strong>Skalabilitas</strong></p>
+
+    <p>Jika ada data yang baru untuk dipelajari, misalnya berjumlah 10 sampel, algoritma pemelajaran mesin konvensional mesti melalui proses belajar dari awal yang mengikutsertakan data sebelumnya ditambah dengan 10 sampel yang baru sebagai data latih. Proses ini disebut juga sebagai <strong><em>offline learning</em></strong>.</p>
+
+    <p>Seiring dengan penambahan data, proses <em>offline learning</em> akan menjadi tidak efisien. Bayangkan jika data sebelumnya sudah berjumlah 1 juta sampel dan data yang baru hanya 10 sampel – untuk memasukkan pengetahuan baru dari 10 sampel tersebut akan membutuhkan kompleksitas <em>training</em> yang sama atau bahkan lebih dari 1 juta sampel.</p>
+
+    <p>CL membuka peluang untuk melakukan <strong><em>online learning</em></strong>: agen kecerdasan buatan hanya cukup untuk dilatih dengan 10 sampel yang baru tanpa melupakan pengetahuan sebelumnya, tanpa harus mengikutsertakan 1 juta sampel sebelumnya.</p>
+  </li>
+  <li>
+    <p><strong>Kemampuan Adaptasi</strong></p>
+
+    <p>Algoritma pemelajaran mesin konvensional dirancang hanya untuk melakukan tugas atau domain tertentu saja.
+ Dengan kata lain, agen kecerdasan buatan dengan algoritma standar secara umum bersifat sebagai spesialias yang tidak mampu beradaptasi dengan tugas yang baru.</p>
+
+    <p>CL memungkinkan agen kecerdasan buatan untuk beradaptasi dengan tugas yang baru tanpa melupakan tugas yang lama, disaat yang bersamaan kemampuan dalam melaksanakan tugas yang lama akan menyokong untuk mempelajari kemampuan yang baru. 
+ Kemampuan ini membuat agen kecerdasan buatan mampu untuk terus belajar pada dunia yang dinamis, yang terus berubah-ubah seiring dengan berjalannya waktu. 
+ Karakteristik tersebut lebih dekat dengan dunia nyata dibandingkan <em>offline learning</em> pada algoritma konvensional.</p>
+  </li>
+</ol>
+
+<p>Sebuah perangkat lunak bernama <em><a href="https://www.neurala.com/press-releases/edge-deep-learning-without-cloud">neurala</a></em> merupakan contoh konkrit yang mencoba memiliki kedua hal tersebut.
+Neurala mengklaim dapat melakukan <em>continual learning</em> secara efisien pada perangkat-perangkat keras <em>low-end</em> atau <em>client-side</em> seperti <em>drone</em>, kamera digital, atau ponsel pintar, tanpa harus terhubung pada server.</p>
+
+<h4 id="perkembangan-riset-terkini"><strong>Perkembangan Riset Terkini</strong></h4>
+
+<p>Ketertarikan komunitas peniliti pemelajaran mesin terhadap Continual Learning semakin meningkat setiap tahunnya, seperti yang ditunjukkan pada grafik di bawah ini:</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="/assets/CL_interest.png" width="750" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 2</strong>. Grafik jumlah publikasi artikel ilmiah yang bertema <em>continual learning</em> berdasarkan kata kunci “continual learning”, “lifelong learning”, dan lain-lain. Sumber: https://www.continualai.org/#home,</p>
+
+<p>Salah satu metode yang akhir-akhir ini cukup populer adalah <strong>Elastic Weight Consolidation (EWC)</strong> [<a href="https://arxiv.org/pdf/1612.00796.pdf">Kirkpatrick et al. 2017</a>].
+Metode ini dikembangkan terinspirasi dari temuan neuro-biologis pada <em>neocortical circuits</em> otak mamalia. 
+Suatu observasi pada otak tikus mengindikasikan bahwa mempelajari suatu hal berasosiasi dengan pembentukan atau penguatan koneksi <em>synapses</em>. Yang lebih menarik lagi, ketika belajar hal yang baru setelahnya, koneksi <em>synapses</em> yang sebelumnya terbentuk tidak serta merta hilang, namun membentuk koneksi yang baru [<a href="https://www.nature.com/articles/nature08577">Yang et al. 2009</a>].
+Fenomena ini diilustrasikan pada Gambar 3 di bawah ini.</p>
+
+<p style="font-size: 80%; text-align; center:"><img src="/assets/dendrites.png" width="750" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 3</strong>. Ilustrasi koneksi <em>synapses</em> yang terbentuk berkaitan dengan proses belajar dan pembentukan memori.
+Sumber: https://www.cell.com/current-biology/pdf/S0960-9822(09)02203-9.pdf</p>
+
+<p>EWC menerjemahkan observasi di atas dengan memodifikasi algoritma deep learning standar dengan memberikan penalti / batasan pada proses pemutakhiran bobot koneksi <em>neural networks</em>. 
+Penalti tersebut berupa <em>soft freezing</em> pada koneksi yang dianggap penting sehingga koneksi yang sudah terbentuk sebelumnya tidak langsung hilang ketika memproses data yang baru.
+Seberapa penting suatu koneksi untuk diperhatikan ditentukan berdasarkan data dengan menghitung <em>Fisher-information matrix</em> dari bobot koneksi <em>neural networks</em>.</p>
+
+<p>Contoh metode yang lain yaitu <em>generative replay</em> [<a href="https://papers.nips.cc/paper/6892-continual-learning-with-deep-generative-replay.pdf">Shin et al. 2017</a>].
+Metode ini mencoba mengatasi <em>catastrophic forgetting</em> pada <em>neural networks</em> dengan memanfaatkan <em>generator</em> (yang juga merupakan <em>neural networks</em>) yang men-<em>generate</em> balik input yang dipelajari pada problem sebelumnya.
+Input hasil produksi dari <em>generator</em> tersebut digunakan oleh model utamanya sebagai <em>pivot</em> ketika modelnya dilatih dengan data yang baru agar modelnya tetap memiliki pengetahuan sebelumnya.</p>
+
+<h4 id="penutup"><strong>Penutup</strong></h4>
+<p>Saat ini pengembangan riset di bidang Continual Learning dapat dikatakan masih dalam tahap prematur. 
+Masih banyak hipotesis yang perlu diuji dan problem yang perlu dipecahkan.
+Jika berhasil, Continual Learning akan semakin mendekatkan kecerdasan buatan dengan kecerdasan manusia.</p>
+
+<h4 id="referensi"><strong>Referensi</strong></h4>
+<ol>
+  <li>
+    <p>[<a href="https://www.ncbi.nlm.nih.gov/pubmed/25822789">Cichon &amp; Gan 2015</a>] J. Cichon and W. Gan. “Branch-specific dendritic ca2+ spikes cause persistent synaptic plasticiy.”. Nature, 520(7546):180-185, 2015.</p>
+  </li>
+  <li>
+    <p>[<a href="https://arxiv.org/abs/1312.6211">Goodfellow et al. 2014</a>] I. J. Goodfellow, M. Mirza, D. Xiao, A. Courville, Y. Bengio. “An empirical investigation of catastrophic forgetting in gradient-based neural networks”. International Conference on Machine Learning (ICML), 2014.</p>
+  </li>
+  <li>
+    <p>[<a href="https://www.sciencedirect.com/science/article/pii/S0079742108605368">McCloskey &amp; Cohen 1989</a>] M. McCloskey and N. J. Cohen. “Catastrophic interference in connectionist networks: The sequential learning problem”. Psychology of Learning and Motivation, 1989.</p>
+  </li>
+  <li>
+    <p>https://sites.google.com/view/continual2018</p>
+  </li>
+  <li>
+    <p>https://www.neurala.com/press-releases/edge-deep-learning-without-cloud</p>
+  </li>
+  <li>
+    <p>[<a href="https://arxiv.org/pdf/1612.00796.pdf">Kirkpatrick et al. 2017</a>] Kirkpatrick et al. “Overcoming catastrophic forgetting in neural networks”. PNAS, 2017.</p>
+  </li>
+  <li>
+    <p>https://www.continualai.org/</p>
+  </li>
+  <li>
+    <p>[<a href="https://www.nature.com/articles/nature08577">Yang et al. 2009</a>] G. Yang, F. Pan, W-B. Gan. “Stably maintained dendritic spines are associated with lifelong learning”. Nature, 2009.</p>
+  </li>
+  <li>
+    <p>[<a href="https://papers.nips.cc/paper/6892-continual-learning-with-deep-generative-replay.pdf">Shin et al. 2017</a>] H. Shin, J. K. Lee, J. Kim, J. Kim. “Continual learning with deep generative replay”. NIPS, 2017.</p>
+  </li>
+</ol>
+
+:ET

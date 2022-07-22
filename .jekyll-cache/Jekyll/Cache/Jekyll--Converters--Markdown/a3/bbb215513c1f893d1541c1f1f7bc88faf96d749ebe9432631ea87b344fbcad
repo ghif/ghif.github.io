@@ -1,0 +1,11 @@
+I"æ<p style="text-align: justify;"><em>Deep learning</em> bekerja melalui proses optimisasi. 
+Dengan kata lain, <em>artificial neural networks</em> belajar dari data dengan cara mengoptimalkan fungsi objektif.
+Dari pertengahan tahun 80-an hingga sekarang, teknik optimisasi yang digunakan berbasis <em>first-order gradient</em> dari fungsi objektif yang disebut sebagai <em>gradient descent</em> (<a href="http://gallica.bnf.fr/ark:/12148/bpt6k2982c.image.f540.pagination.langEN">Cauchy, 1847</a>).
+Dipadukan dengan <em>chain rule</em>, <em>gradient descent</em> pada neural networks dikenal dengan algoritma <em>back-propagation</em> (<a href="http://www.cs.toronto.edu/~fritz/absps/pdp8.pdf">Rumelhart et al. 1986</a>).</p>
+
+<p style="text-align: justify;">Di ranah <em>mathematical optimization</em>, gradient descent merupakan metode yang paling sederhana dan telah banyak tersedia metode-metode optimisasi lain yang lebih canggih. 
+Mengapa <em>deep learning</em> masih mengandalkan gradient descent? 
+Alasan utamanya adalah skalabilitas komputasi: gradient descent memiliki kompleksitas linear terhadap pertambahan data dan juga mudah untuk dikomputasi secara paralel (dengan memanfaatkan GPU).
+Karakteristik ini memungkinkan sebuah model <em>neural network</em> yang cukup besar untuk dilatih dengan jutaan data latih.
+Beberapa kisah sukses terkait hal ini antara lain AlexNet (<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">Krizhevsky et al. 2012</a>), Word2Vec (<a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf">Mikolov et al. 2013</a>), dan ResNet (<a href="https://arxiv.org/pdf/1512.03385.pdf">He et al. 2015</a>).</p>
+:ET

@@ -1,0 +1,5 @@
+I"<p><em>Rigid body</em> merupakan sebuah objek geometris terdiri dari kumpulan titik yang membentuk suatu struktur benda solid, i.e., 
+tidak terjadi deformasi pada benda tersebut. Kumpulan titik merah pada Gambar 1 mengilustrasikan sebuah <em>rigid body</em>.
+Sebagaimana halnya objek geometris, kita dapat mengaplikasikan berbagai transformasi geometris pada <em>rigid body</em> seperti translasi, rotasi, dan dilasi.
+Kumpulan titik biru pada Gambar 1 merupakan hasil rotasi <em>rigid body</em> berwarna merah.</p>
+:ET

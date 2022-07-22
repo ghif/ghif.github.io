@@ -1,0 +1,17 @@
+I"§<!-- introduction -->
+<p style="text-align: justify;">Salah satu problem klasik pada Computer Vision adalah bagaimana mengenali / menandai / menentukan <em>outline</em> bentuk benda yang berada pada suatu gambar.
+Dan salah satu metode paling awal yang didesain untuk memecahkan problem tersebut adalah Active Contour Model yang juga dikenal dengan Snakes (<a href="http://web.cs.ucla.edu/~dt/papers/ijcv88/ijcv88.pdf">Kaas et al. IJCV1988</a>).
+Snakes telah banyak diaplikasikan untuk kebutuhan object tracking, segmentation, edge detection, stereo matching, dan sebagainya.</p>
+
+<!-- intuitive explanation, possibly with pictures -->
+<p style="font-size: 80%; text-align: center;"><img src="/assets/Snake-contour-example.jpg" alt="Sumber: https://en.wikipedia.org/wiki/Active_contour_model" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 1</strong>. Active Contour Model/Snakes (sumber: <a href="https://en.wikipedia.org/wiki/Active_contour_model">https://en.wikipedia.org/wiki/Active_contour_model</a>)</p>
+
+<p><em>Snake</em> direpresentasikan dengan kontur yang dapat berubah-ubah bentuk (<em>deformable contour</em>).
+Secara matematis, kontur dapat dimodelkan dengan fungsi kontinu yang mengembalikan nilai titik koordinat 2 dimensi</p>
+
+\[\begin{equation}
+\label{eq:contour}
+\mathbf{v}: \mathbb{S} \rightarrow \mathbb{R}^2, \text{ dimana } \mathbb{S} \subseteq \{ x \in \mathbb{R} | 0 &lt;= x &lt;= 1\}
+\end{equation}\]
+:ET

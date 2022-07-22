@@ -1,0 +1,24 @@
+I"²<!-- introduction -->
+<p style="text-align: justify;">Diberikan dua buah fungsi distribusi probabilitas diskrit $P(x)$ dan $Q(x)$, bagaimana cara mengukur kedekatan diantara kedua fungsi tersebut? Salah satu alat ukur yang populer digunakan adalah <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler (KL) divergence</a>:</p>
+
+\[\begin{equation}
+\label{eq:kl}
+\displaystyle \mathrm{KL}( P \| Q) = \sum_x P(x) \log \frac{ P(x) }{ Q(x) }
+\end{equation}\]
+
+<p>Fungsi divergensi di atas dapat diartikan sebagai kedekatan fungsi probabilitas <strong>$Q$ menuju $P$</strong>.</p>
+
+<p>KL Divergence memenuhi sifat positif-definit:</p>
+<ol>
+  <li>\(\displaystyle \mathrm{KL}(P \| Q) \geq 0\),</li>
+  <li>\(\displaystyle \mathrm{KL}(P \| Q) = 0 \iff P=Q\),</li>
+</ol>
+
+<p style="text-align: justify;">namun tidak simetris \(\mathrm{KL}(P \| Q) \neq \mathrm{KL}( Q \| P)\).
+Oleh karena itu, \(\mathrm{KL}(\cdot \| \cdot)\) disebut sebagai fungsi divergensi, bukan <a href="https://en.wikipedia.org/wiki/Metric_(mathematics)">fungsi jarak</a> â€“ fungsi jarak harus memenuhi kedua sifat positif-definit dan simetris.</p>
+
+<p style="text-align: justify;">Fungsi KL pertama kali ini diperkenalkan oleh Solomon Kullback dan Richard Leibler pada tahun 1951, yang akhirnya menjadi kuantitas sangat penting pada teori informasi.
+KL seringkali digunakan untuk melakukan optimisasi yang melibatkan distribusi probabilitas pada banyak aplikasi seperti mekanika fluida, neurosains, dan <em>machine learning</em> (terutama pada <em>Bayesian inference</em>).</p>
+
+<p>Tulisan ini membahas Kullback-Leibler Divergence dari prinsip-prinsip utamanya, yaitu teori probabilitas dan teori informasi.</p>
+:ET

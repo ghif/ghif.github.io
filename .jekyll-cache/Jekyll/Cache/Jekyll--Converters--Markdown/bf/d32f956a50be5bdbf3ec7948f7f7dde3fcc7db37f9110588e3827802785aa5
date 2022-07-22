@@ -1,0 +1,78 @@
+I"�<hr />
+<h4 id="1-how-to-train-your-maml"><strong>1. How to train your MAML</strong></h4>
+
+<p><strong>Source</strong>: https://arxiv.org/pdf/1810.09502.pdf</p>
+
+<p><strong>Authors</strong>: Antreas Antoniou, Amos Storkey, Harrison Edwards</p>
+
+<p><strong>Topics</strong>: meta learning, few-shot learning</p>
+
+<p>Model Agnostic Meta Learning (MAML) (<a href="https://arxiv.org/pdf/1703.03400.pdf">Finn et al. 2017</a>) is an elegantly simple meta-learning algorithm yet produces state-of-the-art results in few-shot learning problems. 
+MAML is also general enough in the sense that it can be applied on any gradient-based algorithms.
+In short, the way that MAML works is to provide good initialization parameters for a model such that after a few steps of standard training on a few-shot task, the model will perform well on that task.</p>
+
+<p>Few-shot learning is concerned with constructing a good ML model trained from a few examples.
+A successful few-shot learning will be very useful in the context of supervised learning as it will reduce a huge amount of effort in annotating the training examples.</p>
+
+<p>Despite its success, some technical problems in MAML that may hinder its true potential remain unsolved.
+This paper investigates the problems such as training instability, absence of batch normalization statistic accumulation, non-optimal generalization and convergence speed due to fixed learning rate, etc, and proposes solutions to those problems.</p>
+
+<p>The resulting algorithm, referred to as MAML++, was evaluated on the <a href="https://github.com/brendenlake/omniglot">Omniglot</a> and <a href="https://github.com/y2l/mini-imagenet-tools">Mini-Imagenet</a> datasets.
+The outcomes show some superiorities of MAML++ over MAML both in stability and generalization performance.</p>
+
+<p style="text-align: center;"><img src="/assets/MAMLpp.png" alt="MAML vs MAML++" width="80%" height="80%" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Comparison between MAML vs MAML++</strong></p>
+
+<hr />
+<h4 id="2-data-efficient-image-recognition-with-contrastive-predictive-coding"><strong>2. Data-efficient image recognition with contrastive predictive coding</strong></h4>
+
+<p><strong>Source</strong>: https://arxiv.org/pdf/1905.09272.pdf</p>
+
+<p><strong>Authors</strong> : Olivier J. Henaff, Ali Razavi, Carl Doersch, S. M. Ali Eslami, Aaron van der Oord</p>
+
+<p><strong>Topics</strong>: computer vision, semi-supervised deep learning</p>
+
+<p>Biological vision is thought to leverage vast amounts of unlabeled data to perform self-supervised learning as a prior to support object classification tasks with limited supervision.
+Computer vision has so far not quite succeeded in mimicing such the mechanism.
+The most successful image classifier is built upon deep learning that is typically label-hungry.
+It is desirable to have a system that can be trained on a small amount of labeled data.</p>
+
+<p>This paper handles the small-label challenge by adapting a recent self-supervised learning algorithm called Contrastive Predictive Coding (CPC) (<a href="https://arxiv.org/pdf/1807.03748.pdf">van den Oord et al. 2018</a>) with an unusually deep and wide residual network, layer normalization rather than batch normalization, and predicting both lower- and higher-level features.
+The pretrained network is then used to extract deep representations as inputs to a standard linear classifier.</p>
+
+<p>From the evaluation on ImageNet dataset, this strategy outperforms AlexNet model that is trained with full supervision, with 61% Top-1 and 83% Top-5 accuracies – 	AlexNet’s accuracies are 59.3% Top-1 and 81.8% Top-5, respectively).
+When given a small number of labeled images (as few as 13 labels per class), this model retrains a strong classification performance, surpassing state-of-the-art semi-supervised methods by 10% Top-5 accuracy and supervised methods by 20%.</p>
+
+<p>Learning from a small data is a limitation for deep learning, which is typically label-hungry.
+This work opens a new regime in tasks of which only a few labels are available such as detecting rare diseases, spotting defects in a retail pipeline, detecting anomalies/unusual actions in video surveillance, etc.</p>
+
+<!-- ![result example](/assets/cpc_results.png) -->
+<p style="text-align: center;"><img src="/assets/cpc_results.png" alt="CPC Result" width="60%" height="60%" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Classification accuracy comparison between self-supervision with CPC and fully supervised ResNet as a function of the number of labeled examples.</strong></p>
+
+<hr />
+<h4 id="3-understanding-convolutional-neural-networks-for-text-classification"><strong>3. Understanding convolutional neural networks for text classification</strong></h4>
+
+<p><strong>Source</strong>: https://www.aclweb.org/anthology/W18-5408</p>
+
+<p><strong>Authors</strong>: Alon Jacovi, Oren Sar Shalom, Yoav Goldberg</p>
+
+<p><strong>Topics</strong>: deep learning, NLP</p>
+
+<p>This paper investigates the interpretability of convolutional networks that are trained for text classification.
+Interpretablity is about presenting a structured explanation which captures what an ML model has learned, which is important to increase trust in model predictions, analyze errors or improve the model (<a href="https://arxiv.org/pdf/1602.04938.pdf">Riberio et al. 2016</a>).</p>
+
+<p>There have been a number of works that address the interpretability of deep learning models on NLP tasks. 
+However, this area is still generally under-explored, particularly in comparison to computer vision tasks.
+Furthermore, the proposed methods for interpreting computer vision models may not be directly applicable for NLP models.</p>
+
+<p>A common wisdom in terms of 1D-CNN applied on texts is that convolutional filters followed by global max-pooling serve as ngram detectors.
+This work identifies and refines current intuitions as to how 1D-CNNs work on text domain.
+Some key takeaways are as follows:</p>
+<ul>
+  <li>Max-pooling induces a thresholding behaviour, and values below a given threshold are ignored when making a prediction.</li>
+  <li>Filters are not homogeneous, i.e., a single filter can, and often does, detect multiple distinctly different families of ngrams.</li>
+  <li>Filters also detect negative items in ngrams.</li>
+</ul>
+
+:ET

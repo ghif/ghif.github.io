@@ -1,0 +1,216 @@
+I"�G<p style="text-align: justify;"><em>Deep learning</em> bekerja melalui proses optimisasi. 
+Dengan kata lain, <em>artificial neural networks</em> belajar dari data dengan cara mengoptimalkan fungsi objektif.
+Dari pertengahan tahun 80-an hingga sekarang, teknik optimisasi yang digunakan berbasis <em>first-order gradient</em> dari fungsi objektif yang disebut sebagai <em>gradient descent</em> (<a href="http://gallica.bnf.fr/ark:/12148/bpt6k2982c.image.f540.pagination.langEN">Cauchy, 1847</a>).
+Dipadukan dengan <em>chain rule</em>, <em>gradient descent</em> pada neural networks dikenal dengan algoritma <em>back-propagation</em> (<a href="http://www.cs.toronto.edu/~fritz/absps/pdp8.pdf">Rumelhart et al. 1986</a>).</p>
+
+<p style="text-align: justify;">Di ranah <em>mathematical optimization</em>, gradient descent merupakan metode yang paling sederhana dan telah banyak tersedia metode-metode optimisasi lain yang lebih canggih. 
+Mengapa <em>deep learning</em> masih mengandalkan gradient descent? 
+Alasan utamanya adalah skalabilitas komputasi: gradient descent memiliki kompleksitas linear terhadap pertambahan data dan juga mudah untuk dikomputasi secara paralel (dengan memanfaatkan GPU).
+Karakteristik ini memungkinkan sebuah model <em>neural network</em> yang cukup besar untuk dilatih dengan jutaan data latih.
+Beberapa kisah sukses terkait hal ini antara lain AlexNet (<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">Krizhevsky et al. 2012</a>), Word2Vec (<a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf">Mikolov et al. 2013</a>), dan ResNet (<a href="https://arxiv.org/pdf/1512.03385.pdf">He et al. 2015</a>).</p>
+
+<p style="text-align: justify;">Misalnya kita punya sebuah <em>neural network</em> \(\displaystyle f_{\boldsymbol{\theta}} : \mathcal{X} \rightarrow \mathcal{Y}\), dimana \(\boldsymbol{\theta}\) merupakan parameter yang nantinya akan disetel berdasarkan data yang dipelajari – pada <em>neural networks</em> parameter ini terdiri dari <em>weights</em> dan <em>bias</em>.
+Asumsikan kondisi <em>supervised learning</em>, yaitu \(f_{\boldsymbol{\theta}}\) belajar dari pasangan data \((x, y)\) dan definisikan fungsi <em>loss</em> \(\displaystyle \ell: \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}\). 
+Salah satu bentuk fungsi <em>loss</em>, untuk \(\mathcal{Y} \subseteq \mathbb{R}\), adalah <em>least-square error</em> \(L\left(f_{\boldsymbol{\theta}}(x), y \right) = \left( f_{\boldsymbol{\theta}}(x) - y\right)^2\).</p>
+
+<p style="text-align: justify;">Untuk menyederhanakan notasi, tulis \(L(\boldsymbol{\theta}) := L(f_{\boldsymbol{\theta}}(x), y)\). 
+Tujuan dari optimisasi pada <em>deep learning</em> yaitu meminimalkan fungsi <em>loss</em></p>
+
+\[\begin{equation}
+\label{eq:dlobj}
+	\min_{\boldsymbol{\theta}} L(\boldsymbol{\theta})
+\end{equation}\]
+
+<p>Kita definisikan <em>gradient</em> dari fungsi <em>loss</em> terhadap \(\boldsymbol{\theta}\) dengan notasi 
+\(\nabla_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\).</p>
+
+<h1 id="gradient-descent-gd">Gradient Descent (GD)</h1>
+<p style="text-align: justify;">Kita definisikan <em>gradient</em> dari fungsi <em>loss</em> terhadap \(\boldsymbol{\theta}\) dengan notasi \(\nabla_{\boldsymbol{\theta}} L(\boldsymbol{\theta})\).
+<em>Gradient descent</em> melakukan <em>update</em> secara iteratif terhadap parameter \(\boldsymbol{\theta}\) agar objektif (\ref{eq:dlobj}) tercapai 
+dengan memanfaatkan \(\nabla_{\boldsymbol{\theta}}L(\boldsymbol{\theta})\). 
+Tahapan GD diringkas pada <strong>Algoritma 1</strong>.</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 1</strong> (Gradient Descent). <br />
+\(\text{1: } \boldsymbol{\theta}_0 = \mathrm{rand()} \\
+\text{2: } \textbf{repeat} \\
+\text{3: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L( \boldsymbol{\theta}_{t-1})  \\
+\text{4: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \mathbf{g}_t \\
+\text{5: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p style="text-align: justify;">Gambar 1 mengilustrasikan parameter dengan ruang solusi berdimensi dua – parameter pada <em>neural networks</em> umumnya berdimensi banyak.
+Parameter \(\boldsymbol{\theta}\) dapat diilustrasikan sebagai sebuah titik pada ruang solusi.
+Secara intuitif, GD memindah-mindahkan titik tersebut berdasarkan arahan dari <em>gradient</em>, 
+yang menginformasikan <strong>jalur tercuram</strong> dari suatu posisi tertentu ke posisi tujuan.
+Harapannya, akumulasi informasi dari <em>gradient</em> pada tiap-tiap posisi mampu mengantarkan ke solusi optimal.</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="http://komarix.org/ac/papers/thesis/thesis_html/img30.png" alt="GD" title="Gradient Descent" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 1</strong>. Gradient Descent (sumber: <a href="http://komarix.org/ac/papers/thesis/thesis_html/img30.png]">http://komarix.org/ac/papers/thesis/thesis_html/img30.png</a>)</p>
+
+<p style="text-align: justify;">Namun demikian, strategi memilih jalur tercuram ini memiliki beberapa kekurangan.
+Pertama, terdapat resiko untuk terjebak di solusi yang kurang optimal. 
+Kedua, tidak ada garansi untuk terjadi konvergensi ke suatu solusi.
+Kedua masalah ini terkait juga dengan pemilihan konstanta \(\alpha &gt; 0\) (baris ke-4 pada <strong>Algoritma 1</strong>).
+Jika \(\alpha\) terlalu kecil, maka \(\boldsymbol{\theta}\) berpotensi terperangkap ke <em>local optima</em>, 
+sedangkan jika terlalu besar maka berpotensi terjadi osilasi/divergensi.</p>
+
+<p style="text-align: justify;">Masalah yang lebih fundamental adalah bahwa mengikuti jalur tercuram belum tentu merupakan cara yang benar atau efisien untuk menuju tujuan solusi, 
+terutama untuk lanskap ruang solusi yang kompleks.
+Bayangkan seseorang yang turun dari perbukitan dengan berjalan kaki, tetapi tidak tahu jalan menuju daratan dan tidak mempunyai peta. 
+Salah satu metode heuristis yang bisa dipakai adalah selalu mengikuti jalur yang turun ke bawah.
+Padahal bisa jadi itu akan membawa kita berputar-putar dahulu sebelum mencapai daratan tujuan, atau bahkan bisa terperangkap ke jurang.
+Mungkin saja jalur yang benar adalah dengan cara menaiki bukit-bukit kecil terlebih dahulu, lalu kemudian turun.</p>
+
+<p style="text-align: justify;">Dapatkah GD diperbaiki sehingga mampu membentuk jalur optimisasi yang lebih efisien? 
+Salah satu cara tradisional untuk melakukan hal tersebut adalah dengan melakukan penjadwalan <em>annealing</em> terhadap <em>learning rate</em> \(\alpha\), 
+e.g., bernilai besar pada awal iterasi, lalu perlahan-lahan mengecil pada pertengahan / akhir iterasi.
+Namun kita memiliki 2 strategi yang lebih elegan: i) <em>momentum</em> dan ii) <em>adaptive subgradient</em>.</p>
+
+<h1 id="gd-dengan-classical-momentum-cm">GD dengan Classical Momentum (CM)</h1>
+<p style="text-align: justify;">Momentum (<a href="https://www.researchgate.net/profile/Boris_Polyak2/publication/243648538_Some_methods_of_speeding_up_the_convergence_of_iteration_methods/links/5666fa3808ae34c89a01fda1.pdf">Polyak, 1964</a>) merupakan sebuah metode untuk mengakselerasi GD dengan memanfaatkan informasi <em>gradient</em> dari langkah-langkah sebelumnya.
+Akumulasi informasi dari <em>gradient</em> berguna untuk mengurangi efek osilisasi sehingga jalur optimisasi menjadi lebih stabil.
+Algoritma 2 di bawah ini merupakan modifikasi dari GD dengan penambahan strategi momentum.</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 2</strong> (Gradient Descent dengan Classical Momentum (CM)). <br />
+\(\text{1: } \boldsymbol{\theta}_0 = \mathrm{rand()} \\
+\text{2: } \mathbf{m}_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L(\boldsymbol{\theta}_{t-1})  \\
+\text{5: } \quad \mathbf{m}_t := \mathbf{g}_t + \beta \mathbf{m}_{t-1} \\
+\text{6: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \mathbf{m}_t \\
+\text{7: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p style="text-align: justify;">Kita sebut saja algoritma ini dengan <em>Classical Momentum</em> (CM) – pada bagian berikutnya akan dibahas metode momentum yang lebih terkini.
+Jika dibandingkan dengan GD, CM hanya melakukan satu penambahan, yaitu \(\beta m_{t-1}\), 
+dimana \(\beta\) merupakan konstanta yang mengatur seberapa besar kontribusi dari <em>gradient</em> sebelumnya. 
+\(\beta = 0.9\) merupakan best practice dari CM – perhatikan bahwa \(\beta = 0\) akan membuat CM sama persis dengan GD.</p>
+
+<p style="text-align: justify;">Andaikan gradient \(g_t\) merupakan sebuah vektor berdimensi banyak.
+Secara intuitif, CM akan memberikan bobot yang lebih pada dimensi tertentu yang memiliki nilai yang konsisten untuk tiap langkah.
+Sebaliknya, untuk dimensi yang tidak stabil CM akan memberikan bobot yang lebih kecil.
+Hal inilah yang menstabilkan jalur optimisasi dari parameter \(\theta\) sehingga menimbulkan efek akselerasi.
+Gambar 2 mengilustrasikan perbedaan antara GD dan CM.</p>
+
+<p style="text-align: justify;">Perbedaan antara GD dan CM juga dapat dijelaskan dengan analogi sebagai berikut: GD seperti seseorang yang berjalan kaki di perbukitan dan mencoba turun ke daratan, 
+sedangkan CM seperti bola yang menggelinding ke bawah.
+Bagi yang tertarik mendalami lebih lanjut tentang CM bisa membaca sebuah tulisan brilian di sini: <a href="http://distill.pub/2017/momentum/">http://distill.pub/2017/momentum</a>.</p>
+
+<div style="text-align: center;">
+  <p><img src="http://sebastianruder.com/content/images/2015/12/without_momentum.gif" width="300" /> <img src="http://sebastianruder.com/content/images/2015/12/with_momentum.gif" width="300" /></p>
+</div>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 2</strong>. Gradient Descent tanpa Momentum (kiri) vs dengan Momentum (kanan) (sumber: <a href="http://sebastianruder.com/optimizing-gradient-descent/">http://sebastianruder.com/optimizing-gradient-descent/</a>)</p>
+
+<h1 id="nesterovs-accelerated-gradient-nag">Nesterov’s Accelerated Gradient (NAG)</h1>
+
+<p style="text-align: justify;">Jika kita perhatikan Algoritma 2, CM menghitung vektor gradient \(g_t\) terlebih dahulu, lalu menghitung vektor momentum \(m_t\).
+(<a href="http://www.cs.toronto.edu/~fritz/absps/momentum.pdf">Sutskever et al. 2013</a>) melakukan <em>look-ahead</em> terhadap vektor parameter \(\theta_t\) dengan menggunakan 
+momentum sebelum menghitung vektor gradient \(g_t\):</p>
+
+\[g_t = \nabla_{\theta_{t-1}} L(\theta_{t-1} - \beta m_{t-1}).\]
+
+<p style="text-align: justify;">Strategi ini dinamakan dengan Nesterov’s Accelerated Gradient (NAG) ([Nesterov 1983]).
+Secara lengkapnya langkah-langkah NAG dapat dilihat pada Algoritma 3.1.</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 3.1</strong> (Nesterov’s Accelerated Gradient (NAG)). <br />
+\(\text{1: } \boldsymbol{\theta}_0 = \mathrm{rand()} \\
+\text{2: } \mathbf{m}_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L(\boldsymbol{\theta}_{t-1} - \beta \mathbf{m}_{t-1})  \\
+\text{5: } \quad \mathbf{m}_t := \mathbf{g}_t + \beta \mathbf{m}_{t-1} \\
+\text{6: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \mathbf{m}_t \\
+\text{7: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p style="text-align: justify;">Perbedaan antara CM dan NAG diilustrasikan pada Gambar 3.
+Dapat dilihat bahwa NAG terlebih dahulu ‘memindahkan’ parameter mengikuti vektor momentum, lalu barulah menghitung vektor gradient.
+Sedangkan CM menghitung vektor gradient di awal, dan posisi akhir parameter berdasarkan akumulasi antara vektor gradient tersebut dengan vektor momentum.</p>
+
+<p>Walaupun perubahan yang dilakukan nyaris <em>innocent</em>, NAG menghasilkan performa yang lebih baik dibandingkan CM baik secara empiris maupun dari sisi teori.</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="http://cs231n.github.io/assets/nn3/nesterov.jpeg" alt="NAG" />
+<strong>Gambar 3</strong>. Classical Momentum vs Nesterov’s Accelerated Gradient (sumber: <a href="http://cs231n.github.io/assets/nn3/nesterov.jpeg">http://cs231n.github.io/assets/nn3/nesterov.jpeg</a>)</p>
+
+<p>Untuk kemudahan implementasi, kita dapat menulis ulang algoritma NAG seperti pada Algoritma 3.2.</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 3.2</strong> (Nesterov’s Accelerated Gradient (NAG)). <br />
+\(\text{1: } \theta_0 = \mathrm{rand()} \\
+\text{2: } \mathbf{m}_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L(\boldsymbol{\theta}_{t-1})  \\
+\text{5: } \quad \mathbf{m}_t := \mathbf{g}_t + \beta \mathbf{m}_{t-1} \\
+\text{6: } \quad \hat{\mathbf{m}}_t := \mathbf{g}_t + \beta \mathbf{m}_t \\
+\text{7: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \hat{\mathbf{m}}_t \\
+\text{8: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p><br /></p>
+
+<h1 id="adagrad-dan-rmsprop">AdaGrad dan RMSProp</h1>
+<p style="text-align: justify;">Cara lain untuk memperbaiki GD selain dengan momentum adalah dengan memberikan kecepatan <em>update</em> yang berbeda pada tiap dimensi vektor parameter \(\theta_t\) dan mampu beradaptasi berdasarkan indikator tertentu.
+Salah satu indikator yang dapat dipakai adalah besarnya perubahan nilai vektor <em>gradient</em> pada dimensi tertentu.
+Realisasi dari ide ini dikenal dengan metode <em>adaptive subgradient descent</em> (AdaGrad) (<a href="http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf">Duchi et al. 2011</a>), yang diringkas pada Algoritma 4 di bawah ini.</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 4</strong> (AdaGrad). <br />
+\(\text{1: } \boldsymbol{\theta}_0 = \mathrm{rand()} \\
+\text{2: } \mathbf{n}_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L(\boldsymbol{\theta}_{t-1})  \\
+\text{5: } \quad \mathbf{n}_t := \mathbf{g}^2_t + \mathbf{n}_{t-1} \\
+\text{6: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \frac{\mathbf{g}_t}{ \sqrt{\mathbf{n}_t} + \varepsilon} \\
+\text{7: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p style="text-align: justify;">Perhatikan bahwa \(\sqrt{\mathbf{n}_t}\) memberikan informasi seberapa besar perubahan nilai sebuah elemen pada vektor <em>gradient</em>, yang berfungsi sebagai faktor skala untuk <em>gradient</em> \(\mathbf{g}_t\) – operasi pembagian pada baris 6 merupakan operasi per-elemen antar 2 vektor.
+Apabila nilai \(\sqrt{\mathbf{n}_t}\) pada dimensi tertentu mengecil, maka kecepatan <em>update</em> pada dimensi tersebut bertambah, dan sebaliknya.
+Hal ini akan menyeimbangkan kontribusi dari tiap dimensi dari vektor <em>gradient</em> sehingga membuat jalur optimisasi menjadi lebih stabil.</p>
+
+<p style="text-align: justify;">AdaGrad memiliki sebuah problem, yaitu pada waktu tertentu nilai \(\mathbf{n}_t\) berpotensi sangat besar sehingga malah akan memperlambat proses optimisasi.
+Untuk mengatasi hal ini, (<a href="http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf">Tieleman dan Hinton 2012</a>)
+melakukan sedikit modifikasi terhadap AdaGrad dengan menambahkan konstanta \(\gamma\) dan \(1-\gamma\) untuk mengatur besaran masing-masing dari 
+\(\mathbf{g}^2_t\) dan \(\mathbf{n}_t\). 
+Modifikasi ini menghasilkan nama algoritma baru yang disebut dengan RMSProp – bandingkan baris ke-5 pada Algoritma 4 dan 5.</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 5</strong> (RMSProp). <br />
+\(\text{1: } \boldsymbol{\theta}_0 = \mathrm{rand()} \\
+\text{2: } \mathbf{n}_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L(\boldsymbol{\theta}_{t-1})  \\
+\text{5: } \quad \mathbf{n}_t := (1 - \gamma) \mathbf{g}^2_t + \gamma \mathbf{n}_{t-1} \\
+\text{6: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \frac{\mathbf{g}_t}{ \sqrt{\mathbf{n}_t} + \varepsilon} \\
+\text{7: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p><br /></p>
+
+<h1 id="adam">Adam</h1>
+<p style="text-align: justify;">Kita telah melihat bahwa terdapat 2 pendekatan yang berbeda untuk memperbaiki <em>gradient descent</em>: i) <em>momentum</em> dan ii) <em>adaptive subgradient</em>.
+Dapatkah kita menggabungkan keduanya sehingga dapat memanfaatkan hal yang terbaik dari kedua pendekatan tersebut?
+(<a href="https://arxiv.org/pdf/1412.6980.pdf">Kingma and Ba 2015</a>) menjawab pertanyaan ini dengan mengkombinasikan RMSProp dan <em>classical momentum</em> (CM).
+Algoritma baru yang dihasilkan bernama <em>adaptive moment estimation</em> (Adam).</p>
+
+<div style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
+  <p><strong>Algoritma 6</strong> (Adam). <br />
+\(\text{1: } \boldsymbol{\theta}_0 = \mathrm{rand()} \\
+\text{2: } \mathbf{n}_0 = 0 \\
+\text{3: } \textbf{repeat} \\
+\text{4: } \quad \mathbf{g}_t := \nabla_{\boldsymbol{\theta}_{t-1}} L(\boldsymbol{\theta}_{t-1})  \\
+\text{5: } \quad \mathbf{m}_t := (1 - \beta) \mathbf{g}_t + \beta \mathbf{m}_{t-1} \\
+\text{6: } \quad \hat{\mathbf{m}}_t := \frac{\mathbf{m}_t}{1 - \beta^t} \\
+\text{7: } \quad \mathbf{n}_t := (1 - \gamma) \mathbf{g}^2_t + \gamma \mathbf{n}_{t-1} \\
+\text{8: } \quad \hat{\mathbf{n}}_t := \frac{\mathbf{n}_t}{1 - \gamma^t} \\
+\text{9: } \quad \boldsymbol{\theta}_t := \boldsymbol{\theta}_{t-1} - \alpha \frac{\hat{\mathbf{m}}_t}{ \sqrt{\hat{\mathbf{n}}_t} + \varepsilon}  \\
+\text{10: } \textbf{until}\quad\text{convergence}\)</p>
+</div>
+
+<p style="text-align: justify;">Dapat kita lihat pada Algoritma 6, baris ke-5 merupakan unsur <em>momentum</em> dan baris ke-7 merupakan unsur <em>adaptive subgradient</em>.
+Adam juga menggunakan teknik <em>bias correction</em> yang memberikan aproksimasi lebih baik untuk \(\mathbf{m}_t\) dan \(\mathbf{n}_t\).
+Saat ini Adam menjadi pilihan favorit sebagai alat optimisasi pada deep learning.</p>
+
+:ET

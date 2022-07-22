@@ -1,0 +1,470 @@
+I"¶º<!-- introduction -->
+<p style="text-align: justify;">Salah satu problem klasik pada Computer Vision adalah bagaimana mengenali / menandai / menentukan <em>outline</em> bentuk benda yang berada pada suatu gambar.
+Dan salah satu metode paling awal yang didesain untuk memecahkan problem tersebut adalah Active Contour Model yang juga dikenal dengan Snakes (<a href="http://web.cs.ucla.edu/~dt/papers/ijcv88/ijcv88.pdf">Kaas et al. IJCV1988</a>).
+Snakes telah banyak diaplikasikan untuk kebutuhan object tracking, segmentation, edge detection, stereo matching, dan sebagainya.</p>
+
+<!-- intuitive explanation, possibly with pictures -->
+<p style="font-size: 80%; text-align: center;"><img src="/assets/Snake-contour-example.jpg" alt="Sumber: https://en.wikipedia.org/wiki/Active_contour_model" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 1</strong>. Active Contour Model/Snakes (sumber: <a href="https://en.wikipedia.org/wiki/Active_contour_model">https://en.wikipedia.org/wiki/Active_contour_model</a>)</p>
+
+<p><em>Snake</em> direpresentasikan dengan kontur yang dapat berubah-ubah bentuk (<em>deformable contour</em>).
+Secara matematis, kontur dapat dimodelkan dengan fungsi kontinu yang mengembalikan nilai titik koordinat 2 dimensi</p>
+
+\[\begin{equation}
+\label{eq:contour}
+\mathbf{v}: \mathbb{S} \rightarrow \mathbb{R}^2, \text{ dimana } \mathbb{S} \subseteq \{ x \in \mathbb{R} | 0 &lt;= x &lt;= 1\}
+\end{equation}\]
+
+<p style="text-align: justify;">dengan \(\mathbf{v}[0]\) dan \(\mathbf{v}[1]\) sebagai titik awal dan akhir dari kontur.
+Misalkan kita memiliki kontur/<em>Snake</em> awal \(\mathbf{v}^0\) berada pada sebuah data citra 2D (Gambar 1 kiri), algoritma <em>Snake</em> akan menuntun kontur tersebut menuju lokasi tempat terletaknya outline dari suatu benda (Gambar 1 kanan). 
+Kontur awal dapat diinisialisasi secara acak atau ditentukan oleh user. 
+Idealnya kontur akhir akan berada tepat pada outline, yang kita nyatakan dengan \(\mathbf{v}^*\).</p>
+
+<h3 id="cara-kerja">Cara Kerja</h3>
+<p style="text-align: justify;">Bagaimana cara kerja algoritma Snake agar dia bisa menuju ke jalan yang benar?
+Snake memanfaatkan <em>energy minimization</em>, yaitu kontur $\mathbf{v}$ beradaptasi untuk mencari nilai energi minimum.</p>
+
+<p>Energi dari Snake diformulasikan dengan <em><a href="https://en.wikipedia.org/wiki/Functional_(mathematics)">functional</a></em> dalam bentuk integral:</p>
+
+\[\begin{equation}
+\label{eq:efunc}
+J(\mathbf{v}) = \int_{0}^{1} E_{\mathrm{snake}}(\mathbf{v}(s)) ds
+\end{equation}\]
+
+<p>dimana $E_{\mathrm{snake}}(\mathbf{v}(s))$ merupakan fungsi energi yang dievaluasi pada saat $s$. 
+Bentuk fungsi energi $E_{\mathrm{snake}}$ ini menentukan karakteristik/kelakuan dari Snake.</p>
+
+<p>Algorithma Active Contour Model dimodelkan dengan problem optimisasi sebagai berikut:</p>
+
+\[\begin{equation}
+	\label{eq:opt}
+	\mathbf{v}^* := \arg \min_{\mathbf{v}} J(\mathbf{v})
+\end{equation}\]
+
+<p style="text-align: justify;">Sebelum membahas solusi dari problem optimisasi di atas, kita perlu terlebih dahulu memahami bentuk fungsi energi $E_{\mathrm{snake}}$.</p>
+
+<h3 id="fungsi-energi">Fungsi Energi</h3>
+<p><a href="http://web.cs.ucla.edu/~dt/papers/ijcv88/ijcv88.pdf">[Kass, 1988]</a> mendekomposisi $E_{\mathrm{snake}}$ menjadi dua bentuk energi, yaitu energi internal ($E_{\mathrm{int}}$) dan energi external ($E_{\mathrm{ext}}$).</p>
+
+\[\begin{equation}
+\label{eq:esnake}
+E_{\mathrm{snake}}(\mathbf{v}(s)) = E_{\mathrm{int}}(\mathbf{v}(s)) + E_{\mathrm{ext}}(\mathbf{v}(s)).
+\end{equation}\]
+
+<p>Secara umum, energi internal merupakan energi yang berasal dari Snake sendiri, sedangkan energi eksternal merupakan energi yang berasal dari luar, dalam hal ini berasal dari citra 2D.
+Berikut ini penjelasan detil dari kedua energi tersebut.</p>
+
+<p><strong>Energi internal</strong>. Energi internal berperan dalam mengontrol deformasi dari kontur Snakes. Kita asumsikan fungsi kontur \(\mathbf{v}(s)\) memiliki turunan hingga orde ke-2. Energi internal dinyatakan dalam bentuk penjumlahan turunan pertama dan turunan kedua sebagai berikut:</p>
+
+\[\begin{equation}
+E_{\mathrm{int}}(\mathbf{v}(s)) = \frac{1} {2} \left( 
+						\alpha \left\| \frac{ \partial \mathbf{v}(s) } { \partial s }  \right\|^2 + 
+						\beta \left\| \frac{ \partial^2 \mathbf{v}(s) } { \partial s^2 } \right\|^2
+					\right),
+\end{equation}\]
+
+<p>dimana konstanta $\alpha$ mengatur <em>tension</em> dan $\beta$ mengontrol <em>rigidigity</em> dari Snake.</p>
+
+<p>Semakin besar nilai $\alpha$, Snake akan tampak seperti <em>garis lurus</em>, yang berarti tidak bersifat seperti ular lagi.
+Semakin besar nilai $\beta$ akan membuat Snake semakin tidak lentur. 
+Nilai $\alpha$ dan $\beta$ harus disetel secara tepat agar Snake <em>deformable</em>, namun disaat yang bersamaan harus tetap menjaga strukturnya sehingga tidak tampak seperti benang kusut.</p>
+
+<p><strong>Energi eksternal</strong>. Energi eksternal menentukan ke arah mana Snake harus bergerak untuk mencapai posisi stasioner. 
+Kita dapat membayangkan semacam ada kekuatan dari luar yang menarik/mendorong Snake untuk menuju posisi tertentu.</p>
+
+<p><em>Kekuatan dari luar</em> tidak lain berasal dari lingkungan tempat Snake bersemayam, yaitu data citra.
+Ada beberapa opsi untuk memodelkan kekuatan dari luar ini, antara lain:</p>
+
+\[\begin{equation*}
+E^{(1)}_{\mathrm{ext}} (\mathbf{v}(s)) = | I(s) | \\
+E^{(2)}_{\mathrm{ext}} (\mathbf{v}(s)) = -| \nabla I(s) | \\
+\end{equation*}\]
+
+<p>$E^{(1)}$ menggunakan langsung piksel dari citra sebagai sumber energi eksternal, sedangkan $E^{(2)}$ menggunakan nilai negatif dari <em>gradient</em> citra.</p>
+
+<p>Terkadang kita perlu untuk mem-<em>blur</em> data citra sedikit sehingga energi akan terdistribusi menjangkau area yang lebih luas. 
+Ini diperlukan terutama pada situasi dimana Snake diinisialisasi pada posisi yang agak jauh dari target.
+Kita dapat memanfaatkan <em>Gaussian filter</em> untuk mem-<em>blur</em> piksel sehingga menghasilkan opsi energi eksternal yang lain</p>
+
+\[\begin{equation*}
+E^{(3)}_{\mathrm{ext}} (\mathbf{v}(s)) = | G_{\sigma}(s) \ast I(s) | \\
+E^{(4)}_{\mathrm{ext}} (\mathbf{v}(s)) = -|G_{\sigma}(s) \ast \nabla I(s) |,
+
+\end{equation*}\]
+
+<p>atau bahkan menggabungkan <em>raw pixels</em> dengan gradient seperti di bawah ini:</p>
+
+\[\begin{equation*}
+E^{(5)}_{\mathrm{ext}} (\mathbf{v}(s) )= w_{\mathrm{line}} | I(s) | + w_{\mathrm{edge}} | \nabla I(s) |
+\end{equation*}\]
+
+<h3 id="solusi-numeris">Solusi Numeris</h3>
+<p>Sekarang kita akan mencari solusi problem optimisasi Snakes ($\ref{eq:opt}$).
+Pertama-tama kita dapat tulis persamaan functional $J(\mathbf{v})$ ($\ref{eq:efunc}$) menjadi</p>
+
+\[\begin{equation}
+\label{eq:efunc2}
+J(\mathbf{v}) = \int_{0}^{1} E_{\mathrm{snake}}(s, \mathbf{v}(s), \frac{\partial \mathbf{v}}{\partial s}(s), \frac{\partial^2 \mathbf{v}}{\partial s^2}(s)) ds
+\end{equation}\]
+
+<p>Penulisan $E_{\mathrm{snake}}$ dengan 4 buah parameter ini dideduksi dari pengetahuan sebelumnya mengenai energi internal dan energi eksternal. 
+Untuk menyederhanakan notasi, kita tulis $\mathbf{v}^\prime = \frac{ \partial \mathbf{v} }{ \partial s}$ dan $\mathbf{v}^{\prime\prime} = \frac{ \partial^2 \mathbf{v} }{ \partial s^2}$.</p>
+
+<p>Bagaimana mencari fungsi optimum $\mathbf{v}$ dari <em>functional</em> $J(\mathbf{v})$? 
+Kita akan meminjam teknik dasar dari <a href="://en.wikipedia.org/wiki/Calculus_of_variations">calculus of variation</a> yang dikenal dengan <a href="https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation">Euler-Lagrange equation</a>.
+Dengan demikian, Euler-Lagrange equation dari persamaan ($\ref{eq:efunc2}$) adalah sebagai berikut:</p>
+
+\[\begin{equation}
+\label{eq:euler}
+\frac{ \partial }{ \partial \mathbf{v} } E_{\mathrm{snake}} ( s, \mathbf{v}(s), \mathbf{v}^{\prime}(s), \mathbf{v}^{\prime\prime}(s) ) - 
+\frac{ \partial }{ \partial s \partial \mathbf{v}^{\prime} } E_{\mathrm{snake}} ( s, \mathbf{v}(s), \mathbf{v}^{\prime}(s), \mathbf{v}^{\prime\prime}(s) ) \\ 
++ \frac{ \partial }{ \partial s^2 \partial \mathbf{v}^{\prime\prime}}   E_{\mathrm{snake}} ( s, \mathbf{v}(s), \mathbf{v}^{\prime}(s), \mathbf{v}^{\prime\prime}(s) ) = 0.
+
+\end{equation}\]
+
+<p>Dari pengetahuan kita sebelumnya tentang energi internal dan eksternal, persamaan ($\ref{eq:euler}$) dapat ditulis sebagai berikut:</p>
+
+\[\begin{equation}
+\label{eq:euler2}
+-F(\mathbf{v}(s)) - \alpha \mathbf{v}^{\prime\prime}(s) + \beta \mathbf{v}^{\prime\prime\prime\prime}(s) = 0
+\end{equation}\]
+
+<p>dimana $F(\mathbf{v}) = - \frac{ \partial E_{\mathrm{ext} } (\mathbf{v}) }{ \partial \mathbf{v} }$, yang dapat diinterpretasi sebagai gaya eksternal yang mengarahkan Snake ke lokasi yang memiliki energi minimum.</p>
+
+<p style="text-align: justify;">Secara teori, persamaan ($\ref{eq:euler2}$) dapat diselesaikan secara analitis apabila bentuk fungsi $F(\mathbf{v})$, $\mathbf{v}^\prime$, dan $\mathbf{v}^{\prime\prime}$ diketahui secara pasti. 
+Namun pada kenyataannya tidak demikian. 
+Satu-satunya cara yang dapat dilakukan adalah dengan melakukan aproksimasi: mencari solusi $\mathbf{v}^*$ yang mendekati persamaan ($\ref{eq:euler2}$). 
+Kita akan memanfaatkan <a href="https://en.wikipedia.org/wiki/Finite_difference">finite difference</a> dan solusi iteratif untuk melakukan aproksimasi.</p>
+
+<p><strong>Finite difference</strong>.
+<em>Finite difference</em> bekerja pada ranah diskrit. 
+Oleh karena itu, pertama-tama kita nyatakan kontur Snake ($\ref{eq:contour}$) secara diskrit, yaitu sebagai himpunan titik 2D sebagai berikut:</p>
+
+\[\begin{equation}
+V = \{ \mathbf{v}_1, \ldots, \mathbf{v}_n \}, \text{ dimana } \mathbf{v}_i = [x_i, y_i]^\top
+\end{equation}\]
+
+<p>Masing-masing komponen x dan y dari titik-titik tersebut juga dapat dinyatakan dengan vektor:</p>
+
+\[\begin{eqnarray}
+\mathbf{x} &amp;=&amp; [x_1, \ldots, x_n]^\top, \nonumber \\
+\label{eq:vaxes}
+\mathbf{y} &amp;=&amp; [y_1, \ldots, y_n]^\top.
+\end{eqnarray}\]
+
+<p><em>Finite difference</em> menyatakan bahwa turunan pertama dari fungsi kontur dapat diaproksimasi secara diskrit sebagai berikut:</p>
+
+\[\begin{equation}
+\nonumber
+\mathbf{v}^{\prime}_{i} \approx \frac{ \mathbf{v}_{i + \frac{1}{2}h} -\mathbf{v}_{i - \frac{1}{2}h} } { h }
+\end{equation}\]
+
+<p>Dari sini kita dapat menurunkan persamaan aproksimasi untuk turunan kedua dan keempat, dengan $h=1$:</p>
+
+\[\begin{eqnarray}
+\mathbf{v}^{\prime\prime}_{i}  &amp;\approx&amp;  \mathbf{v}_{i+1} - 2 \mathbf{v}_i+ \mathbf{v}_{i-1} , \nonumber \\ 
+\label{eq:fda}
+\mathbf{v}^{\prime\prime\prime\prime}_{i} &amp; \approx &amp;   \mathbf{v}_{i+2} - 4 \mathbf{v}_{i+1} + 6\mathbf{v}_i  
+	 - 4 \mathbf{v}_{i-1} + \mathbf{v}_{i-2}.
+\end{eqnarray}\]
+
+<p>Dengan menggunakan salah satu vektor axis dari kontur $V$ (lihat persamaan ($\ref{eq:vaxes}$)) kita dapat menyatakan persaman ($\ref{eq:fda}$) dalam bentuk matriks dan vektor 
+\(\begin{eqnarray}
+\mathbf{x}^{\prime\prime} &amp; \approx &amp; \mathbf{A} \mathbf{x}, \nonumber \\ 
+\label{eq:fda2}
+\mathbf{x}^{\prime\prime\prime\prime} &amp; \approx &amp; \mathbf{B} \mathbf{x}, 
+\end{eqnarray}\)</p>
+
+<p>dimana $\mathbf{A}$ dan $\mathbf{B}$ merupakan pentadiagonal matriks dengan bentuk sebagai berikut:</p>
+
+\[\begin{eqnarray}
+\mathbf{A} = 
+\begin{pmatrix}
+-2 &amp; 1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 1 \\
+1 &amp; -2 &amp; 1 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; -2 &amp; 1 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 1 &amp; -2  &amp; 1 \\
+1 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 1  &amp; -2 
+\end{pmatrix}, \nonumber\\
+
+\mathbf{B} = 
+\begin{pmatrix}
+6 &amp; -4 &amp; 1 &amp; 0 &amp; \cdots &amp; 0 &amp; 1 &amp; -4 \\
+-4 &amp; 6 &amp; -4 &amp; 1 &amp; \cdots &amp; 0 &amp; 0 &amp; 1 \\
+1 &amp; -4 &amp; 6 &amp; -4 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\
+1 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; -4 &amp; 6  &amp; -4 \\
+-4 &amp; 1 &amp; 0 &amp; 0 &amp; \cdots &amp; 1 &amp; -4  &amp; 6 
+\end{pmatrix}. \nonumber
+
+\end{eqnarray}\]
+
+<p>Hal yang sama juga mesti dilakukan terhadap vektor axis $\mathbf{y}$.</p>
+
+<p>Dengan menggunakan aproksimasi ($\ref{eq:fda2}$) kita dapat menulis ulang persamaan ($\ref{eq:euler2}$) dalam bentuk diskrit untuk masing-masing axis $\mathbf{x}$ and $\mathbf{y}$</p>
+
+\[\begin{eqnarray}
+-\mathbf{f}_x - \alpha \mathbf{A} \mathbf{x} + \beta \mathbf{B} \mathbf{x} = 
+-\mathbf{f}_x + \mathbf{Z} \mathbf{x}= 0, \nonumber \\
+\label{eq:euler3}
+-\mathbf{f}_y - \alpha \mathbf{A} \mathbf{y} + \beta \mathbf{B} \mathbf{y} =  
+-\mathbf{f}_y + \mathbf{Z} \mathbf{y} = 0,
+\end{eqnarray}\]
+
+<p>dimana $\mathbf{f}_x$ dan $\mathbf{f}_y$ merupakan bentuk diskrit dari $F(\mathbf{v})$ untuk masing-masing axis, dan $\mathbf{Z} = -\alpha \mathbf{A} + \beta \mathbf{B}$.</p>
+
+<p>Perhatikan bahwa solusi untuk $\mathbf{x}$ dan $\mathbf{y}$ dapat diselesaikan secara analitis jika matriks $\mathbf{Z}$ memiliki <em>inverse</em>.
+Namun demikian dikarenakan problem optimisasi ($\ref{eq:efunc2}$) <em>non-convex</em> dan <em>non-linear</em>, kita tidak dapat menjamin bahwa solusi analitis memberikan solusi yang cukup baik. 
+Ditambah lagi dalam kebanyakan aplikasi, kontur awal ditentukan oleh <em>user</em> dan kita menginginkan solusi/kontur akhir <em>tidak jauh</em> dari kontur awal. 
+Solusi analitis tidak mampu melakukan hal tersebut.</p>
+
+<p><strong>Solusi iteratif</strong>.
+Untuk mengatasi permasalahan di atas, kita memerlukan mekanisme iteratif yang mengubah kontur awal menjadi kontur akhir yang diinginkan.
+Trik yang dapat digunakan adalah dengan mengubah persamaan ($\ref{eq:euler3}$) menjadi dinamis terhadap waktu: memasukkan variabel waktu $t$ dan turunan pertama kontur terhadap waktu $\frac{ \partial \mathbf{x} }{ \partial t}, \frac{ \partial \mathbf{y} }{ \partial t}$
+\(\begin{eqnarray}
+-\mathbf{f}_{x(t-1)} + \mathbf{Z} \mathbf{x}(t) = - \frac{ \partial \mathbf{x}(t) }{ \partial t } \rightarrow 0 , \nonumber \\
+\label{eq:euler4}
+-\mathbf{f}_{y(t-1)} + \mathbf{Z} \mathbf{y}(t) = - \frac{ \partial \mathbf{y}(t) }{ \partial t } \rightarrow 0 
+\end{eqnarray}\)</p>
+
+<p>Makna intuitif dari persamaan di atas adalah bahwa $\mathbf{x}(t)$ dan $\mathbf{y}(t)$ merupakan solusi akhir apabila sama (atau sangat dekat) dengan $\mathbf{x}(t-1)$ dan $\mathbf{y}(t-1)$. 
+Tanda negatif pada turunan pertama bertujuan untuk menjamin nilai ruas kanan selalu positif karena persyaratan $\mathbf{x}(t) \leq \mathbf{x}(t-1)$.
+Dikarenakan turunan pertama $\frac{ \partial \mathbf{x} }{ \partial t}, \frac{ \partial \mathbf{y} }{ \partial t}$ tidak dapat dihitung secara langsung, kita akan gunakan kembali <em>finite difference</em> sehingga menghasilkan persamaan sebagai berikut
+\(\begin{eqnarray}
+-\mathbf{f}_{x(t-1)} + \mathbf{Z} \mathbf{x}(t) = - \frac{ (\mathbf{x}(t) - \mathbf{x}(t-1) )}{ \tau }, \nonumber \\ 
+\label{eq:euler5}
+-\mathbf{f}_{y(t-1)} + \mathbf{Z} \mathbf{y}(t) = - \frac{ (\mathbf{y}(t) - \mathbf{y}(t-1) )}{ \tau },
+\end{eqnarray}\)</p>
+
+<p>dengan $\tau&gt;0$.</p>
+
+<p>Dengan sedikit operasi aljabar kita akan mendapatkan persamaan akhir solusi iteratif di bawah ini:
+\(\begin{eqnarray}
+\mathbf{x}(t) = \left(\mathbf{I} + \tau \mathbf{Z} \right)^{-1} \left( \mathbf{x}(t-1) + \tau \mathbf{f}_{x(t-1)} \right), \nonumber \\
+\label{eq:final}
+\mathbf{y}(t) = \left(\mathbf{I} + \tau \mathbf{Z} \right)^{-1} \left( \mathbf{y}(t-1) + \tau \mathbf{f}_{y(t-1)} \right), 
+\end{eqnarray}\)</p>
+
+<p>dimana $\mathbf{I}$ merupakan matriks identitas.
+Komputasi persamaan di atas dilakukan berulang-ulang hingga tidak terjadi perubahan terhadap kontur $\mathbf{v}(t) = (\mathbf{x}(t), \mathbf{y}(t))$.</p>
+
+<p>Secara rinci, algoritma Snakes/Active Contour Model dapat ditulis dalam <em>pseudo-code</em> di bawah ini:</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="/assets/snakes_alg.png" alt="Algoritma Snakes" /></p>
+
+<h3 id="implementasi-segmentasi-bibir">Implementasi: Segmentasi Bibir</h3>
+
+<p>Kita akan lihat bagaimana performa algoritma Snakes yang telah dijelaskan di atas dalam melakukan segmentasi bibir. 
+Berikut ini merupakan <em>source code</em> kelas Snakes yang diimplementasi dalam Python.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Snakes</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'snakes'</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">hist</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">fit_kaas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Im</span><span class="p">,</span> <span class="n">init_snake</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">w_line</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w_edge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">bc</span><span class="o">=</span><span class="s">'periodic'</span><span class="p">,</span> <span class="n">max_px_move</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">max_iter</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">convergence</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">convergence_order</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="s">"""
+        Snake fitting based on the original method 
+            Kaas, M., Witkin, A., Terzopoulos, D. "Snakes: Active Contour Models". [IJCV 1998]
+
+        Adopted from skimage active_contour
+            https://github.com/scikit-image/scikit-image/blob/master/skimage/segmentation/active_contour_model.py
+
+        Args: 
+            Im (ndarray)            : (H x W) grayscaled image
+            init_snake (ndarray)    : (n, 2) initial snake contour
+                For periodic snakes, it should not include duplicate endpoints
+            alpha (float)           : Snake length shape parameter
+            beta (float)            : Snake smoothness shape parameter
+            w_line (float)          : Controls attraction to brightness. Use negative values to attract to dark regions
+            w_edge (float)          : Controls attraction to edges. Use negative values to repel snake from edges
+            tau (float)             : time step
+            bc {'periodic', 'free', 'fixed'}    : Boundary conditions for snake. 'periodic' attaches the two ends of the snake
+            max_px_move             : maximum pixel distance to move per iteration
+            max_iter                : maximum iterations to optimize snake shape
+            convergence             : convergence criteria
+
+        Returns:
+            snake (ndarray)         : (n, 2) final snake contour
+            Edge (ndarray)          : (H x W) sobel edge image 
+            Map (ndarray)           : (H x W) external energy
+
+        """</span>
+        <span class="c1"># Gaussian smoothing
+</span>        <span class="n">Img</span> <span class="o">=</span> <span class="n">img_as_float</span><span class="p">(</span><span class="n">Im</span><span class="p">)</span>
+        <span class="n">Img</span> <span class="o">=</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">Img</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                
+        <span class="c1"># Compute edge
+</span>        <span class="n">Edge</span> <span class="o">=</span> <span class="n">sobel</span><span class="p">(</span><span class="n">Img</span><span class="p">)</span>
+
+        <span class="c1"># Superimpose intensity and edge images
+</span>        <span class="n">Img</span> <span class="o">=</span> <span class="n">iproc</span><span class="p">.</span><span class="n">normalizeRange</span><span class="p">(</span><span class="n">Img</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxVal</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># normalize to 0-1 values, IMPORTANT!
+</span>        <span class="n">Edge</span> <span class="o">=</span> <span class="n">iproc</span><span class="p">.</span><span class="n">normalizeRange</span><span class="p">(</span><span class="n">Edge</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxVal</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Map</span> <span class="o">=</span> <span class="n">w_line</span> <span class="o">*</span> <span class="n">Img</span> <span class="o">+</span> <span class="n">w_edge</span> <span class="o">*</span> <span class="n">Edge</span>
+        
+        <span class="c1"># Interpolate for smoothness
+</span>        <span class="n">intp_fn</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span>
+                <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Map</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Map</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="n">Map</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">kx</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ky</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get snake contour axes
+</span>        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">init_snake</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">float</span><span class="p">),</span> <span class="n">init_snake</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">float</span><span class="p">)</span>
+        
+        <span class="c1"># store snake progress
+</span>        <span class="n">sn</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">]).</span><span class="n">T</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">hist</span><span class="p">[</span><span class="s">'snakes'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">hist</span><span class="p">[</span><span class="s">'snakes'</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">)</span> 
+
+        <span class="c1"># for convergence computation
+</span>        <span class="n">xsave</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">((</span><span class="n">convergence_order</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)))</span>
+        <span class="n">ysave</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">((</span><span class="n">convergence_order</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y0</span><span class="p">)))</span>
+
+        <span class="c1"># Build finite difference matrices
+</span>        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+	<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> \
+		<span class="n">np</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> \
+		<span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># second order derivative, central difference
+</span>	<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> \
+		<span class="n">np</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> \
+		<span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> \
+		<span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+		<span class="mi">6</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># fourth order derivative, central difference
+</span>	<span class="n">Z</span> <span class="o">=</span> <span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="n">A</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">B</span>
+ 
+        
+        <span class="c1"># Impose boundary conditions different from periodic:
+</span>	<span class="n">sfixed</span> <span class="o">=</span> <span class="bp">False</span>
+	<span class="k">if</span> <span class="n">bc</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'fixed'</span><span class="p">):</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">sfixed</span> <span class="o">=</span> <span class="bp">True</span>
+
+	<span class="n">efixed</span> <span class="o">=</span> <span class="bp">False</span>
+	<span class="k">if</span> <span class="n">bc</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">'fixed'</span><span class="p">):</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">efixed</span> <span class="o">=</span> <span class="bp">True</span>
+
+	<span class="n">sfree</span> <span class="o">=</span> <span class="bp">False</span>
+	<span class="k">if</span> <span class="n">bc</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'free'</span><span class="p">):</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">sfree</span> <span class="o">=</span> <span class="bp">True</span>
+
+	<span class="n">efree</span> <span class="o">=</span> <span class="bp">False</span>
+	<span class="k">if</span> <span class="n">bc</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">'free'</span><span class="p">):</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Z</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">efree</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="c1"># Calculate inverse
+</span>        <span class="n">Zinv</span> <span class="o">=</span> <span class="n">scipy</span><span class="p">.</span><span class="n">linalg</span><span class="p">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">Z</span><span class="p">)</span>
+
+        <span class="c1"># Snake energy minimization
+</span>        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">y0</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">=</span> <span class="n">intp_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+	    <span class="n">fy</span> <span class="o">=</span> <span class="n">intp_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        
+            <span class="k">if</span> <span class="n">sfixed</span><span class="p">:</span>
+                <span class="n">fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">efixed</span><span class="p">:</span>
+                <span class="n">fx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">fy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">sfree</span><span class="p">:</span>
+                <span class="n">fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+                <span class="n">fy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">efree</span><span class="p">:</span>
+                <span class="n">fx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+                <span class="n">fy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+
+            <span class="n">xn</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Zinv</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">fx</span><span class="p">)</span>
+            <span class="n">yn</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Zinv</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">fy</span><span class="p">)</span>
+            
+            <span class="c1"># Movements are capped to max_px_move per iter
+</span>            <span class="n">dx</span> <span class="o">=</span> <span class="n">max_px_move</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">xn</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">dy</span> <span class="o">=</span> <span class="n">max_px_move</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">yn</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">sfixed</span><span class="p">:</span>
+                <span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">dy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">if</span> <span class="n">efixed</span><span class="p">:</span>
+                <span class="n">dx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">dy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">dy</span>
+
+            <span class="c1"># Convergence criteria 
+</span>            <span class="c1"># - x(t) - x(t-i} &lt; convergence 
+</span>            <span class="c1"># - i: the last k (convergence_order) of previous snakes
+</span>	    
+	    <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="p">(</span><span class="n">convergence_order</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="mi">10000000</span>
+	    <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">convergence_order</span><span class="p">:</span>
+                <span class="n">xsave</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="n">ysave</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">y</span>
+	    <span class="k">else</span><span class="p">:</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">xsave</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:])</span> <span class="o">+</span>
+                           <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">ysave</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:]),</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">convergence</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">'Iter-%d/%d: convergence_order: %d, j: %d, dist: %f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">convergence_order</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">dist</span><span class="p">))</span>
+                <span class="c1"># store snake progress
+</span>                <span class="n">sn</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]).</span><span class="n">T</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">hist</span><span class="p">[</span><span class="s">'snakes'</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">)</span>
+        <span class="c1"># end for
+</span>
+        <span class="n">snake</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]).</span><span class="n">T</span>
+
+        <span class="k">return</span> <span class="n">snake</span><span class="p">,</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">Map</span><span class="p">,</span> <span class="n">Img</span>
+</code></pre></div></div>
+
+<p>Fungsi utama dari kode di atas adalah $\text{fit_kaas(.)}$ yang menjalankan algoritma iteratif Snakes.
+Ada beberapa hal teknis yang perlu diperhatikan yaitu:</p>
+<ol>
+  <li><em>Edge image</em> dihasilkan dengan <a href="https://en.wikipedia.org/wiki/Sobel_operator">sobel image detector</a> yang digunakan sebagai energi eksternal. Energi eksternal bisa berupa kombinasi antara gambar asli dengan gambar <em>edge</em> dengan memainkan parameter $w_{\mathrm{line}}$ dan $w_{\mathrm{edge}}$.</li>
+  <li>Turunan pertama energi eksternal dari Snakes ($\mathbf{f}_x, \mathbf{f}_y$) didapatkan dengan menggunakan <a href="ihttps://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RectBivariateSpline.html">RectBivariateSpline</a></li>
+  <li>Kriteria untuk memberhentikan iterasi algoritma Snakes dilakukan dengan membandingkan kontur terakhir dengan 10 kontur sebelumnya</li>
+</ol>
+
+<p>Gambar-gambar berikut ini merupakan hasil segmentasi bibir dari algoritma Snakes. 
+Kontur awal berbentuk elips yang dibuat secara manual. Lalu algoritma Snakes mengarahkan elips tersebut agar merekat di bibir bagian luar.</p>
+
+<table style="font-size: 80%; text-align: center;">
+  <tbody>
+    <tr>
+      <td><img src="/assets/lip.jpg" width="300" /> <br />(a) Original</td>
+      <td><img src="/assets/gim.jpg" width="300" /> <br />(b) Gaussian smoothed</td>
+    </tr>
+    <tr>
+      <td><img src="/assets/map.jpg" width="300" /> <br />(c) External energy (edge)</td>
+      <td><img src="/assets/snake.jpg" width="300" /> <br />(d) Snakes</td>
+    </tr>
+  </tbody>
+</table>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 2</strong>. Segmentasi bibir dengan Snakes. Gambar (a) merupakan gambar asli; (b) merupakan gambar <em>grayscale</em> dari (a) dan juga dihaluskan dengan Gaussian filter;
+(c) merupakan gambar <em>edge</em> hasil dari operasi sobel; (d) menampilkan kontur awal (biru) dan kontur akhir (merah) hasil algoritma Snakes.</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="/assets/snakes_opt.gif" />
+<br />
+<strong>Gambar 3</strong>. Progres deformasi dari kontur Snakes (54 iterasi)</p>
+
+<p>Untuk mengetahui teknis yang lebih lengkap lagi dan menghasilkan gambar-gambar di atas dapat mengakses ke <em>code repository</em> https://github.com/ghif/ActiveContourModel.</p>
+:ET

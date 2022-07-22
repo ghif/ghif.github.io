@@ -1,0 +1,67 @@
+I"#<h3 id="1-the-lottery-ticket-hypothesis-finding-sparse-trainable-neural-networks"><strong>1. The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks</strong></h3>
+<hr />
+
+<p><strong>Paper Asli</strong>: https://openreview.net/pdf?id=rJl-b3RcF7</p>
+
+<p>Paper ini mendapatkan <em>best paper award</em> pada konferensi <a href="https://iclr.cc/">ICLR 2019</a>, yang merupakan salah satu konferensi tingkat atas di bidang <em>deep learning</em>.</p>
+
+<p><em>Deep neural networks</em> (DNN) yang memiliki performa terbaik biasanya memiliki arsitektur model yang besar dan mendalam, yang dilatih dengan sejumlah data yang masif.
+Pada domain <em>computer vision</em>, beberapa arsitektur model populer seperti AlexNet memiliki jumlah parameter sebesar 61 juta dan VGG-16 memiliki jumlah parameter 138 juta.</p>
+
+<p>Arsitektur model yang besar memiliki efek samping yaitu penambahan kompleksitas waktu dan memori baik dari fase pelatihan maupun fase inferensi.
+Jika kita memiliki model DNN yang jauh lebih kecil dengan performa akurasi yang serupa dengan model yang besar, itu akan sangat banyak manfaatnya dari sisi aplikasi.
+DNN ukuran yang kecil akan lebih mudah untuk diimplementasi pada perangkat <em>mobile</em> atau IoT yang notabene memiliki batasan komputasi dan memori dibandingkan komputer normal.</p>
+
+<p>Di beberapa tahun terakhir ada berbagai percobaan untuk memangkas arsitektur model DNN. 
+Sebagai contoh, (<a href="https://arxiv.org/pdf/1506.02626.pdf">Han et al. NIPS 2015</a>) membuat algoritma yang berhasil memangkas DNN hingga ~90% lebih kecil dari model aslinya tanpa mengurangi performa akurasi saat inferensi – menurunkan parameter AlexNet ke 6.7 juta dan VGG-16 ke 10.3 juta.</p>
+
+<p>Namun demikian, metode tersebut, yang selanjutnya dikenal dengan <em>deep compression</em>, sebatas memangkas model DNN besar yang sebelumnya sudah dilatih, belum menangani bagaimana memangkas DNN pada saat pelatihan.
+Pemangkasan pada saat pelatihan akan secara natural meningkatkan efisiensi proses pelatihan.</p>
+
+<p>Paper ini mengusulkan sebuah algoritma untuk memangkas arsitektur DNN dari saat proses pelatihan.
+Algoritma tersebut dilatarbelakangi oleh sebuah hipotesis yang penulisnya namakan sebagai <strong>Lottery Ticket Hypothesis</strong>:
+<em>Sebuah DNN yang parameternya diinisialisasi secara random memiliki sebuah sub-network yang parameternya diinisialisasi sedemikian rupa sehingga apabila sub-network tersebut dilatih, performa akurasinya akan serupa dengan DNN yang besar dengan jumlah iterasi pelatihan yang serupa.</em></p>
+
+<p>Algoritma yang diusulkan akan menghasilkan sebuah <em>sub-network</em> yang disebut dengan <em>winning ticket</em>, yang secara umum terdiri dari 4 tahapan:</p>
+<ol>
+  <li>Inisialisi parameter DNN secara acak: \(f(x; \theta_0)\), dimana \(\theta_0 \sim \mathcal{D}_\theta\).</li>
+  <li>Latih DNN sebanyak iterasi sejumlah \(j\), menghasilkan parameter \(\theta_j\).</li>
+  <li>Pangkas \(p\%\) dari parameter \(\theta_j\) sehingga menghasilkan <em>mask</em> \(m\).</li>
+  <li>Kembalikan nilai parameter yang tersisa ke nilai pada \(\theta_0\), yang menghasilkan <em>winning ticket</em> \(f(x; m \odot \theta_0)\).</li>
+</ol>
+
+<p>Berbagai hasil eksperimen yang dilaporkan pada paper tersebut menunjukkan bahwa hasilnya mendukung <em>lottery ticket hypothesis</em> dan secara konsisten mampu menghasilkan <em>sub-network</em> yang berukuran ~90% lebih kecil dibandingkan model aslinya melalui proses pelatihan pada dataset MNIST dan CIFAR10.
+<!-- Manfaat utama dari algoritma ini adalah membuat proses pelatihan secara keseluruhan lebih efisien dibandingkan cara konvensional. -->
+Model dengan parameter yang jauh lebih sedikit mengakibatkan proses inferensi menjadi lebih efisien.</p>
+
+<h3 id="2-a-meta-transfer-objective-for-learning-to-disentangle-causal-mechanisms"><strong>2. A Meta-Transfer Objective for Learning to Disentangle Causal Mechanisms</strong></h3>
+<hr />
+<p><strong>Paper Asli</strong>: https://arxiv.org/pdf/1901.10912.pdf</p>
+
+<p>Penulis pertama dari paper ini, Yoshua Bengio, merupakan salah satu pionir di bidang <em>deep learning</em> yang baru saja dinobatkan sebagai pemenang <a href="https://www.acm.org/media-center/2019/march/turing-award-2018">Turing Award 2018</a>.
+Paper ini membahas tentang <em>meta-learning</em> dan bagaimana konsep <em>causal inference</em> berpengaruh pada keberhasilan dari <em>meta-learning</em>.</p>
+
+<p><em>Meta-learning</em> merupakan sebuah ide pada <em>machine learning</em> agar sebuah model AI dapat mempelajari kemampuan baru dengan cepat dan dengan hanya membutuhkan sedikit data latih. 
+Metode <em>machine learning</em> konvensional biasanya membutuhkan data yang banyak dan waktu yang cukup lama untuk melatih sebuah agen AI dengan kemampuan yang mumpuni.
+<em>Meta-learning</em>, jika dijalankan dengan sukses, akan membawa <em>machine learning</em> menjadi jauh lebih efisien, baik dari segi proses pelatihan maupun kebutuhan data latih.</p>
+
+<p>Problem yang lebih fundamental yang mungkin dapat diselesaikan dengan <em>meta-learning</em> adalah problem adaptasi.
+Biasanya sebuah model AI akan melakukannya tugasnya dengan baik apabila kondisi atau distribusi antara data latih dengan lingkungan aktual tidak jauh berbeda.
+Jika distribusi tersebut berbeda, model AI akan kehilangan kemampuan generalisasi terhadap lingkungan aktual.
+Akan lebih baik jika model AI dapat beradaptasi pada lingkungan aktual dengan mengambil sedikit (1 atau 2) langsung dari lingkungan tersebut, kemudian melatih dirinya kembali. 
+Dengan demikian, kemampuan <em>meta-learning</em> akan berimplikasi pada kemampuan adaptasi yang baik.</p>
+
+<p><em>Causal inference</em> merupakan ide lain yang mencoba menangkap hubungan kausalitas (sebab-akibat) dari dua buah variabel.
+Ide ini memungkinkan untuk melakukan intervensi terhadap proses prediksi dari suatu model AI.</p>
+
+<p>Sebagai contoh, misal \(X\) merupakan metode pengobatan dan \(Y\) merupakan kondisi kesehatan. 
+Model yang memiliki kemampuan <em>causal inference</em> akan mampu menjawab pertanyaan yang bersifat intervensi seperti ini: 
+jika obat yang lama \(X=a\) diganti dengan obat yang baru \(X=b\), apa yang akan terjadi pada kondisi kesehatan pasien \(Y\)?
+Kemampuan ini tidak dimiliki oleh metode <em>machine learning</em> standar yang pada umumnya berbasis korelasi.</p>
+
+<p>Singkatnya, paper ini mencoba menangkap hubungan kausalitas antara <em>distribusi data latih</em> dengan distribusi lingkungan tempat model AI dijalankan, yang diistilahkan dengan <em>distribusi target</em>.
+Dengan memodelkan kausalitas antara kedua distribusi tersebut, proses <em>meta-learning</em> akan berlangsung dengan lebih efektif dan efisien.</p>
+
+<p>Secara keseluruhan, penyampaian argumen-argumen dari paper ini sangat teoretis dan matematis sehingga agak sulit untuk dipahami bagi yang belum familiar dengan berbagai konsep matematika yang melandasi <em>machine learning</em>.</p>
+
+:ET

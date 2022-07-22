@@ -1,0 +1,87 @@
+I"	!<hr />
+<h4 id="1-neural-factorization-machines-for-sparse-predictive-analytics"><strong>1. Neural Factorization Machines for Sparse Predictive Analytics</strong></h4>
+
+<p><strong>Source</strong>: https://arxiv.org/pdf/1708.05027.pdf</p>
+
+<p><strong>Authors</strong>: Xiangnan He, Tat-Seng Chua</p>
+
+<p><strong>Topics</strong>: recommender system, neural networks</p>
+
+<p>Paper ini mengajukan sebuah model <em>recommender system</em> yang dinamakan <em>Neural Factorization Machines (NFM)</em>. 
+Model ini merupakan modifikasi atau perbaikan dari <a href="https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf"><em>Factorization Machines (FM)</em></a> yang sebelumnya sudah cukup populer dan aplikatif pada <em>recommender system</em>.</p>
+
+<p>Untuk memahami NFM, pertama-tama diperlukan pemahaman akan FM. 
+FM merupakan sebuah model prediktif linear sebagaimana halnya linear regression atau linear SVM, dengan tambahan komponen interaksi antar atribut-atribut dari input. 
+Adanya interaksi antar atribut tersebut membuat FM dikategorikan sebagai metode <em>collaborative filtering</em>.</p>
+
+<p>Katakanlah \(\mathbf{x} \in \mathbb{R}^n\) merupakan input dari FM yang biasa disebut sebagai <em>feature vector</em>, dimana \(x_1, \ldots, x_n\) merupakan atribut-atribut dari input.
+Dalam konteks <em>recommender system</em>, misalnya pada e-commerce, atribut-atribut tersebut dapat berupa informasi tentang pengguna, barang-barang yang dijual, waktu transaksi, ataupun informasi-informasi implisit lainnya.</p>
+
+<p>Model FM didefinisikan sebagai berikut:</p>
+
+\[\begin{equation}
+y_{FM} = w_0 + \sum_{i=1}^n w_i x_i + \sum_{i=1}^n \sum_{j=i+1}^n \langle \mathbf{v}_i, \mathbf{v}_j\rangle x_i x_j
+\end{equation}\]
+
+<p>dimana \(y_{FM} \in \mathbb{R}\) merupakan skor prediksi yang dapat merepresentasikan apapun, seperti <em>rating</em> yang diberikan pengguna terhadap barang tertentu.
+Gambar di bawah ini mengilustrasikan input (<strong>feature vectors</strong>) dan output dari FM:</p>
+
+<p style="text-align: center;"><img src="/assets/fm_feats.png" alt="FM features" width="80%" height="80%" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 1: Features atau representasi input dari FM <a href="https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf">(Rendle 2010)</a></strong></p>
+
+<p>FM cukup sukses diimplementasikan untuk berbagai aplikasi <em>recommender system</em> dan cocok untuk problem dengan karakteristik <em>feature vectors</em> yang angka 0-nya mendominasi (dikenal dengan istilah <em>sparse</em>).
+Namun demikian, FM pada esensinya merupakan model linear sehingga akan kesulitan mempelajari data yang kompleks dan memiliki struktur non-linear.</p>
+
+<p>NFM memasukkan unsur non-linear pada FM dengan memanfaatkan <em>neural networks</em> untuk memodelkan interaksi antar atribut input.
+Persamaan model NFM mirip dengan FM, yaitu:</p>
+
+\[\begin{equation}
+y_{NFM} = w_0 + \sum_{i=1}^n w_i x_i + \sum_{i=1}^n \sum_{j=i+1}^n f(\mathbf{x})
+\end{equation}\]
+
+<p>dimana fungsi \(f: \mathbb{R}^n \rightarrow \mathbb{R}\) merupakan sebuah <em>neural network</em>. 
+Arsitektur dari <em>neural network</em> tersebut digambarkan sebagai berikut:</p>
+
+<p style="text-align: center;"><img src="/assets/nfm_nets.png" alt="NFM Nets" width="80%" height="80%" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 2: Arsitektur neural networks pada NFM <a href="https://arxiv.org/pdf/1708.05027.pdf">(He and Chua 2017)</a></strong></p>
+
+<p>Pada model tersebut terdapat layer khusus yang dinamakan <em>bi-interaction layer</em> yang merekapitulasi interaksi dari semua atribut input menjadi sebuah vektor.</p>
+
+<p>Hasil eksperimen pada 2 domain <em>recommender systems</em>: <a href="https://github.com/hexiangnan/neural_factorization_machine/tree/master/data/frappe">Frappe</a> dan <a href="https://grouplens.org/datasets/movielens/latest/">MovieLens</a>, menunjukkan efektifitas dari NFM.
+NFM bekerja lebih baik daripada FM dengan peningkatan performa relatif sebesar \(7.5 \%\). 
+Dibandingkan dengan metode sistem rekomendasi berbasis <em>deep learning</em> seperti <a href="https://arxiv.org/abs/1606.07792">Wide&amp;Deep</a> dan <a href="https://www.kdd.org/kdd2016/papers/files/adf0975-shanA.pdf">DeepCross</a>, NFM juga bekerja sedikit lebih baik pada 2 domain tersebut.
+Keuntungan NFM lainnya adalah arsitekturnya yang notabene <em>shallow</em> sehingga memiliki jumlah parameter yang lebih sedikit dibandingkan Wide&amp;Deep maupun DeepCross – yang berarti lebih sedikit membutuhkan memori penyimpanan dan lebih cepat untuk dieksekusi.</p>
+
+<h4 id="2-language-models-as-knowledge-bases"><strong>2. Language Models as Knowledge Bases?</strong></h4>
+
+<p><strong>Source</strong>: https://arxiv.org/pdf/1909.01066.pdf</p>
+
+<p><strong>Authors</strong>: Fabio Petroni, Tim Rocktaschel, Patrick Lewis, Anton Bakhtin, Yuxiang Wu, Alexander H. Miller, Sebastian Riedel</p>
+
+<p><strong>Topics</strong>: natural language processing, knowledge bases</p>
+
+<p>Sekitar 2 tahun belakangan ini terjadi perkembangan yang pesat pada model bahasa generik yang dilatih secara <em>self-supervised</em> dengan menggunakan korpus berskala besar.
+Model generik tersebut dapat digunakan dalam melakukan <em>transfer learning</em>: model yang sudah dilatih kemudian digunakan kembali untuk melakukan pekerjaan lainnya yang tidak harus berhubungan langsung dengan apa yang dipelajari di awal – model semacam ini dikenal dengan istilah <em>pretrained model</em>.</p>
+
+<p>Beberapa contoh dari <em>pretrained model</em> tersebut antara lain <a href="https://arxiv.org/pdf/1802.05365">ELMo</a>, <a href="https://arxiv.org/pdf/1810.04805.pdf">BERT</a>, dan <a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">Open-GPT</a>.
+Model-model ini sangat sukses ketika ditransfer untuk menyelesaikan problem-problem NLP seperti <em>text classification</em>, <em>textual entailment</em>, <em>semantic similarity</em>, <em>question answering</em>, <em>reading comprehension</em>, dan sebagainya.</p>
+
+<p>Artikel ini menjelaskan penelitian ke arah mengapa <em>pretrained model</em> tersebut memiliki performa yang sangat baik.
+Dari berbagai observasi ditemukan bahwa model-model tersebut mampu melakukan tugas semacam melengkapi kata / teks yang hilang, mengindikasikan adanya informasi relasional yang berhasil dipelajari, semacam (<em>subject</em>, <em>relation</em>, <em>object</em>).
+Adanya pengetahuan tersebut memungkinkan untuk melakukan <em>query</em> seperti (<em>Dante</em>, <em>born-in</em>, X), yaitu mencari fakta tentang X, yang biasanya dapat dilakukan dengan menggunakan <a href="https://en.wikipedia.org/wiki/Knowledge_base"><em>knowledge base</em> (KB)</a> – diilustrasikan pada Gambar 2 di bawah ini.</p>
+
+<p style="text-align: center;"><img src="/assets/lm_kg.png" alt="Languange models as knowledge bases" width="80%" height="80%" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 2: Arsitektur neural networks pada NFM <a href="https://arxiv.org/pdf/1909.01066.pdf">(Petroni et al. 2019)</a></strong></p>
+
+<p>Jika benar bahwa model bahasa generik memiliki karakteristik tersebut, maka ini akan memberikan berbagai keuntungan dibandingkan <em>knowledge base</em> konvensional yang biasanya memerlukan <em>pipeline</em> NLP yang rumit untuk mengkonstruksi pengetahuan di dalamnya, seperti <em>entity extraction</em>, <em>coreference resolution</em>, <em>entity linking</em>, dan <em>relation extraction</em>.
+Model bahasa generik tidak memerlukan <em>schema engineering</em> dan anotasi data secara manual (karena tidak memerlukan <em>supervised learning</em>).</p>
+
+<p>Penelitian ini fokus pada investigasi model BERT. 
+Dari hasil eksperimen empiris disimpulkan bahwa BERT memiliki pengetahuan relasional yang cukup komprehensif sebagaimana pada <em>knowledge base</em> tradisional.
+BERT juga memiliki kemampuan memulihkan informasi faktual dan <em>commonsense reasoning</em> yang sangat baik, melebihi model-model bahasa generik lainnya.
+Berikut beberapa contoh <em>reasoning</em> yang dihasilkan oleh BERT dari berbagai <em>query</em> yang sifatnya relasional:</p>
+
+<p style="text-align: center;"><img src="/assets/lama.png" alt="BERT token generation" width="80%" height="80%" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Tabel 1: Keluaran dari model BERT saat diberikan <em>query</em> relasional</strong></p>
+
+:ET

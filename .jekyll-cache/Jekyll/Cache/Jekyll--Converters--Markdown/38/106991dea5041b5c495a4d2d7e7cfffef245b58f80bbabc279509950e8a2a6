@@ -1,0 +1,20 @@
+I"¶<p>Ada sebuah fenomena yang menarik dari kemampuan otak manusia dalam mempelajari hal baru. Otak kita dapat belajar berkesinambungan akan kemampuan yang baru tanpa (benar-benar) melupakan hal-hal yang telah dipelajari sebelumnya. Lebih hebatnya lagi, kita dapat mentransfer kemampuan yang sudah ada sehingga lebih mudah untuk mempelajari hal-hal baru yang berkaitan.</p>
+
+<p>Salah satu contoh fenomena ini adalah proses belajar berbahasa. Bayangkan Anda baru mulai belajar, misalnya, bahasa Spanyol. Di fase awal Anda mempelajari huruf-huruf / unsur-unsur terkecil dari bahasa Spanyol. Kemudian Anda menghafal berbagai kosa kata. Selanjutnya Anda belajar menyusun frasa dan kalimat dari kosa kota tersebut.</p>
+
+<p style="font-size: 80%; text-align: center;"><img src="/assets/lifelong-learning.jpg" width="750" /></p>
+<p style="font-size: 80%; text-align: center;"><strong>Gambar 1</strong>. Sumber: http://netprofitgrowth.com/business-learning/</p>
+
+<p>Kesemuanya itu berkesinambungan: ketika belajar merangkai kalimat, Anda tidak melupakan bagaimana caranya menyusun frasa dan arti dari kosa kata yang sudah dihafal. Sebaliknya, justru yang sudah Anda pelajari sebelumnya, yaitu menyusun frasa, akan sangat membantu kefasihan merangkai kalimat. Bandingkan jika Anda langsung melompat untuk mempelajari kalimat tanpa tahu frasa dan kosa kata.</p>
+
+<p>Sekarang bayangkan Anda sudah mahir berbahasa Spanyol. Selanjutnya Anda ingin mempelajari bahasa Italia. Dikarenakan bahasa Spanyol dan Italia <a href="https://bigthink.com/strange-maps/a-map-of-lexical-distances-between-europes-languages">cukup dekat</a>, Anda akan merasa bahasa Italia relatif lebih mudah dipahami, dibandingkan orang lain yang langsung belajar bahasa Italia tanpa tahu bahasa Spanyol. Disaat yang bersamaan Anda tidak lupa dengan berbahasa Spanyol selagi belajar bahasa Italia.</p>
+
+<p>Kemampuan otak manusia yang luar biasa ini dikenal dengan istilah <strong><em>continual learning</em></strong> (CL) atau <strong><em>lifelong learning</em></strong> atau <strong><em>incremental learning</em></strong>. Studi neurosains mengindikasikan bahwa continual learning benar-benar terjadi secara biologis pada otak mamalia [<a href="https://www.ncbi.nlm.nih.gov/pubmed/25822789">Cichon &amp; Gan, 2015</a>].</p>
+
+<p>Inilah salah satu aspek yang masih belum dimiliki oleh teknik kecerdasan buatan atau pemelajaran mesin saat ini. Deep neural networks yang sangat sukses dalam 1 dekade terakhir di berbagai aplikasi pun belum memiliki kemampuan ini. Algoritma pemelajaran konvensional pada deep neural networks mengalami apa yang disebut sebagai <em>catastrophic forgetting</em> [<a href="https://www.sciencedirect.com/science/article/pii/S0079742108605368">McCloskey and Cohen 1989</a>, <a href="https://arxiv.org/abs/1312.6211">Goodfellow et al. 2014</a>]: ketika algoritma pembelajaran menerima data yang baru, deep neural networks akan dengan cepat melupakan hal yang lama.</p>
+
+<h4 id="continual-learning-pada-kecerdasan-buatan"><strong>Continual Learning pada Kecerdasan Buatan</strong></h4>
+
+<p>Saat ini Continual Learning (CL) sudah mulai mendapat perhatian serius oleh komunitas kecerdasan buatan dan pemelajaran mesin. DARPA (Defense Advanced Research Projects Agency) meluncurkan proyek riset khusus bernama <a href="https://www.darpa.mil/program/lifelong-learning-machines">Lifelong Learning Machines (L2M)</a> untuk mengembangkan agen kecerdasan buatan yang lebih mumpuni.
+Dalam beberapa tahun terakhir, Neural Information Processing Systems (NeurIPS), yang merupakan salah satu konferensi yang paling bereputasi dan berpengaruh di bidang pembelajaran mesin, mengadakan <a href="https://sites.google.com/view/continual2018"><em>workshop</em> khusus dengan tema Continual Learning</a>.</p>
+:ET

@@ -1,0 +1,92 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - assets/**
+  render:
+    - "*.qmd"
+    - "posts/*/*.qmd"
+    # Draft posts remain available in the source tree but are not published.
+    - "!posts/2017-01-01-advanced-examples/index.qmd"
+    - "!posts/2017-02-01-markdown-examples/index.qmd"
+    - "!posts/2017-03-01-welcome-to-jekyll/index.qmd"
+    - "!posts/2018-01-07-lbfgs/index.qmd"
+    - "!posts/2018-10-31-gmrf/index.qmd"
+    - "!posts/2018-11-18-variational-autoencoder/index.qmd"
+    - "!posts/2018-12-06-wasserstein-distances/index.qmd"
+    - "!posts/2019-08-14-arima/index.qmd"
+    - "!posts/2019-09-01-matrix-factorization/index.qmd"
+    - "!posts/2019-11-02-ringkasaan-bacaan-AI-8/index.qmd"
+    - "!posts/2019-12-28-5-hal-ai-2019/index.qmd"
+    - "!posts/2020-05-05-prediksi-deret-waktu-dengan-ARIMA/index.qmd"
+    - "!posts/2022-06-05-gradient-boosting/index.qmd"
+    - "!posts/2022-07-01-explainable-ai/index.qmd"
+
+website:
+  title: "Ghif Lab"
+  description: "An AI research scientist's personal notes on machine learning, computer vision, intelligent systems, and the evolution of AI."
+  site-url: "https://ghif.github.io"
+  google-analytics: "G-022W9RG2YC"
+  repo-url: "https://github.com/ghif/ghif.github.io"
+  repo-actions: [issue]
+  
+  navbar:
+    title: "Ghif Lab"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: archive.qmd
+        text: Archive
+      - href: about.qmd
+        text: About
+      - href: privacy.qmd
+        text: Privacy
+    right:
+      - icon: github
+        href: https://github.com/ghif
+        aria-label: GitHub
+      - icon: envelope
+        href: mailto:mghifary@gmail.com
+        aria-label: Email
+      - icon: rss
+        href: index.xml
+        aria-label: RSS Feed
+
+  page-footer:
+    left: "© Muhammad Ghifary"
+    center: "Research, implementations, and perspectives on AI"
+    right: "Built with [Quarto](https://quarto.org)"
+
+  search:
+    location: navbar
+    type: overlay
+    show-item-context: true
+
+format:
+  html:
+    theme: [cyborg, custom-dark.scss]
+    highlight-style: dracula
+    code-copy: hover
+    code-overflow: wrap
+    code-tools: false
+    toc: true
+    toc-depth: 3
+    toc-title: "Table of Contents"
+    number-sections: false
+    smooth-scroll: true
+    anchor-sections: true
+    html-math-method:
+      method: mathjax
+      url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    include-in-header:
+      - text: |
+          <script>
+          window.MathJax = {
+            tex: {
+              tags: 'ams',
+              useLabelIds: true,
+              inlineMath: [['$', '$'], ['\\(', '\\)']],
+              displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+          };
+          </script>

@@ -1,0 +1,17 @@
+---
+title: "Privacy"
+---
+
+## Analytics
+
+Ghif Lab uses Google Analytics to understand aggregate website traffic and improve the site. Google Analytics may collect information such as page views, approximate location, device type, and referral source.
+
+No medical records, private documents, or user-submitted content are collected by this website.
+
+## External services
+
+Articles may link to external websites, repositories, media, and research papers. Those services have their own privacy policies and data practices.
+
+## Contact
+
+For questions about this site or its data practices, contact [Muhammad Ghifary](mailto:mghifary@gmail.com).

@@ -1,0 +1,22 @@
+---
+title: "Muhammad Ghifary"
+image: assets/profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/ghif
+    - icon: envelope
+      text: Email
+      href: mailto:mghifary@gmail.com
+    - icon: file-person
+      text: Google Scholar / CV
+      href: https://sites.google.com/site/mghifary
+---
+
+I am an AI researcher and practitioner with deep interests in machine learning, computer vision, natural language processing, computer graphics, and foundational mathematics.
+
+This website serves as my digital notebook: a repository for derivations, paper summaries, algorithmic investigations, and computational notes.
+
+For my academic publication record and curriculum vitae, please visit [sites.google.com/site/mghifary](https://sites.google.com/site/mghifary).

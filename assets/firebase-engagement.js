@@ -1,10 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   getAuth,
-  GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithPopup,
-  signOut,
+  signInAnonymously,
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
   addDoc,
@@ -34,7 +32,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
 const slug = window.location.pathname
   .replace(/^\/+|\/+$/g, "")
   .split("/")
@@ -55,8 +52,6 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
     <h2 id="engagement-title">Join the discussion</h2>
     <div class="engagement-actions">
       <button class="engagement-like" type="button" disabled>♡ Like <span>0</span></button>
-      <button class="engagement-sign-in" type="button">Sign in with Google to participate</button>
-      <button class="engagement-sign-out" type="button" hidden>Sign out</button>
     </div>
     <p class="engagement-status" role="status">Loading engagement…</p>
     <form class="engagement-form" hidden>
@@ -69,8 +64,6 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
   document.querySelector("#quarto-document-content")?.append(mount);
 
   const likeButton = mount.querySelector(".engagement-like");
-  const signInButton = mount.querySelector(".engagement-sign-in");
-  const signOutButton = mount.querySelector(".engagement-sign-out");
   const form = mount.querySelector(".engagement-form");
   const status = mount.querySelector(".engagement-status");
   const commentsList = mount.querySelector(".engagement-comments");
@@ -119,28 +112,16 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
   const setSignedInState = async (user) => {
     currentUser = user;
     const signedIn = Boolean(user);
-    signInButton.hidden = signedIn;
-    signOutButton.hidden = !signedIn;
     form.hidden = !signedIn;
     status.textContent = signedIn
-      ? `Signed in as ${user.displayName || user.email}.`
-      : "Sign in with Google to like this article or leave a comment.";
+      ? `Participating as ${user.displayName || user.email || "Anonymous Reader"}.`
+      : "Connecting anonymously…";
     try {
       await refreshLikes();
     } catch (error) {
       status.textContent = `Firestore error: ${error.code || error.message}`;
     }
   };
-
-  signInButton.addEventListener("click", async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      status.textContent = `Sign-in failed: ${error.message}`;
-    }
-  });
-
-  signOutButton.addEventListener("click", () => signOut(auth));
 
   likeButton.addEventListener("click", async () => {
     if (!currentUser) return;
@@ -178,6 +159,9 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
   });
 
   onAuthStateChanged(auth, setSignedInState);
+  signInAnonymously(auth).catch((error) => {
+    status.textContent = `Anonymous sign-in failed: ${error.code || error.message}`;
+  });
   getCountFromServer(likesRef).then(refreshLikes).catch((error) => {
     status.textContent = `Firestore error: ${error.code || error.message}`;
   });

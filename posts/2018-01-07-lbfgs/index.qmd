@@ -2,7 +2,9 @@
 title: Newton, Quasi-Newton, dan L-BFGS Optimization
 date: '2018-01-07'
 categories:
-- Optimization
+  - machine-learning
+  - mathematics
+  - research-notes
 aliases:
 - /lbfgs/
 draft: true

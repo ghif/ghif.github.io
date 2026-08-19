@@ -2,7 +2,10 @@
 title: 'Variational Autoencoder: Membangun Model Generatif dengan Neural Networks'
 date: '2018-11-18'
 categories:
-- Machine Learning
+  - machine-learning
+  - deep-learning
+  - generative-ai
+  - research-notes
 aliases:
 - /variational-autoencoder/
 draft: true

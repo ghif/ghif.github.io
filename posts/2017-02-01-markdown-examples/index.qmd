@@ -1,6 +1,8 @@
 ---
 title: Markdown examples
 date: '2017-02-01'
+categories:
+  - implementation
 categories: []
 aliases:
 - /markdown-examples/

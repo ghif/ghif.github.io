@@ -2,7 +2,9 @@
 title: 'ARIMA: Time Series Forecasting'
 date: '2019-08-14'
 categories:
-- Mathematics
+  - machine-learning
+  - mathematics
+  - research-notes
 aliases:
 - /arima/
 draft: true

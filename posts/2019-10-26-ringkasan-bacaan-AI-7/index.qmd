@@ -2,7 +2,8 @@
 title: Ringkasan Mingguan Bacaan AI (26 Oktober 2019)
 date: '2019-10-26'
 categories:
-- AI
+  - reading-notes
+  - research-notes
 aliases:
 - /ringkasan-bacaan-AI-7/
 ---

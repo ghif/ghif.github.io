@@ -2,7 +2,8 @@
 title: AI Weekly Reading Summary (25 Mei 2019)
 date: '2019-05-25'
 categories:
-- AI
+  - reading-notes
+  - research-notes
 aliases:
 - /ringakasan-bacaan-AI-2/
 ---

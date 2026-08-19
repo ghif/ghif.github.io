@@ -2,7 +2,8 @@
 title: Ringkasan Mingguan Bacaan AI (12 Oktober 2019)
 date: '2019-10-12'
 categories:
-- AI
+  - reading-notes
+  - research-notes
 aliases:
 - /ringkasan-bacaan-AI-6/
 ---

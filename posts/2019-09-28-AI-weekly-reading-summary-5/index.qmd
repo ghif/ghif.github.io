@@ -2,7 +2,8 @@
 title: AI Weekly Reading Summary (28 September 2019)
 date: '2019-09-28'
 categories:
-- AI
+  - reading-notes
+  - research-notes
 aliases:
 - /AI-weekly-reading-summary-5/
 ---

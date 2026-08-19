@@ -1,6 +1,6 @@
 ---
-title: "Research Notes"
-subtitle: "Reflections, derivations, and summaries on Machine Learning, Computer Vision, and Mathematics."
+title: "Ghif Lab"
+subtitle: "Notes on science and technology, especially about AI/ML, through my lens."
 listing:
   contents: posts
   sort: "date desc"
@@ -11,9 +11,11 @@ listing:
   fields: [date, title, reading-time, description, categories]
   feed:
     type: full
-    title: "Ghif's Research Notes"
-    description: "Research notes on AI, Math, and Machine Learning by Muhammad Ghifary"
+    title: "Ghif Lab"
+    description: "Muhammad Ghifary's personal notes on AI research, machine learning, computer vision, implementations, and the evolution of intelligent systems"
     items: 20
 page-layout: full
 title-block-banner: true
 ---
+
+I write from the intersection of research and practice: mathematical foundations, paper-driven investigations, implementation experiments, and personal perspectives on the changing landscape of AI. Notes may be written in English or Bahasa Indonesia, depending on the subject and intended audience.

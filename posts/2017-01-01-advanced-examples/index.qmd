@@ -2,7 +2,7 @@
 title: Advanced examples
 date: '2017-01-01'
 categories:
-- General
+  - implementation
 aliases:
 - /advanced-examples/
 draft: true

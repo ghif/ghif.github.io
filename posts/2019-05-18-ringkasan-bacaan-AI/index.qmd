@@ -2,7 +2,8 @@
 title: Ringkasan Mingguan Bacaan AI (18 Mei 2019)
 date: '2019-05-18'
 categories:
-- AI
+  - reading-notes
+  - research-notes
 aliases:
 - /ringkasan-bacaan-AI/
 ---

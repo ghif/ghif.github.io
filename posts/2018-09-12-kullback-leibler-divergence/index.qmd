@@ -2,8 +2,9 @@
 title: 'Kullback-Leibler Divergence: Membandingkan Dua Distribusi Probabilitas'
 date: '2018-09-12'
 categories:
-- Machine Learning
-- Probability & Statistics
+  - machine-learning
+  - mathematics
+  - research-notes
 aliases:
 - /kullback-leibler-divergence/
 ---

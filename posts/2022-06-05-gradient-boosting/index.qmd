@@ -2,8 +2,8 @@
 title: Gradient Boosting
 date: '2022-06-05'
 categories:
-- Mathematics
-- Machine Learning
+  - machine-learning
+  - research-notes
 aliases:
 - /gradient-boosting/
 draft: true

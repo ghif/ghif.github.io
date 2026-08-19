@@ -2,7 +2,9 @@
 title: 'Continual Learning: Pembeda Utama Cara Belajar Manusia vs Komputer?'
 date: '2019-03-27'
 categories:
-- AI
+  - machine-learning
+  - deep-learning
+  - research-notes
 aliases:
 - /continual-learning/
 ---

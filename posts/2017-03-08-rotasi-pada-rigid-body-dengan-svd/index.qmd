@@ -2,8 +2,9 @@
 title: Rotasi pada Rigid Body dengan SVD
 date: '2017-03-08'
 categories:
-- Graphics
-- Mathematics
+  - computer-vision
+  - mathematics
+  - research-notes
 aliases:
 - /rotasi-pada-rigid-body-dengan-svd/
 ---

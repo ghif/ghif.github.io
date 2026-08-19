@@ -6,16 +6,32 @@ project:
   render:
     - "*.qmd"
     - "posts/*/*.qmd"
+    # Draft posts remain available in the source tree but are not published.
+    - "!posts/2017-01-01-advanced-examples/index.qmd"
+    - "!posts/2017-02-01-markdown-examples/index.qmd"
+    - "!posts/2017-03-01-welcome-to-jekyll/index.qmd"
+    - "!posts/2018-01-07-lbfgs/index.qmd"
+    - "!posts/2018-10-31-gmrf/index.qmd"
+    - "!posts/2018-11-18-variational-autoencoder/index.qmd"
+    - "!posts/2018-12-06-wasserstein-distances/index.qmd"
+    - "!posts/2019-08-14-arima/index.qmd"
+    - "!posts/2019-09-01-matrix-factorization/index.qmd"
+    - "!posts/2019-11-02-ringkasaan-bacaan-AI-8/index.qmd"
+    - "!posts/2019-12-28-5-hal-ai-2019/index.qmd"
+    - "!posts/2020-05-05-prediksi-deret-waktu-dengan-ARIMA/index.qmd"
+    - "!posts/2022-06-05-gradient-boosting/index.qmd"
+    - "!posts/2022-07-01-explainable-ai/index.qmd"
 
 website:
-  title: "Ghif's Research Notes"
-  description: "\"Research means that you don't know, but are willing to find out\" - Charles F. Kettering"
+  title: "Ghif Lab"
+  description: "An AI research scientist's personal notes on machine learning, computer vision, intelligent systems, and the evolution of AI."
   site-url: "https://ghif.github.io"
+  google-analytics: "G-022W9RG2YC"
   repo-url: "https://github.com/ghif/ghif.github.io"
   repo-actions: [issue]
   
   navbar:
-    title: "Ghif's Research Notes"
+    title: "Ghif Lab"
     left:
       - href: index.qmd
         text: Home
@@ -36,7 +52,7 @@ website:
 
   page-footer:
     left: "© Muhammad Ghifary"
-    center: "\"Research means that you don't know, but are willing to find out\" — Charles F. Kettering"
+    center: "Research, implementations, and perspectives on AI"
     right: "Built with [Quarto](https://quarto.org)"
 
   search:
@@ -46,8 +62,7 @@ website:
 
 format:
   html:
-    theme:
-      dark: [cyborg, custom-dark.scss]
+    theme: [cyborg, custom-dark.scss]
     highlight-style: dracula
     code-copy: hover
     code-overflow: wrap

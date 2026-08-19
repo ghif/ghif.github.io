@@ -2,8 +2,8 @@
 title: Explainable AI (AI)
 date: '2022-07-01'
 categories:
-- AI
-- Machine Learning
+  - machine-learning
+  - research-notes
 aliases:
 - /explainable-ai/
 draft: true

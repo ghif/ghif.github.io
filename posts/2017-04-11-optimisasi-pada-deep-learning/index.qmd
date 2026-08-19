@@ -2,7 +2,9 @@
 title: Optimisasi pada Deep Learning
 date: '2017-04-11'
 categories:
-- AI
+  - deep-learning
+  - mathematics
+  - research-notes
 aliases:
 - /optimisasi-pada-deep-learning/
 ---

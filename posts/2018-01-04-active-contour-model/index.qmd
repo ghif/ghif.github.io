@@ -2,7 +2,10 @@
 title: Active Contour Model (Snakes)
 date: '2018-01-04'
 categories:
-- Computer Vision
+  - computer-vision
+  - mathematics
+  - implementation
+  - research-notes
 aliases:
 - /active-contour-model/
 ---

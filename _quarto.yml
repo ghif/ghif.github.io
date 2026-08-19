@@ -24,6 +24,7 @@ project:
 
 website:
   title: "Ghif Lab"
+  favicon: assets/favicon.svg
   description: "An AI research scientist's personal notes on machine learning, computer vision, intelligent systems, and the evolution of AI."
   site-url: "https://ghif.github.io"
   google-analytics: "G-022W9RG2YC"

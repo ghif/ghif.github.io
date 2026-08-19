@@ -80,6 +80,8 @@ format:
       url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     include-in-header:
       - text: |
+          <script type="module" src="/assets/firebase-engagement.js"></script>
+      - text: |
           <!-- Google tag (gtag.js) -->
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBFM9VBHY2"></script>
           <script>

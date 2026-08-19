@@ -125,7 +125,11 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
     status.textContent = signedIn
       ? `Signed in as ${user.displayName || user.email}.`
       : "Sign in with Google to like this article or leave a comment.";
-    await refreshLikes();
+    try {
+      await refreshLikes();
+    } catch (error) {
+      status.textContent = `Firestore error: ${error.code || error.message}`;
+    }
   };
 
   signInButton.addEventListener("click", async () => {
@@ -147,7 +151,11 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
     } else {
       await setDoc(likeRef, { createdAt: serverTimestamp() });
     }
-    await refreshLikes();
+    try {
+      await refreshLikes();
+    } catch (error) {
+      status.textContent = `Firestore error: ${error.code || error.message}`;
+    }
   });
 
   form.addEventListener("submit", async (event) => {
@@ -155,20 +163,26 @@ if (!slug || !window.location.pathname.startsWith("/posts/")) {
     const textarea = form.querySelector("textarea");
     const body = textarea.value.trim();
     if (!body || !currentUser) return;
-    await addDoc(commentsRef, {
-      authorId: currentUser.uid,
-      authorName: currentUser.displayName || currentUser.email || "Reader",
-      body,
-      createdAt: serverTimestamp(),
-    });
-    textarea.value = "";
+    try {
+      await addDoc(commentsRef, {
+        authorId: currentUser.uid,
+        authorName: currentUser.displayName || currentUser.email || "Reader",
+        body,
+        createdAt: serverTimestamp(),
+      });
+      textarea.value = "";
+      status.textContent = "Comment posted.";
+    } catch (error) {
+      status.textContent = `Comment error: ${error.code || error.message}`;
+    }
   });
 
   onAuthStateChanged(auth, setSignedInState);
-  getCountFromServer(likesRef).then(refreshLikes).catch(() => {
-    status.textContent = "Engagement is not configured yet.";
+  getCountFromServer(likesRef).then(refreshLikes).catch((error) => {
+    status.textContent = `Firestore error: ${error.code || error.message}`;
   });
-  unsubscribeComments = onSnapshot(commentsQuery, renderComments, () => {
+  unsubscribeComments = onSnapshot(commentsQuery, renderComments, (error) => {
     commentsList.innerHTML = "<p class=\"engagement-empty\">Comments are temporarily unavailable.</p>";
+    status.textContent = `Comments error: ${error.code || error.message}`;
   });
 }

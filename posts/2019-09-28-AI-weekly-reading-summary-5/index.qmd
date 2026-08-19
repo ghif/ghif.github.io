@@ -21,7 +21,7 @@ Adversarial examples -- inputs that are slightly perturbed by an imperceptible n
 The impact of such examples has also been studied in some previous work ([Dalvi et al. 2003](https://dl.acm.org/citation.cfm?id=1014066),[Globerson and Roweis 2006](1143889)).
 The figure below shows one example of adversarial examples including its unintended behaviour.
 
-<img src="/assets/piggie.png" alt="Adversarial Example" width="80%" height="80%"/>
+<img src="media/piggie.png" alt="Adversarial Example" width="80%" height="80%"/>
 
 **The effect of adversarial noise**
 
@@ -34,14 +34,14 @@ The main observation in this work is the existence of the so-called "non-robust 
 __Non-robust features__ are defined as those that are highly predictive, yet brittle and incomprehensible to humans, as opposed to __robust features__, i.e., highly predictive and also human comprehensible. 
 
 This work captures the non-robust features within a theoretical framework and also finds their empirical evidence on a range of image datasets.
-The way to find was conducted by disentangling robust and non-robust features via an optimization that results in two separate datasets: robust dataset $$\mathcal{\hat{D}}_R $$ and non-robust dataset  $$ \mathcal{\hat{D}}_{NR}$$.
+The way to find was conducted by disentangling robust and non-robust features via an optimization that results in two separate datasets: robust dataset $\mathcal{\hat{D}}_R$ and non-robust dataset  $\mathcal{\hat{D}}_{NR}$.
 
-One interesting outcome from this work is that a classifer trained on the robust dataset $$\mathcal{\hat{D}}_R $$ through *standard training* can already reach a certain level of robustness, i.e., having a good adversarial performance.
+One interesting outcome from this work is that a classifer trained on the robust dataset $\mathcal{\hat{D}}_R$ through *standard training* can already reach a certain level of robustness, i.e., having a good adversarial performance.
 Additionally, non-robust datasets are found to be sufficient to produce good standard generalisation tests, but suffer from adversarial tests.
 The following figure succinctly summarizes the fore-mentioned outcomes.
 
 
-<img src="/assets/nonrobust_datasets.png" alt="Robust vs non-robust features with respect to the standard and adversarial training" width="100%" height="100%"/>
+<img src="media/nonrobust_datasets.png" alt="Robust vs non-robust features with respect to the standard and adversarial training" width="100%" height="100%"/>
 
 **Robust vs non-robust features with respect to the standard and adversarial training**
 
@@ -67,7 +67,7 @@ In general, the overall system has two stages: 1) matching and 2) ranking.
 This paper focuses on addressing the challenges in the matching stage, where the core task is the computation of pairwise similarities between all items based on users' behaviors.
 Such a computation utilizes an embedding derived from graph, namely Base Graph Embedding (BGE), that serves a similar goal as the standard collaborative filtering (CF) based methods but offers higher-order similarities between items.
 
-The graph $$ \mathcal{G} = (\mathcal{V}, \mathcal{E}) $$ is constructed from the behavior history of one billion users within a session or time window, which is one of the main contributions of this paper. 
+The graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ is constructed from the behavior history of one billion users within a session or time window, which is one of the main contributions of this paper. 
 The nodes of the graph represent the items, where each edge is weighted by the co-occurences of the two connected items in all users' behaviors.
 The constructed graph is then used to generate the samples of item sequences based on random walk.
 The actual embedding is created through the Skip-gram model ([Mikolov et al. 2013](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)) learned from the samples from random walk.
@@ -76,7 +76,7 @@ The figure below illustrates the Base Graph Embedding process.
 Furthermore, the BGE is also enhanced by incorporating side information, e.g., category, shop, price, etc, of an item, to reduce the cold-start problem.
 
 
-<img src="/assets/deepwalk_taobao.png" alt="Base Graph Embedding" width="100%" height="100%"/>
+<img src="media/deepwalk_taobao.png" alt="Base Graph Embedding" width="100%" height="100%"/>
 
 **Base Graph Embedding**
 
@@ -112,7 +112,7 @@ The accuracy is virtually similar to CPC, except that GIM trains the network mod
 decreasing the memory costs during training.
 The similar trend of outcomes also can be obseved on the audio classification tasks.
 
-<img src="/assets/GIM_results.png" alt="GIM evaluation on STL-10 dataset" width="100%" height="100%"/>
+<img src="media/GIM_results.png" alt="GIM evaluation on STL-10 dataset" width="100%" height="100%"/>
 
 **GIM evaluation on STL-10 dataset**
 

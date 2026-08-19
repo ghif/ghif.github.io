@@ -1,31 +1,43 @@
-# Ghif's Research Notes
+# Ghif Lab
 
-Personal research blog and digital notebook on Machine Learning, Computer Vision, Deep Learning, and Foundational Mathematics by Muhammad Ghifary.
+Personal technical notes from Muhammad Ghifary's work across artificial intelligence, machine learning, computer vision, mathematics, and software implementation.
 
-Built with [Quarto](https://quarto.org) and deployed via GitHub Actions to GitHub Pages.
+The site is built with [Quarto](https://quarto.org) and deployed to GitHub Pages through GitHub Actions.
 
 ## Site Structure
 
-- `index.qmd`: Homepage listing of technical notes and articles with category filters and search.
-- `archive.qmd`: Tabular chronological archive of all notes.
-- `about.qmd`: Researcher profile and biography.
-- `posts/`: Individual technical articles and research derivations.
-- `assets/`: Media and diagram assets.
-- `custom-dark.scss`: High-contrast dark theme styling overrides.
-- `_quarto.yml`: Quarto website configuration and MathJax AMS equation numbering setup.
+- `index.qmd`: Landing page with searchable, categorized notes.
+- `archive.qmd`: Chronological archive.
+- `about.qmd`: Author profile.
+- `privacy.qmd`: Analytics and privacy notice.
+- `posts/`: Individual Quarto articles and their local `media/` folders.
+- `assets/`: Shared site assets, such as the profile image.
+- `custom-dark.scss`: Dark theme styling.
+- `_quarto.yml`: Website, search, MathJax, analytics, and rendering configuration.
+- `scripts/migrate-notion.sh`: Concise Notion-export migration command.
 
-## Local Development & Preview
+## Local Development
 
-To preview the website locally with live reload:
+Install [Quarto](https://quarto.org/docs/get-started/) and run:
 
 ```bash
-# Preview the site locally
 quarto preview
+```
 
-# Render the complete site to _site/
+To render the complete site:
+
+```bash
 quarto render
 ```
 
-## Publishing & Deployment
+Notion exports belong in the ignored `notion-export/` directory. Import one with:
 
-The site is automatically rendered and deployed to GitHub Pages via GitHub Actions upon push to `main` using `.github/workflows/publish.yml`.
+```bash
+scripts/migrate-notion.sh <export-directory> <target-post-directory> <category ...>
+```
+
+Imports are visible by default. Add `--draft` before the categories only when an article should remain hidden.
+
+## Deployment
+
+A push to `main` renders and deploys the site through `.github/workflows/publish.yml`. The `Journal/`, `notion-export/`, `_site/`, and Quarto cache directories are local-only and are not committed.

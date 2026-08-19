@@ -34,7 +34,7 @@ Attention layer is applied on the top of that, which is a shallow neural network
 The output of the attention layer is a weighted linear combination of its input vectors, the weights of which are learned from data.
 HAN architecture is illustrated below.
 
-<img src="/assets/han.png" alt="HAN architecture" width="80%" height="80%"/>
+<img src="media/han.png" alt="HAN architecture" width="80%" height="80%"/>
 
 **HAN architecture (source: https://medium.com/analytics-vidhya/hierarchical-attention-networks-d220318cf87e)**
 
@@ -43,7 +43,7 @@ The model was evaluated over a wide range of datasets such as Yelp reviews, IMBD
 The results demonstrate that HAN performs significantly better than some previously proposed text classifiers. 
 As a bonus, the weights learned in the attention layers can provide an interesting visualization indicating word and text saliencies.
 
-<img src="/assets/han_viz.png" alt="HAN architecture" width="80%" height="80%"/>
+<img src="media/han_viz.png" alt="HAN architecture" width="80%" height="80%"/>
 
 
 #### __2. Combining Knowledge with Deep Convolutional Networks for Short Text Classification__
@@ -70,7 +70,7 @@ The model consists of two sub-networks: 1) word-level CNN and 2) character-level
 The word-level CNN is equipped with word embedding layer pretrained from the enriched texts: words and their concepts -- the embedding layer is kept being static during the joint training.
 Meanwhile, the character-level CNN does not have pre-trained embedding layer and, therefore, during the joint training its parameters are updated.
 
-<img src="/assets/kpcnn.png" alt="KPCNN architecture" width="80%" height="80%"/>
+<img src="media/kpcnn.png" alt="KPCNN architecture" width="80%" height="80%"/>
 
 
 The method was evaluated on several benchmarks for short text classification tasks such as TREC, Twitter, AG news, Bing, and Movie Review. 
@@ -88,10 +88,10 @@ __Topics__: artificial intelligence, retail
 
 This whitepaper presents a study from Juniper Research about the impact of AI services in retail.
 Under a premise that retailers must adopt AI solutions to save them from the advanced competition, 
-the global spending in adopting AI technologies by retailers is estimated to increase by 230% between 2019 and 2023 -- from $$\$3.6$$ billion in 2019 to $$\$12$$ billion by 2023.
+the global spending in adopting AI technologies by retailers is estimated to increase by 230% between 2019 and 2023 -- from $\$3.6$ billion in 2019 to $\$12$ billion by 2023.
 Juniper expects over 325,000 retailers to adopt AI technology over the period.
 
-<img src="/assets/ai-retail.png" alt="AI adoption spending in retail" width="50%" height="50%"/>
+<img src="media/ai-retail.png" alt="AI adoption spending in retail" width="50%" height="50%"/>
 
 
 Some AI areas of interest that have the potential to revive retail are as follows:
@@ -104,6 +104,6 @@ Some AI areas of interest that have the potential to revive retail are as follow
 
 The use of AI for demand forecasting will prove to be a key retailer's demand.
 This will be an opportunity for AI vendors in providing that need, 
-with revenues reaching $$\$3$$ billion by 2023, up from $$\$760$$ million in 2019.
+with revenues reaching $\$3$ billion by 2023, up from $\$760$ million in 2019.
 Demand forecasting will be essential to enable an effective omnichannel experience and drive higher margins.
 

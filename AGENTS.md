@@ -10,6 +10,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 - Deployment: GitHub Pages via `.github/workflows/publish.yml` on push to `main`.
 - Build & Validation: `quarto render` (must build cleanly to `_site/`). Local preview via `quarto preview`.
 - Activity logging: `Journal/<date_time>_<title>.md` (ignored in `.gitignore`).
+- Notion migration: use `scripts/migrate-notion.sh <export-directory> <target-post-directory> [category ...]`; imported articles are visible by default. Pass `--draft` only when deliberately keeping an import hidden.
 
 ## Maintaining this file
 

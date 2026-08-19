@@ -41,7 +41,7 @@ Q_\phi^* := \arg \min_{Q_\phi} \mathrm{KL}(Q_\phi \| P)
 \end{eqnarray}
 $$
 
-$$ Q^* $$ disebut sebagai distribusi aproksimasi.
+$Q^*$ disebut sebagai distribusi aproksimasi.
 
 
 $$
@@ -68,11 +68,11 @@ $$
 \end{eqnarray}
 $$
 
-dimana $$ \mathcal{L}(Q_\phi(z)) = \sum_{z \sim Q_\phi(z)} \log{ \frac{P(x, z)} {Q_\phi(z)} }$$ merupakan kuantitas yang dikenal dengan istilah *evidence lower bound (ELBO)*.
+dimana $\mathcal{L}(Q_\phi(z)) = \sum_{z \sim Q_\phi(z)} \log{ \frac{P(x, z)} {Q_\phi(z)} }$ merupakan kuantitas yang dikenal dengan istilah *evidence lower bound (ELBO)*.
 
-Persamaan ($$ \ref{eq:elbo1} $$) penting untuk dipahami lebih mendalam karena di sini kunci utama trik komputasi *variational inference*.
-Perhatikan bahwa kuantitas pada ruas kiri $$ \log{ P(x)} $$ tidak berubah atau konstan.  
-Ingat kembali bahwa tujuan optimisasi di sini yaitu untuk meminimalkan divergensi $$ \mathrm{KL} $$ antara $$ Q $$ dan $$ P $$, seperti pada persamaan ($$ \ref{eq:varopt}$$).
+Persamaan ($\ref{eq:elbo1}$) penting untuk dipahami lebih mendalam karena di sini kunci utama trik komputasi *variational inference*.
+Perhatikan bahwa kuantitas pada ruas kiri $\log{ P(x)}$ tidak berubah atau konstan.  
+Ingat kembali bahwa tujuan optimisasi di sini yaitu untuk meminimalkan divergensi $\mathrm{KL}$ antara $Q$ dan $P$, seperti pada persamaan ($\ref{eq:varopt}$).
 
 #### __Referensi__
 [[Kingma & Welling ICLR2014] "Auto-Encoding Varitional Bayes"](https://arxiv.org/abs/1312.6114)

@@ -16,10 +16,10 @@ Types:
 - Non-seasonal
 - Seasonal
 
-$$ \mathrm{ARIMA}(p, d, q) $$
+$\mathrm{ARIMA}(p, d, q)$
 
 
-- $$p$$: jumlah observasi *lag* yang dimasukkan ke dalam model (lag order)
-- $$d$$: jumlah observasi yang didiferensiasi
-- $$q$$: ukuran *window* dari *moving average*
+- $p$: jumlah observasi *lag* yang dimasukkan ke dalam model (lag order)
+- $d$: jumlah observasi yang didiferensiasi
+- $q$: ukuran *window* dari *moving average*
 

@@ -25,7 +25,7 @@ P(A | B) = \frac{ P(A, B) } { P(B) }
 $$
 
 #### __Joint (Multivariate) Gaussian Distribution__
-Diberikan himpunan variabel acak $$ \mathbf{x} = \{ x_1, \ldots, x_d\} $$
+Diberikan himpunan variabel acak $\mathbf{x} = \{ x_1, \ldots, x_d\}$
 
 $$
 \begin{equation}

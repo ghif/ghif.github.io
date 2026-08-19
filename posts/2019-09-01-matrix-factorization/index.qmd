@@ -10,7 +10,7 @@ aliases:
 draft: true
 ---
 
-Misalnya terdapat sebuah matriks $$ \mathbf{R} \in \mathbb{R}^{n \times m}$$, dimana $$ n $$ dan $$ m $$ biasanya cukup besar, kita dapat membaginya menjadi perkalian matriks-matriks dengan ukuran yang lebih kecil:
+Misalnya terdapat sebuah matriks $\mathbf{R} \in \mathbb{R}^{n \times m}$, dimana $n$ dan $m$ biasanya cukup besar, kita dapat membaginya menjadi perkalian matriks-matriks dengan ukuran yang lebih kecil:
 
 
 $$
@@ -18,11 +18,11 @@ $$
 \mathbf{R} \approx \mathbf{U} \mathbf{V}^\top
 $$ 
 
-dimana $$\mathbf{U} \in \mathbb{R}^{n \times d} $$ dan $$ \mathbf{V} \in \mathbb{R}^{m \times d}$$.
-Dimensi $$ d $$ biasanya jauh lebih kecil dibandingkan $$ n $$ dan $$ m $$. 
+dimana $\mathbf{U} \in \mathbb{R}^{n \times d}$ dan $\mathbf{V} \in \mathbb{R}^{m \times d}$.
+Dimensi $d$ biasanya jauh lebih kecil dibandingkan $n$ dan $m$. 
 
-Konsep ini dikenal dengan istilah __matrix factorization__ atau __matrix decomposition__ -- matrix $$\mathbf{U}$$ dan $$\mathbf{V}$$ disebut dengan *latent factors*. 
-Pada bilangan 1D, faktorisasi merupakan hal yang sudah sangat familiar, seperti $$ 6 = 2 \times 3 $$.
+Konsep ini dikenal dengan istilah __matrix factorization__ atau __matrix decomposition__ -- matrix $\mathbf{U}$ dan $\mathbf{V}$ disebut dengan *latent factors*. 
+Pada bilangan 1D, faktorisasi merupakan hal yang sudah sangat familiar, seperti $6 = 2 \times 3$.
 
 
 Mengapa kita membutuhkan faktorisasi pada matriks? Alasan utamanya adalah untuk membuat komputasi objek-objek matriks yang berjalan setelahnya menjadi lebih sederhana atau efisien.

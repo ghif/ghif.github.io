@@ -17,7 +17,7 @@ Snakes telah banyak diaplikasikan untuk kebutuhan object tracking, segmentation,
 
 
 <!-- intuitive explanation, possibly with pictures -->
-![Sumber: https://en.wikipedia.org/wiki/Active_contour_model](/assets/Snake-contour-example.jpg)
+![Sumber: https://en.wikipedia.org/wiki/Active_contour_model](media/Snake-contour-example.jpg)
 
 **Gambar 1**. Active Contour Model/Snakes (sumber: [https://en.wikipedia.org/wiki/Active_contour_model](https://en.wikipedia.org/wiki/Active_contour_model))
 
@@ -34,10 +34,10 @@ $$
 
 
 
-dengan $$\mathbf{v}[0]$$ dan $$\mathbf{v}[1]$$ sebagai titik awal dan akhir dari kontur.
-Misalkan kita memiliki kontur/*Snake* awal $$ \mathbf{v}^0 $$ berada pada sebuah data citra 2D (Gambar 1 kiri), algoritma *Snake* akan menuntun kontur tersebut menuju lokasi tempat terletaknya outline dari suatu benda (Gambar 1 kanan). 
+dengan $\mathbf{v}[0]$ dan $\mathbf{v}[1]$ sebagai titik awal dan akhir dari kontur.
+Misalkan kita memiliki kontur/*Snake* awal $\mathbf{v}^0$ berada pada sebuah data citra 2D (Gambar 1 kiri), algoritma *Snake* akan menuntun kontur tersebut menuju lokasi tempat terletaknya outline dari suatu benda (Gambar 1 kanan). 
 Kontur awal dapat diinisialisasi secara acak atau ditentukan oleh user. 
-Idealnya kontur akhir akan berada tepat pada outline, yang kita nyatakan dengan $$ \mathbf{v}^* $$.
+Idealnya kontur akhir akan berada tepat pada outline, yang kita nyatakan dengan $\mathbf{v}^*$.
 
 
 ### Cara Kerja
@@ -86,7 +86,7 @@ $$
 Secara umum, energi internal merupakan energi yang berasal dari Snake sendiri, sedangkan energi eksternal merupakan energi yang berasal dari luar, dalam hal ini berasal dari citra 2D.
 Berikut ini penjelasan detil dari kedua energi tersebut.
 
-__Energi internal__. Energi internal berperan dalam mengontrol deformasi dari kontur Snakes. Kita asumsikan fungsi kontur $$\mathbf{v}(s)$$ memiliki turunan hingga orde ke-2. Energi internal dinyatakan dalam bentuk penjumlahan turunan pertama dan turunan kedua sebagai berikut:
+__Energi internal__. Energi internal berperan dalam mengontrol deformasi dari kontur Snakes. Kita asumsikan fungsi kontur $\mathbf{v}(s)$ memiliki turunan hingga orde ke-2. Energi internal dinyatakan dalam bentuk penjumlahan turunan pertama dan turunan kedua sebagai berikut:
 
 $$
 \begin{equation}
@@ -324,7 +324,7 @@ Komputasi persamaan di atas dilakukan berulang-ulang hingga tidak terjadi peruba
 
 Secara rinci, algoritma Snakes/Active Contour Model dapat ditulis dalam *pseudo-code* di bawah ini:
 
-![Algoritma Snakes](/assets/snakes_alg.png)
+![Algoritma Snakes](media/snakes_alg.png)
 
 
 
@@ -521,15 +521,15 @@ Ada beberapa hal teknis yang perlu diperhatikan yaitu:
 Gambar-gambar berikut ini merupakan hasil segmentasi bibir dari algoritma Snakes. 
 Kontur awal berbentuk elips yang dibuat secara manual. Lalu algoritma Snakes mengarahkan elips tersebut agar merekat di bibir bagian luar.
 
-|<img src="/assets/lip.jpg" width="300"/> <br/>(a) Original |  <img src="/assets/gim.jpg" width="300"/> <br/>(b) Gaussian smoothed |
-|<img src="/assets/map.jpg" width="300"/> <br/>(c) External energy (edge) | <img src="/assets/snake.jpg" width="300"/> <br/>(d) Snakes |
+|<img src="media/lip.jpg" width="300"/> <br/>(a) Original |  <img src="media/gim.jpg" width="300"/> <br/>(b) Gaussian smoothed |
+|<img src="media/map.jpg" width="300"/> <br/>(c) External energy (edge) | <img src="media/snake.jpg" width="300"/> <br/>(d) Snakes |
 
 **Gambar 2**. Segmentasi bibir dengan Snakes. Gambar (a) merupakan gambar asli; (b) merupakan gambar *grayscale* dari (a) dan juga dihaluskan dengan Gaussian filter;
 (c) merupakan gambar *edge* hasil dari operasi sobel; (d) menampilkan kontur awal (biru) dan kontur akhir (merah) hasil algoritma Snakes.
 
 
 
-<img src="/assets/snakes_opt.gif" />
+<img src="media/snakes_opt.gif" />
 <br/>
 **Gambar 3**. Progres deformasi dari kontur Snakes (54 iterasi) 
 

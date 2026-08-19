@@ -13,7 +13,7 @@ Ada sebuah fenomena yang menarik dari kemampuan otak manusia dalam mempelajari h
 
 Salah satu contoh fenomena ini adalah proses belajar berbahasa. Bayangkan Anda baru mulai belajar, misalnya, bahasa Spanyol. Di fase awal Anda mempelajari huruf-huruf / unsur-unsur terkecil dari bahasa Spanyol. Kemudian Anda menghafal berbagai kosa kata. Selanjutnya Anda belajar menyusun frasa dan kalimat dari kosa kota tersebut. 
 
-<img src="/assets/lifelong-learning.jpg" width="750"/>
+<img src="media/lifelong-learning.jpg" width="750"/>
 
 **Gambar 1**. Sumber: http://netprofitgrowth.com/business-learning/
 
@@ -61,7 +61,7 @@ Neurala mengklaim dapat melakukan *continual learning* secara efisien pada peran
 
 Ketertarikan komunitas peniliti pemelajaran mesin terhadap Continual Learning semakin meningkat setiap tahunnya, seperti yang ditunjukkan pada grafik di bawah ini:
 
-<img src="/assets/CL_interest.png" width="750"/>
+<img src="media/CL_interest.png" width="750"/>
 
 **Gambar 2**. Grafik jumlah publikasi artikel ilmiah yang bertema *continual learning* berdasarkan kata kunci "continual learning", "lifelong learning", dan lain-lain. Sumber: https://www.continualai.org/#home, 
 
@@ -72,7 +72,7 @@ Suatu observasi pada otak tikus mengindikasikan bahwa mempelajari suatu hal bera
 Fenomena ini diilustrasikan pada Gambar 3 di bawah ini.
 
 
-<img src="/assets/dendrites.png" width="750"/>
+<img src="media/dendrites.png" width="750"/>
 
 **Gambar 3**. Ilustrasi koneksi *synapses* yang terbentuk berkaitan dengan proses belajar dan pembentukan memori.
 Sumber: https://www.cell.com/current-biology/pdf/S0960-9822(09)02203-9.pdf

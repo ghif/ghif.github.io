@@ -11,7 +11,7 @@ draft: true
 ---
 
 Suppose we have a real data distribution 
-$${\mathbb P_r} $$ and model distribution $$ {\mathbb P_g} $$, we define Earth-Mover (EM) or 1-Wassertein distance as
+${\mathbb P_r}$ and model distribution ${\mathbb P_g}$, we define Earth-Mover (EM) or 1-Wassertein distance as
 
 $$
 \displaystyle
@@ -24,5 +24,5 @@ W({\mathbb P_r}, {\mathbb P_g}) =
 $$
 
 
-where $$ \Pi({\mathbb P_r}, {\mathbb P_g}) $$ is the set of all joint distributions $$ \gamma(x, y)$$ with marginals $$ {\mathbb P_r} $$ and $$ {\mathbb P_g} $$, respectively.
+where $\Pi({\mathbb P_r}, {\mathbb P_g})$ is the set of all joint distributions $\gamma(x, y)$ with marginals ${\mathbb P_r}$ and ${\mathbb P_g}$, respectively.
 

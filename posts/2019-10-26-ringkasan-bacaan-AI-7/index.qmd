@@ -25,7 +25,7 @@ FM merupakan sebuah model prediktif linear sebagaimana halnya linear regression 
 Adanya interaksi antar atribut tersebut membuat FM dikategorikan sebagai metode *collaborative filtering*.
 
 
-Katakanlah $$ \mathbf{x} \in \mathbb{R}^n $$ merupakan input dari FM yang biasa disebut sebagai *feature vector*, dimana $$ x_1, \ldots, x_n $$ merupakan atribut-atribut dari input.
+Katakanlah $\mathbf{x} \in \mathbb{R}^n$ merupakan input dari FM yang biasa disebut sebagai *feature vector*, dimana $x_1, \ldots, x_n$ merupakan atribut-atribut dari input.
 Dalam konteks *recommender system*, misalnya pada e-commerce, atribut-atribut tersebut dapat berupa informasi tentang pengguna, barang-barang yang dijual, waktu transaksi, ataupun informasi-informasi implisit lainnya.
 
 Model FM didefinisikan sebagai berikut:
@@ -36,10 +36,10 @@ y_{FM} = w_0 + \sum_{i=1}^n w_i x_i + \sum_{i=1}^n \sum_{j=i+1}^n \langle \mathb
 \end{equation}
 $$
 
-dimana $$ y_{FM} \in \mathbb{R}$$ merupakan skor prediksi yang dapat merepresentasikan apapun, seperti *rating* yang diberikan pengguna terhadap barang tertentu.
+dimana $y_{FM} \in \mathbb{R}$ merupakan skor prediksi yang dapat merepresentasikan apapun, seperti *rating* yang diberikan pengguna terhadap barang tertentu.
 Gambar di bawah ini mengilustrasikan input (**feature vectors**) dan output dari FM:
 
-<img src="/assets/fm_feats.png" alt="FM features" width="80%" height="80%"/>
+<img src="media/fm_feats.png" alt="FM features" width="80%" height="80%"/>
 
 **Gambar 1: Features atau representasi input dari FM [(Rendle 2010)](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf)**
 
@@ -57,11 +57,11 @@ y_{NFM} = w_0 + \sum_{i=1}^n w_i x_i + \sum_{i=1}^n \sum_{j=i+1}^n f(\mathbf{x})
 \end{equation}
 $$
 
-dimana fungsi $$ f: \mathbb{R}^n \rightarrow \mathbb{R} $$ merupakan sebuah *neural network*. 
+dimana fungsi $f: \mathbb{R}^n \rightarrow \mathbb{R}$ merupakan sebuah *neural network*. 
 Arsitektur dari *neural network* tersebut digambarkan sebagai berikut:
 
 
-<img src="/assets/nfm_nets.png" alt="NFM Nets" width="80%" height="80%"/>
+<img src="media/nfm_nets.png" alt="NFM Nets" width="80%" height="80%"/>
 
 **Gambar 2: Arsitektur neural networks pada NFM [(He and Chua 2017)](https://arxiv.org/pdf/1708.05027.pdf)**
 
@@ -69,7 +69,7 @@ Arsitektur dari *neural network* tersebut digambarkan sebagai berikut:
 Pada model tersebut terdapat layer khusus yang dinamakan *bi-interaction layer* yang merekapitulasi interaksi dari semua atribut input menjadi sebuah vektor.
 
 Hasil eksperimen pada 2 domain *recommender systems*: [Frappe](https://github.com/hexiangnan/neural_factorization_machine/tree/master/data/frappe) dan [MovieLens](https://grouplens.org/datasets/movielens/latest/), menunjukkan efektifitas dari NFM.
-NFM bekerja lebih baik daripada FM dengan peningkatan performa relatif sebesar $$ 7.5 \% $$. 
+NFM bekerja lebih baik daripada FM dengan peningkatan performa relatif sebesar $7.5 \%$. 
 Dibandingkan dengan metode sistem rekomendasi berbasis *deep learning* seperti [Wide&Deep](https://arxiv.org/abs/1606.07792) dan [DeepCross](https://www.kdd.org/kdd2016/papers/files/adf0975-shanA.pdf), NFM juga bekerja sedikit lebih baik pada 2 domain tersebut.
 Keuntungan NFM lainnya adalah arsitekturnya yang notabene *shallow* sehingga memiliki jumlah parameter yang lebih sedikit dibandingkan Wide&Deep maupun DeepCross -- yang berarti lebih sedikit membutuhkan memori penyimpanan dan lebih cepat untuk dieksekusi.
 
@@ -95,7 +95,7 @@ Dari berbagai observasi ditemukan bahwa model-model tersebut mampu melakukan tug
 Adanya pengetahuan tersebut memungkinkan untuk melakukan *query* seperti (*Dante*, *born-in*, X), yaitu mencari fakta tentang X, yang biasanya dapat dilakukan dengan menggunakan [*knowledge base* (KB)](https://en.wikipedia.org/wiki/Knowledge_base) -- diilustrasikan pada Gambar 2 di bawah ini.
 
 
-<img src="/assets/lm_kg.png" alt="Languange models as knowledge bases" width="80%" height="80%"/>
+<img src="media/lm_kg.png" alt="Languange models as knowledge bases" width="80%" height="80%"/>
 
 **Gambar 2: Arsitektur neural networks pada NFM [(Petroni et al. 2019)](https://arxiv.org/pdf/1909.01066.pdf)**
 
@@ -108,7 +108,7 @@ Dari hasil eksperimen empiris disimpulkan bahwa BERT memiliki pengetahuan relasi
 BERT juga memiliki kemampuan memulihkan informasi faktual dan *commonsense reasoning* yang sangat baik, melebihi model-model bahasa generik lainnya.
 Berikut beberapa contoh *reasoning* yang dihasilkan oleh BERT dari berbagai *query* yang sifatnya relasional:
 
-<img src="/assets/lama.png" alt="BERT token generation" width="80%" height="80%"/>
+<img src="media/lama.png" alt="BERT token generation" width="80%" height="80%"/>
 
 **Tabel 1: Keluaran dari model BERT saat diberikan *query* relasional**
 

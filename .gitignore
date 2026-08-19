@@ -5,7 +5,8 @@
 *_files/
 *.html_files/
 
-# Local Activity Logging & Private Journals (DO NOT COMMIT)
+# Local source exports and activity logs (DO NOT COMMIT)
+notion-export/
 Journal/
 Journal/**
 

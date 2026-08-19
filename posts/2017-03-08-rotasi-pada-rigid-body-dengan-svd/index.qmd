@@ -15,7 +15,7 @@ Sebagaimana halnya objek geometris, kita dapat mengaplikasikan berbagai transfor
 Kumpulan titik biru pada Gambar 1 merupakan hasil rotasi *rigid body* berwarna merah.
 
 
-Sebuah *rigid body* dengan $$m$$ buah titik di ruang 3D dapat kita tulis dalam notasi matriks sebagai berikut:
+Sebuah *rigid body* dengan $m$ buah titik di ruang 3D dapat kita tulis dalam notasi matriks sebagai berikut:
 
 $$
 \begin{align}
@@ -28,16 +28,16 @@ $$
 \end{align}
 $$
 
-dimana $$ \mathbf{p}_i = [x^p_i, y^p_i, z^p_i]^{\top} $$ merupakan titik ke-$$ i $$. 
+dimana $\mathbf{p}_i = [x^p_i, y^p_i, z^p_i]^{\top}$ merupakan titik ke-$i$. 
 
-![Sumber: www.kwo3d.com/theory/jkinem/rotmat.html](/assets/rotmat_f01.gif)
+![Sumber: www.kwo3d.com/theory/jkinem/rotmat.html](media/rotmat_f01.gif)
 
 
 **Gambar 1**. Rotasi pada rigid body (sumber: [www.kwo3d.com/theory/jkinem/rotmat.html](www.kwo3d.com/theory/jkinem/rotmat.html))
 
 
-Pada contoh Gambar 1, $$ m=4 $$.
-Misalkan $$ \mathbf{Q} \in \mathbb{R}^{3 \times m} $$ merupakan sebuah *rigid body* hasil rotasi dari $$ \mathbf{P} $$, maka berlaku persamaan:
+Pada contoh Gambar 1, $m=4$.
+Misalkan $\mathbf{Q} \in \mathbb{R}^{3 \times m}$ merupakan sebuah *rigid body* hasil rotasi dari $\mathbf{P}$, maka berlaku persamaan:
 
 $$
 \begin{equation}
@@ -46,7 +46,7 @@ $$
 \end{equation}
 $$
 
-dimana $$ \mathbf{R} \in \mathbb{R}^{3 \times 3} $$ merupakan matriks rotasi pada ruang 3D:
+dimana $\mathbf{R} \in \mathbb{R}^{3 \times 3}$ merupakan matriks rotasi pada ruang 3D:
 
 $$
 \begin{equation}
@@ -76,7 +76,7 @@ $$
 \end{equation}
 $$
 
-Jika $$\mathbf{P}$$ dan $$\{ \theta_x, \theta_y, \theta_z \}$$ (atau $$\mathbf{R}$$) diketahui, maka $$\mathbf{Q}$$ dapat dihitung dengan mudah.
+Jika $\mathbf{P}$ dan $\{ \theta_x, \theta_y, \theta_z \}$ (atau $\mathbf{R}$) diketahui, maka $\mathbf{Q}$ dapat dihitung dengan mudah.
 
 Pada berbagai aplikasi (menghitung *spacecraft attitude*, menentukan gerakan pada robot, animasi objek-objek grafis, 3D object registration) , kita tertarik untuk __mencari matriks rotasi $\mathbf{R}$ diketahui 2 buah *rigid body* yang saling berkorespondensi__. 
 Korespondensi di sini maksudnya adalah setiap titik pada sebuah *rigid body* memiliki pasangannya pada *rigid body* yang lain.
@@ -85,7 +85,7 @@ Selanjutnya kita akan membahas bagaimana memecahkan problem ini dengan menggunak
 
 
 # Orthogonal Procrustes Problem
-Mencari $$\mathbf{R}$$ pada persamaan ($$\ref{eq:rig}$$) tidak cukup mudah dikarenakan matriks $$\mathbf{P} \in \mathbb{R}^{3 \times m}$$ tidak dapat di-*inverse*.
+Mencari $\mathbf{R}$ pada persamaan ($\ref{eq:rig}$) tidak cukup mudah dikarenakan matriks $\mathbf{P} \in \mathbb{R}^{3 \times m}$ tidak dapat di-*inverse*.
 Agar komputasi mungkin dilakukan, kita formulasikan problemnya dalam bentuk minimisasi *least square* sebagai berikut:
 
 $$
@@ -98,9 +98,9 @@ J(\mathbf{R}) =  \left \| \mathbf{Q} - \mathbf{R} \mathbf{P} \right \|_F^2 \righ
 \end{equation}
 $$
 
-dimana $$\displaystyle  \left \| \cdot \right \|_F^2$$  merupakan *[Frobenius norm](https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm)*.
+dimana $\displaystyle  \left \| \cdot \right \|_F^2$  merupakan *[Frobenius norm](https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm)*.
 
-Cara lain untuk mengekspresikan persamaan di atas adalah dengan menggunakan operator *trace* $$\mathrm{Tr}(\cdot)$$:
+Cara lain untuk mengekspresikan persamaan di atas adalah dengan menggunakan operator *trace* $\mathrm{Tr}(\cdot)$:
 
 $$
 \begin{equation}
@@ -119,7 +119,7 @@ $$
 
 # Singular Value Decomposition
 Singular Value Decomposition (SVD) merupakan sebuah teknik memecah / dekomposisi / faktorisasi sebuah matriks menjadi 3 buah matriks.
-Sebarang matriks $$\mathbf{M} \in \mathbb{R}^{m \times n}$$ dapat difaktorisasi menjadi
+Sebarang matriks $\mathbf{M} \in \mathbb{R}^{m \times n}$ dapat difaktorisasi menjadi
 
 $$
 \begin{equation}
@@ -128,19 +128,19 @@ $$
 \end{equation}
 $$
 
-dimana $$\mathbf{U} \in \mathbb{R}^{m \times m}$$ merupakan matriks ortogonal yang dikenal dengan matriks *left-singular*, 
-$$\mathbf{\Sigma} \in \mathbb{R}^{m \times n}$$ merupakan matriks diagonal dengan elemen non-negatif, 
-dan $$\mathbf{V} \in \mathbb{R}^{n \times n}$$ merupakan matriks ortogonal yang disebut matriks *right-singular*.
+dimana $\mathbf{U} \in \mathbb{R}^{m \times m}$ merupakan matriks ortogonal yang dikenal dengan matriks *left-singular*, 
+$\mathbf{\Sigma} \in \mathbb{R}^{m \times n}$ merupakan matriks diagonal dengan elemen non-negatif, 
+dan $\mathbf{V} \in \mathbb{R}^{n \times n}$ merupakan matriks ortogonal yang disebut matriks *right-singular*.
 
 # Matriks Rotasi
-Secara umum, matriks rotasi pada ruang $$D > 1$$ dapat didefinisikan sebagai berikut.
+Secara umum, matriks rotasi pada ruang $D > 1$ dapat didefinisikan sebagai berikut.
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
 
 **Definisi 1** (Matriks Rotasi). \\
-Sebuah matriks persegi $$ \mathbf{R} \in \mathbb{R}^{D \times D} $$ merupakan matriks rotasi jika 
-1. $$ \mathbf{R}^{-1} = \mathbf{R}^{\top} $$,  dan 
-2. $$ \mathrm{det}(\mathbf{R}) = 1 $$.
+Sebuah matriks persegi $\mathbf{R} \in \mathbb{R}^{D \times D}$ merupakan matriks rotasi jika 
+1. $\mathbf{R}^{-1} = \mathbf{R}^{\top}$,  dan 
+2. $\mathrm{det}(\mathbf{R}) = 1$.
 
 </div>
 
@@ -153,9 +153,9 @@ Solusi untuk orthogonal Procrustes problem (\ref{eq:probls}) dikemas dalam teore
 
 <div markdown="1" style="border-style: solid; margin: 5px; padding: 5px; text-align: justify;">
 **Teorema 1** (Matriks Rotasi). \\
-Diberikan 2 buah rigid body yang berkorespondensi $  \mathbf{X}, \mathbf{Y} \in \mathbb{R}^{3 \times m} $, 
+Diberikan 2 buah rigid body yang berkorespondensi $\mathbf{X}, \mathbf{Y} \in \mathbb{R}^{3 \times m}$, 
 dimana vektor-vektor kolom pada kedua matriks tersebut merupakan titik-titik pada ruang 3D. 
-Jika titik $ \mathbf{c}=(x_c, y_c, z_c) $ merupakan poros rotasi dan matriks $ \mathbf{P}, \mathbf{Q} \in \mathbb{R}^{3 \times m} $ memenuhi
+Jika titik $\mathbf{c}=(x_c, y_c, z_c)$ merupakan poros rotasi dan matriks $\mathbf{P}, \mathbf{Q} \in \mathbb{R}^{3 \times m}$ memenuhi
 
 $$
 \begin{align}
@@ -164,7 +164,7 @@ $$
 \end{align}
 $$
 
-maka matriks rotasi $$ \mathbf{R}$$ yang memberikan solusi untuk problem ($$ \ref{eq:probls}$$) dapat dihitung sbb:
+maka matriks rotasi $\mathbf{R}$ yang memberikan solusi untuk problem ($\ref{eq:probls}$) dapat dihitung sbb:
 
 $$
 \begin{align}
@@ -172,12 +172,12 @@ $$
 \end{align}
 $$
 
-dimana $  \mathrm{SVD}(\mathbf{P} \mathbf{Q}^\top) = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top $
+dimana $\mathrm{SVD}(\mathbf{P} \mathbf{Q}^\top) = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top$
 
 </div>
 
 <div markdown="1" style="font-size: 90%; margin: 5px; padding: 5px; text-align: justify;">
-**Bukti.** Persamaan ($$\ref{eq:probtr}$$) dapat dijabarkan menjadi
+**Bukti.** Persamaan ($\ref{eq:probtr}$) dapat dijabarkan menjadi
 
 $$
 \begin{align}
@@ -193,7 +193,7 @@ J(\mathbf{R}) &= \mathrm{Tr}\left( (\mathbf{Q} - \mathbf{R} \mathbf{P})^\top(\ma
 \end{align}
 $$
 
-Karena minimisasi $$ J(\mathbf{R}) $$ hanya bergantung pada matriks rotasi $$ \mathbf{R} $$, kita dapat sederhanakan problem ($$\ref{eq:probls}$$) menjadi
+Karena minimisasi $J(\mathbf{R})$ hanya bergantung pada matriks rotasi $\mathbf{R}$, kita dapat sederhanakan problem ($\ref{eq:probls}$) menjadi
 
 $$ 
 \begin{align}
@@ -209,8 +209,8 @@ $$
 \end{align}
 $$
 
-Kemudian kita dekomposisi matriks $$ \mathbf{P} \mathbf{Q}^\top $$ dengan menggunakan 
-$$ \mathrm{SVD}(\mathbf{P} \mathbf{Q}^\top) = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top $$ sehingga menjadi
+Kemudian kita dekomposisi matriks $\mathbf{P} \mathbf{Q}^\top$ dengan menggunakan 
+$\mathrm{SVD}(\mathbf{P} \mathbf{Q}^\top) = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top$ sehingga menjadi
 
 $$ 
 \begin{align}
@@ -219,7 +219,7 @@ $$
 \end{align}
 $$
 
-Tulis $$ \mathbf{A} = \mathbf{V}^\top \mathbf{R} \mathbf{U} $$. Ekspresi di atas mencapai maksimum ketika $$ \mathbf{A}= \mathbf{I} $$. Dengan demikian,
+Tulis $\mathbf{A} = \mathbf{V}^\top \mathbf{R} \mathbf{U}$. Ekspresi di atas mencapai maksimum ketika $\mathbf{A}= \mathbf{I}$. Dengan demikian,
 
 $$
 \begin{align}
@@ -231,12 +231,12 @@ $$
 </div>
 
 
-Mungkin ada yang bertanya-tanya mengapa $ \mathbf{A} = \mathbf{I} $ berimplikasi nilai maksimum untuk ($$\ref{eq:probmax}$$)? Dengan kata lain, mengapa 
-$ \displaystyle \max_{\mathbf{R}} \mathrm{Tr}\left( \mathbf{R} \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top \right) = \mathrm{Tr} \left( \mathbf{\Sigma} \right) = \sum_{i=1}^m \sigma_{i}  $ ?
+Mungkin ada yang bertanya-tanya mengapa $\mathbf{A} = \mathbf{I}$ berimplikasi nilai maksimum untuk ($\ref{eq:probmax}$)? Dengan kata lain, mengapa 
+$\displaystyle \max_{\mathbf{R}} \mathrm{Tr}\left( \mathbf{R} \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top \right) = \mathrm{Tr} \left( \mathbf{\Sigma} \right) = \sum_{i=1}^m \sigma_{i}$ ?
 
 
-Perhatikan bahwa semua matriks yang menyusun $ \mathbf{A} $ merupakan matriks ortogonal, sehingga matriks$ \mathbf{A} $ juga ortogonal. 
-Dengan demikian, penjumlahan elemen-elemen kolom dari $ \mathbf{A} $ memenuhi $ \displaystyle \sum_{i=1}^m a_{ij}^2 = 1 $, yang berimplikasi $ \displaystyle -1 \leq a_{ij} \leq 1 $.
+Perhatikan bahwa semua matriks yang menyusun $\mathbf{A}$ merupakan matriks ortogonal, sehingga matriks$\mathbf{A}$ juga ortogonal. 
+Dengan demikian, penjumlahan elemen-elemen kolom dari $\mathbf{A}$ memenuhi $\displaystyle \sum_{i=1}^m a_{ij}^2 = 1$, yang berimplikasi $\displaystyle -1 \leq a_{ij} \leq 1$.
 Maka kita dapat simpulkan bahwa
 
 $$

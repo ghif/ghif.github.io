@@ -64,7 +64,7 @@ Paper ini mengemukakan sebuah model bernama Neuro-Symbolic Concept Learner (NS-C
 Model tersebut hanya mengandalkan data gambar beserta pasangan kalimat tanya-jawab (QA) terkait gambar tersebut.
 Cara bagaimana NS-CL belajar dan melakukan inferensi diilustrasikan pada gambar di bawah ini.
 
-<img src="/assets/nscl_learning.png" alt="NS-CL Learning" width="80%" height="80%"/>
+<img src="media/nscl_learning.png" alt="NS-CL Learning" width="80%" height="80%"/>
 
 **Ilustrasi bagaimana NS-CL belajar (disebut dengan istilah *curriculum learning*) dan inferensi untuk VQA (Visual Question Answering)**
 
@@ -75,7 +75,7 @@ NS-CL memiliki 3 buah modul: 1) modul persepsi berbasis *neural network* yang me
 Sederhananya, NS-CL memadukan antara *deep learning* dan *symbolic reasoning* untuk menjembatani proses belajar konsep-konsep visual, kata-kata, dan juga pengurai semantik dari kalimat-kalimat secara simultan. 
 Gambar di bawah ini menunjukkan integrasi tersebut.
 
-<img src="/assets/nscl_symbolic_reasoning.png" alt="NS-CL Symbolic Reasoning" width="80%" height="80%"/>
+<img src="media/nscl_symbolic_reasoning.png" alt="NS-CL Symbolic Reasoning" width="80%" height="80%"/>
 
 **Ilustrasi *neural symbolic reasoning* pada model NSCL**
 

@@ -39,6 +39,8 @@ website:
         text: Archive
       - href: about.qmd
         text: About
+      - href: privacy.qmd
+        text: Privacy
     right:
       - icon: github
         href: https://github.com/ghif

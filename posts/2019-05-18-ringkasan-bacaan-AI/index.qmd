@@ -32,10 +32,10 @@ Algoritma tersebut dilatarbelakangi oleh sebuah hipotesis yang penulisnya namaka
 *Sebuah DNN yang parameternya diinisialisasi secara random memiliki sebuah sub-network yang parameternya diinisialisasi sedemikian rupa sehingga apabila sub-network tersebut dilatih, performa akurasinya akan serupa dengan DNN yang besar dengan jumlah iterasi pelatihan yang serupa.*
 
 Algoritma yang diusulkan akan menghasilkan sebuah *sub-network* yang disebut dengan *winning ticket*, yang secara umum terdiri dari 4 tahapan:
-1. Inisialisi parameter DNN secara acak: $$f(x; \theta_0)$$, dimana $$ \theta_0 \sim \mathcal{D}_\theta$$.
-2. Latih DNN sebanyak iterasi sejumlah $$j$$, menghasilkan parameter $$\theta_j$$.
-3. Pangkas $$ p\%$$ dari parameter $$ \theta_j $$ sehingga menghasilkan *mask* $$ m $$.
-4. Kembalikan nilai parameter yang tersisa ke nilai pada $$\theta_0$$, yang menghasilkan *winning ticket* $$ f(x; m \odot \theta_0) $$.
+1. Inisialisi parameter DNN secara acak: $f(x; \theta_0)$, dimana $\theta_0 \sim \mathcal{D}_\theta$.
+2. Latih DNN sebanyak iterasi sejumlah $j$, menghasilkan parameter $\theta_j$.
+3. Pangkas $p\%$ dari parameter $\theta_j$ sehingga menghasilkan *mask* $m$.
+4. Kembalikan nilai parameter yang tersisa ke nilai pada $\theta_0$, yang menghasilkan *winning ticket* $f(x; m \odot \theta_0)$.
 
 Berbagai hasil eksperimen yang dilaporkan pada paper tersebut menunjukkan bahwa hasilnya mendukung *lottery ticket hypothesis* dan secara konsisten mampu menghasilkan *sub-network* yang berukuran ~90% lebih kecil dibandingkan model aslinya melalui proses pelatihan pada dataset MNIST dan CIFAR10.
 <!-- Manfaat utama dari algoritma ini adalah membuat proses pelatihan secara keseluruhan lebih efisien dibandingkan cara konvensional. -->
@@ -65,9 +65,9 @@ Dengan demikian, kemampuan *meta-learning* akan berimplikasi pada kemampuan adap
 Ide ini memungkinkan untuk melakukan intervensi terhadap proses prediksi dari suatu model AI. 
 
 
-Sebagai contoh, misal $$X$$ merupakan metode pengobatan dan $$Y$$ merupakan kondisi kesehatan. 
+Sebagai contoh, misal $X$ merupakan metode pengobatan dan $Y$ merupakan kondisi kesehatan. 
 Model yang memiliki kemampuan *causal inference* akan mampu menjawab pertanyaan yang bersifat intervensi seperti ini: 
-jika obat yang lama $$X=a$$ diganti dengan obat yang baru $$ X=b $$, apa yang akan terjadi pada kondisi kesehatan pasien $$Y$$?
+jika obat yang lama $X=a$ diganti dengan obat yang baru $X=b$, apa yang akan terjadi pada kondisi kesehatan pasien $Y$?
 Kemampuan ini tidak dimiliki oleh metode *machine learning* standar yang pada umumnya berbasis korelasi.
 
 Singkatnya, paper ini mencoba menangkap hubungan kausalitas antara *distribusi data latih* dengan distribusi lingkungan tempat model AI dijalankan, yang diistilahkan dengan *distribusi target*.

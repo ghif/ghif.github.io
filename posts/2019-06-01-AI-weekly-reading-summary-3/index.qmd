@@ -30,7 +30,7 @@ This paper investigates the problems such as training instability, absence of ba
 The resulting algorithm, referred to as MAML++, was evaluated on the [Omniglot](https://github.com/brendenlake/omniglot) and [Mini-Imagenet](https://github.com/y2l/mini-imagenet-tools) datasets.
 The outcomes show some superiorities of MAML++ over MAML both in stability and generalization performance.
 
-<img src="/assets/MAMLpp.png" alt="MAML vs MAML++" width="80%" height="80%"/>
+<img src="media/MAMLpp.png" alt="MAML vs MAML++" width="80%" height="80%"/>
 
 **Comparison between MAML vs MAML++**
 
@@ -58,8 +58,8 @@ When given a small number of labeled images (as few as 13 labels per class), thi
 Learning from a small data is a limitation for deep learning, which is typically label-hungry.
 This work opens a new regime in tasks of which only a few labels are available such as detecting rare diseases, spotting defects in a retail pipeline, detecting anomalies/unusual actions in video surveillance, etc.
 
-<!-- ![result example](/assets/cpc_results.png) -->
-<img src="/assets/cpc_results.png" alt="CPC Result" width="60%" height="60%"/>
+<!-- ![result example](media/cpc_results.png) -->
+<img src="media/cpc_results.png" alt="CPC Result" width="60%" height="60%"/>
 
 **Classification accuracy comparison between self-supervision with CPC and fully supervised ResNet as a function of the number of labeled examples.**
 

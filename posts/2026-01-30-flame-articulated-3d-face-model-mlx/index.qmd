@@ -1,0 +1,200 @@
+---
+title: "Unmasking FLAME: The Articulated 3D Face Model Powered by Apple MLX"
+author: "MUHAMMAD GHIFARY"
+date: 2026-01-30
+description: "Imported and normalized from a Notion article."
+categories:
+  - machine-learning
+  - computer-vision
+  - deep-learning
+  - implementation
+  - research-notes
+draft: false
+---
+
+
+Facial modeling has come a long way since the early days of simple 3D scans. Today, the **FLAME** (Faces Learned with an Articulated Model and Expressions) model stands as a cornerstone in computer vision, providing a powerful, differentiable, and highly expressive framework for human head modeling ([Li et al. 2017](https://download.is.tue.mpg.de/flame/flame_paper.pdf)).
+
+In this article, we'll dive deep into the mechanics of FLAME, explore recent breakthroughs, and look at how we can leverage Apple's **MLX** framework to run these models at lightning speeds on Apple Silicon.
+
+## What is FLAME?
+
+FLAME is a Linear Blend Skinning (LBS) model that captures the vast variety of human head shapes and expressions. Unlike older models that focused solely on the face, FLAME models the entire head — including the neck, jaw, and eyballs.
+
+At its heart, FLAME represents a 3D mesh$M(\vec{\beta}, \vec{\theta}, \vec{\psi})$, which is a function of:
+
+- Shape parameters$\vec{\beta}$: Identity-specific features (height, face width, etc.).
+- Pose parameters$\vec{\theta}$: Rotations for the neck, jaw, and eyeballs.
+- Expression parameters$\vec{\psi}$: Dynamic movements like smiles or frowns.
+
+The final position of a vertex$v$is calculated using the LBS formula:
+
+$$
+v_{\mathrm{final}} = \sum_{j=1}^{J} w_{j} G_j(\vec{\theta}, J) (v_{\mathrm{template}} + B_s(\vec{\beta}) + B_p(\vec{\theta}) + B_e(\vec{\psi}))
+$$
+
+where
+
+-$v_{\mathrm{template}}$is the average head shape.
+-$B_s$,$B_p$,$B_e$are the Shape, Pose, and Expression blendshapes.
+-$G_j$is the global transformation matrix for point$j$-$w_j$are the skinning weights.
+
+## Recent Advancements
+
+FLAME is not just a static model; it has become the core for modern facial research.
+
+### FLAME 2023: Open Mouth and Beyond
+
+Recent updates to [FLAME](https://github.com/Suraj-Bhor/flame_to_flame_open_converter) have expanded its topology to better handle open-mouth scenarios and interior details, making it more robust for realistic speech animation.
+
+### Monocular Reconstruction: DECA & EMOCA
+
+Models like **DECA** (Detailed Expression Capture and Animation) leverage FLAME to reconstruct a detailed 3D face from a single 2D image ([Feng et al. 2021](https://arxiv.org/pdf/2012.04012)). **EMOCA** (Emotion-driven Monocular Face Capture) takes this a step further by prioritizing the emotional content of the expression, ensuring that the 3D model doesn’t just look like the person, but feels like them ([Daněček et al. 2022](https://openaccess.thecvf.com/content/CVPR2022/papers/Danecek_EMOCA_Emotion_Driven_Monocular_Face_Capture_and_Animation_CVPR_2022_paper.pdf)). 
+
+### Integration with Neural Rendering (NeRF and Gaussian Splatting)
+
+One of the most exciting trends is the marriage of FLAME with implicit neural representations and point-based rendering. Some examples of research work are:
+
+- **IMAvatar ([Zheng et al., 2022](https://arxiv.org/pdf/2112.07471))**: Implements "Implicit Morphable Avatars," where FLAME is used to provide the underlying structure for a neural signed distance function (SDF), allowing for high-fidelity rendering from monocular video.
+- **NeRFlame ([Zając et al., 2023](https://arxiv.org/pdf/2303.06226))**: This work uses the FLAME mesh to explicitly define the density volume within a NeRF, ensuring that the neural radiance field remains geometrically consistent with the underlying head model.
+- **HeadGaS ([Dhamo et al., 2023](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/00280.pdf))**: Represents the state-of-the-art in **3D Gaussian Splatting (3DGS)** integration. It binds 3D Gaussians to the triangles of a FLAME mesh; as the mesh deforms with expression coefficients, the Gaussians move and scale accordingly, enabling real-time, photorealistic animation at hundreds of frames per second.
+- **GaussianAvatars ([Qian et al., 2024](https://arxiv.org/pdf/2312.02069))**: This paper that takes rigging to the next level. It introduces a **"binding inheritance strategy"** to rig 3D Gaussians directly to the FLAME topology. By initializing Gaussians on each triangle and learning their relative offsets, it achieves extremely high-fidelity head avatars that inherit the full articulability of the FLAME model.
+
+## How is FLAME Trained?
+
+Understanding the usage of FLAME is one thing, but how is such a model actually created? The training of FLAME is an iterative process of statistical learning from raw 3D data.
+
+### 1. Data Collection and Registration
+
+The foundation of FLAME is a massive dataset of over **33,000 high-fidelity 3D scans**.
+
+- **Shape Space**: Derived from ~3,800 head scans of different individuals.
+- **Expression Space**: Learned from 4D sequences (videos of 3D scans) from the D3DFACS dataset.
+
+The "magic" happens during **Registration**. Raw 3D scans are just "bags of points" (unstructured point clouds). To train a model, researchers must map a fixed-topology template mesh (the 5023 vertex structure) onto every single scan. This ensures that vertex #100 is always the tip of the nose, regardless of the person's identity or expression.
+
+### 2. Learning the Components (PCA)
+
+Once the scans are co-registered, **Principal Component Analysis (PCA)** is performed on the vertex displacements.
+
+- The **Mean Mesh** $\bar{T}$ is calculated.
+- The **Shape Basis** $S$ and **Expression Basis** $\varepsilon$ are learned by capturing the directions of maximum variance in the data.
+
+### 3. Optimization of Joints & LBS
+
+To make the model articulated, the researchers must solve for the **Joint Locations$J$, Skinning Weights$W$, and Pose$B$.** This is done by minimizing the reconstruction error across thousands of poses:
+
+$$
+\arg\min_{W, J, B} \sum_{i} || \text{LBS}(W, J, B_i) - \text{Scan}_i ||^2
+$$
+
+Recent advancements like FLAME 2023 have further refined this by updating the joints to better represent the “open mouth” anatomy.
+
+## Implementing FLAME in MLX
+
+Why MLX? As a specialized framework for Apple Silicon, MLX allows us to run these complex matrix operations directly on the GPU/NPU with unified memory. This means faster training and real-time inference on edge device with MacBook machines — the real reason is actually, I just want to maximize the utilization of my best local machine: Apple Silicon laptop 🙂
+
+For those who are fluent with NumPy / JAX / PyTorch, MLX feels remarkably familiar. If you can write NumPy, you can write MLX. The API between NumPy and MLX is almost 1:1, with added power of composable function transformations like `mx.grad` and `mx.vmap`.
+
+In MLX, memory is unified. One of the hurdles in PyTorch is managing `.to(device)` or `.cuda()` calls. There is no cost in MLX to move data between the CPU and GPU because they share the same physical memory, simplifying code and eliminates “device mismatch” errors.
+
+Like JAX, MLS uses lazy evaluation. It builds on a computation graph and only executes it when needed (e.g., when we print a value or save a file). This allows for automatic graph optimizations without the complexity of manual JIT decorators in many cases.
+
+Here is how we implement the Linear Blend Skinning forward pass with MLX:
+
+```python
+def lbs(betas, pose, v_template, shapedirs, posedirs, J_regressor, parents, lbs_weights):
+    # 1. Add shape, pose, and expression contributions
+    v_shaped = v_template + blend_shapes(betas, shapedirs)
+    
+    # 2. Add pose-dependent blend shapes
+    ident = mx.eye(3)
+    rot_mats = batch_rodrigues(pose.reshape(-1, 3)).reshape(batch_size, -1, 3, 3)
+    pose_feature = (rot_mats[:, 1:] - ident).reshape(batch_size, -1)
+    pose_offsets = mx.matmul(pose_feature, posedirs).reshape(batch_size, -1, 3)
+    
+    v_posed = v_shaped + pose_offsets
+    
+    # 3. Apply the global joint transformations
+    J_transformed, A = batch_rigid_transform(rot_mats, J, parents)
+    
+    # 4. Final skinning
+    # ... matrix transforms ...
+    return verts, J_transformed
+```
+
+Once we have the posed vertices from the `lbs` function, MLX makes it easy to implement downstream tasks. For instance, calculating 3D landmarks via barycentric interpolation, 3D joint locations from mesh vertices, and per-vertex displacements from blend shapes can be done using `mx.einsum` operation.
+
+```python
+def vertices2landmarks(vertices, faces, lmk_faces_idx, lmk_bary_coords):
+    """
+    Calculates 3D landmarks by barycentric interpolation over specific mesh faces.
+    
+    Args:
+        vertices (mx.array): Batch of mesh vertices of shape (B, V, 3).
+        faces (mx.array): Mesh face indices of shape (F, 3).
+        lmk_faces_idx (mx.array): Indices of faces where landmarks are located (B, L).
+        lmk_bary_coords (mx.array): Barycentric coordinates of landmarks on those faces (B, L, 3).
+        
+    Returns:
+        mx.array: Calculated 3D landmarks of shape (B, L, 3).
+    """
+    batch_size, num_verts = vertices.shape[:2]
+    
+    # Extract the indices of the vertices for each face
+    lmk_faces = faces[lmk_faces_idx]
+    
+    # Add batch offset to indices for flat indexing
+    batch_offset = mx.arange(batch_size)[:, None, None] * num_verts
+    lmk_faces_absolute = lmk_faces + batch_offset
+    
+    # Gather vertices
+    vertices_flat = vertices.reshape(-1, 3)
+    lmk_vertices = vertices_flat[lmk_faces_absolute] # (B, L, 3, 3)
+    
+    # Compute landmarks using barycentric interpolation
+    landmarks = mx.einsum('blfi,blf->bli', lmk_vertices, lmk_bary_coords)
+    return landmarks
+
+def vertices2joints(J_regressor, vertices):
+    """
+    Calculates 3D joint locations from mesh vertices using a regressor matrix.
+    
+    Args:
+        J_regressor (mx.array): Joint regressor matrix of shape (J, V).
+        vertices (mx.array): Batch of mesh vertices of shape (B, V, 3).
+        
+    Returns:
+        mx.array: Calculated 3D joint locations of shape (B, J, 3).
+    """
+    return mx.einsum('bik,ji->bjk', vertices, J_regressor)
+
+def blend_shapes(betas, shape_disps):
+    """
+    Calculates per-vertex displacements from blend shapes (identities or expressions).
+    
+    Args:
+        betas (mx.array): Coefficients for the blend shapes of shape (B, K).
+        shape_disps (mx.array): Blend shape bases of shape (V, 3, K).
+        
+    Returns:
+        mx.array: Vertex displacements of shape (B, V, 3).
+    """
+    return mx.einsum('bl,mkl->bmk', betas, shape_disps)
+```
+
+Since MLX is fully differentiable, we can also easily compute gradient for fitting the model to 2D landmarks or 3D scans.
+
+## **High-Performance Demos**
+
+With this implementation, we can achieve real-time interactivity. Below is a demo of our **Viser-based 3D Viewer** running with FLAME parameters:
+
+<video controls preload="metadata" width="100%"><source src="media/flame_demo.mp4" type="video/mp4">Your browser does not support embedded video.</video>
+
+## Conclusion
+
+FLAME remains the gold standard for controllable 3D face modeling. Its disentangled representation of identity and expression makes it perfect bridge between classic computer graphic and modern generative AI. By porting these models to high-performance frameworks on edge device like MLX, it’s bridging the digital human faces to every edge desktop computer.
+
+Check out the full implementation on GitHub: [https://github.com/ghif/FLAME_mlx](https://github.com/ghif/FLAME_mlx).
+
+Also, thanks to [Google’s Antigravity](https://antigravity.google/) for providing developer experience to the next level in assisting me to port the code.

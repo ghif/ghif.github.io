@@ -20,7 +20,7 @@ This paper proposes Translatotron, an end-to-end speech translation model that s
 This implies an advantage in terms of lower inference latency since only 1 decoding step is needed, instead of 3.
 Translatotron is not only translating but also reproducing the speaker's voice on the translated speech.
 
-![Model architecture of Translatotron](/assets/translatotron.png)
+![Model architecture of Translatotron](media/translatotron.png)
 
 **Model architecture of Translatotron**
 
@@ -36,7 +36,7 @@ The detailed results can be found at https://google-research.github.io/lingvo-la
 In general, Translatotron slightly underperforms a baseline model with the intermediate text encoding-decoding steps in translating Spanish to English languages.
 But it produces more realistic audio than pervious systems and breaks new ground for the end-to-end approach.
 
-![result example](/assets/translatotron2.png)
+![result example](media/translatotron2.png)
 
 
 * * *
@@ -58,7 +58,7 @@ Furthermore, it can serve to solve a variety of tasks such as supervised classif
 
 The overall MAML algorithm is quite simple as described by the pseudo-code below.
 
-| <img src="/assets/maml_intuition.png" alt="maml algorithm"/> | <img src="/assets/maml_alg.png" alt="maml algorithm"/> 
+| <img src="media/maml_intuition.png" alt="maml algorithm"/> | <img src="media/maml_alg.png" alt="maml algorithm"/> 
 
 **MAML algorithm**
 

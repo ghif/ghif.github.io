@@ -6,12 +6,10 @@ author:
 date: 2026-08-07
 description: "A practical exploration of causal image generation, Deep SCMs, Causal-Gen, and a pure JAX implementation."
 categories:
-  - machine-learning
-  - deep-learning
-  - computer-vision
+  - causal-inference
   - generative-ai
-  - research-notes
-  - implementation
+  - computer-vision
+  - jax
 draft: false
 image: media/Screenshot_2026-08-07_at_16.13.11.png
 aliases:
@@ -93,7 +91,7 @@ where $\operatorname{pa}_k$ denotes the direct endogenous parents of $X_k$. The 
 
 Let’s consider a simple example of an SCM with 3 endogenous variables $X_1, X_2, Y$ drawn as a graph below:
 
-```mermaid
+```{mermaid}
 flowchart LR
     U1(("U₁")) --> X1(("X₁"))
     U2(("U₂")) --> X2(("X₂"))
@@ -476,7 +474,7 @@ $$
 Y \longrightarrow X,\qquad T \longrightarrow I,\qquad T \longrightarrow X,\quad I \longrightarrow X, \\ p(Y,T,I)=p(Y)p(T)p(I\mid T).
 $$
 
-```mermaid
+```{mermaid}
 flowchart LR
     UY(("digit noise U_Y")) --> Y(("digit Y"))
     UT(("thickness noise U_T")) --> T(("thickness T"))
@@ -736,7 +734,7 @@ We also build a simple web prototype that turns the inference pipeline into a sm
 
 The browser-to-cloud request flow is:
 
-```mermaid
+```{mermaid}
 flowchart LR
     User["web browser"] --> Pages["GitHub Pages<br/>static frontend"]
     Pages -->|HTTPS + CORS| API["Cloud Run<br/>FastAPI service"]

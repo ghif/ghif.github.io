@@ -27,7 +27,6 @@ website:
   favicon: assets/favicon.svg
   description: "An AI research scientist's personal notes on machine learning, computer vision, intelligent systems, and the evolution of AI."
   site-url: "https://ghif.github.io"
-  google-analytics: "G-022W9RG2YC"
   repo-url: "https://github.com/ghif/ghif.github.io"
   repo-actions: [issue]
   
@@ -80,6 +79,15 @@ format:
       method: mathjax
       url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     include-in-header:
+      - text: |
+          <!-- Google tag (gtag.js) -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBFM9VBHY2"></script>
+          <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-KBFM9VBHY2');
+          </script>
       - text: |
           <script>
           window.MathJax = {

@@ -1,0 +1,121 @@
+/*-- scss:defaults --*/
+
+// Background & Typography Colors
+$body-bg: #0a0c10;                  // Deep Obsidian Black
+$body-color: #f3f4f6;               // Crisp Off-White Body Text
+$headings-color: #ffffff;           // Pure White Headings
+
+// Primary & Accent Colors
+$primary: #58a6ff;                  // Vibrant GitHub-style Blue
+$link-color: #58a6ff;
+$link-hover-color: #79b8ff;
+$selection-bg: #264f78;
+
+// Navbar & Header / Footer
+$navbar-bg: #0f1218;
+$navbar-fg: #f3f4f6;
+$footer-bg: #0f1218;
+$footer-fg: #8b949e;
+$border-color: #30363d;
+
+// Code Blocks & Inline Code
+$code-color: #f0883e;               // Warm Amber for inline code
+$code-bg: #161b22;                  // Dark Charcoal for code backgrounds
+
+// Fonts
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-monospace: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+/*-- scss:rules --*/
+
+// Typography refinements
+body {
+  line-height: 1.75;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+// Title banner
+.quarto-title-banner {
+  background-color: #0f1218 !important;
+  border-bottom: 1px solid #30363d;
+  padding: 2.5rem 0;
+}
+
+// Cards & Listings
+.quarto-post {
+  border-bottom: 1px solid #21262d !important;
+  padding: 1.5rem 0;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+}
+
+.quarto-listing-category-title {
+  color: #8b949e;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.category {
+  background-color: #21262d !important;
+  color: #58a6ff !important;
+  border: 1px solid #30363d !important;
+  border-radius: 12px !important;
+  padding: 2px 10px !important;
+  font-size: 0.8rem;
+  
+  &:hover {
+    background-color: #30363d !important;
+    color: #79b8ff !important;
+  }
+}
+
+// MathJax formulas high contrast
+mjx-container {
+  color: #f3f4f6 !important;
+}
+
+mjx-container[display="true"] {
+  padding: 1rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+// Code blocks styling
+pre {
+  background-color: #161b22 !important;
+  border: 1px solid #30363d !important;
+  border-radius: 8px !important;
+}
+
+code:not(pre code) {
+  background-color: #161b22 !important;
+  border: 1px solid #30363d !important;
+  padding: 0.15em 0.4em !important;
+  border-radius: 4px !important;
+}
+
+// Search dialog
+.quarto-search-dialog {
+  .modal-content {
+    background-color: #0f1218;
+    border: 1px solid #30363d;
+    color: #f3f4f6;
+  }
+}
+
+// Callout blocks
+.callout {
+  border-radius: 8px;
+  background-color: #161b22 !important;
+  border-left-width: 4px !important;
+}

@@ -1,0 +1,19 @@
+---
+title: "Research Notes"
+subtitle: "Reflections, derivations, and summaries on Machine Learning, Computer Vision, and Mathematics."
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: true
+  filter-ui: true
+  fields: [date, title, reading-time, description, categories]
+  feed:
+    type: full
+    title: "Ghif's Research Notes"
+    description: "Research notes on AI, Math, and Machine Learning by Muhammad Ghifary"
+    items: 20
+page-layout: full
+title-block-banner: true
+---

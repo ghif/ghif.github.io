@@ -1,0 +1,13 @@
+---
+title: "Notes Archive"
+description: "Complete chronological catalog of all research notes and articles."
+listing:
+  contents: posts
+  sort: "date desc"
+  type: table
+  fields: [date, title, categories]
+  sort-ui: false
+  filter-ui: true
+  categories: false
+page-layout: full
+---

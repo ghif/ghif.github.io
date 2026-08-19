@@ -1,3 +1,31 @@
-_site
-.sass-cache
+# Quarto build outputs & working cache
+/_site/
+/.quarto/
+/.jupyter/
+*_files/
+*.html_files/
+
+# Local Activity Logging & Private Journals (DO NOT COMMIT)
+Journal/
+Journal/**
+
+# macOS metadata & AppleDouble junk
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Legacy Jekyll caches & bundler
+.jekyll-cache/
+.sass-cache/
 .jekyll-metadata
+.bundle/
+vendor/
+
+# Python virtual environment & cache
+__pycache__/
+*.pyc
+.venv/
+env/
+
+**/*.quarto_ipynb

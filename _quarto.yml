@@ -1,0 +1,75 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - assets/**
+  render:
+    - "*.qmd"
+    - "posts/*/*.qmd"
+
+website:
+  title: "Ghif's Research Notes"
+  description: "\"Research means that you don't know, but are willing to find out\" - Charles F. Kettering"
+  site-url: "https://ghif.github.io"
+  repo-url: "https://github.com/ghif/ghif.github.io"
+  repo-actions: [issue]
+  
+  navbar:
+    title: "Ghif's Research Notes"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: archive.qmd
+        text: Archive
+      - href: about.qmd
+        text: About
+    right:
+      - icon: github
+        href: https://github.com/ghif
+        aria-label: GitHub
+      - icon: envelope
+        href: mailto:mghifary@gmail.com
+        aria-label: Email
+      - icon: rss
+        href: index.xml
+        aria-label: RSS Feed
+
+  page-footer:
+    left: "© Muhammad Ghifary"
+    center: "\"Research means that you don't know, but are willing to find out\" — Charles F. Kettering"
+    right: "Built with [Quarto](https://quarto.org)"
+
+  search:
+    location: navbar
+    type: overlay
+    show-item-context: true
+
+format:
+  html:
+    theme:
+      dark: [cyborg, custom-dark.scss]
+    highlight-style: dracula
+    code-copy: hover
+    code-overflow: wrap
+    code-tools: false
+    toc: true
+    toc-depth: 3
+    toc-title: "Table of Contents"
+    number-sections: false
+    smooth-scroll: true
+    anchor-sections: true
+    html-math-method:
+      method: mathjax
+      url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    include-in-header:
+      - text: |
+          <script>
+          window.MathJax = {
+            tex: {
+              tags: 'ams',
+              useLabelIds: true,
+              inlineMath: [['$', '$'], ['\\(', '\\)']],
+              displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+          };
+          </script>

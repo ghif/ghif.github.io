@@ -1,0 +1,20 @@
+---
+title: Gradient Boosting
+date: '2022-06-05'
+categories:
+- Mathematics
+- Machine Learning
+aliases:
+- /gradient-boosting/
+draft: true
+---
+
+# Pembukaan
+
+
+
+
+
+
+
+

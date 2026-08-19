@@ -203,6 +203,59 @@ code:not(pre code) {
   }
 }
 
+// Firebase likes and comments
+.article-engagement {
+  margin: 4rem auto 2rem;
+  padding: 2rem 0;
+  border-top: 1px solid #30363d;
+  max-width: 52rem;
+
+  h2 { margin-top: 0; }
+
+  button {
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background: #161b22;
+    color: #f3f4f6;
+    padding: .55rem .9rem;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { border-color: #58a6ff; color: #79b8ff; }
+    &:disabled { cursor: not-allowed; opacity: .55; }
+  }
+
+  .engagement-actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+  .engagement-like.is-liked { border-color: #f0883e; color: #f0883e; }
+  .engagement-status, .engagement-empty { color: #8b949e; font-size: .9rem; }
+
+  .engagement-form {
+    display: grid;
+    gap: .6rem;
+    margin: 1.5rem 0;
+
+    textarea {
+      min-height: 6rem;
+      resize: vertical;
+      padding: .75rem;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      background: #161b22;
+      color: #f3f4f6;
+    }
+
+    button { justify-self: start; background: #1f6feb; border-color: #58a6ff; }
+  }
+
+  .engagement-comment {
+    padding: 1rem 0;
+    border-top: 1px solid #21262d;
+
+    header { display: flex; gap: .75rem; align-items: baseline; }
+    time { color: #8b949e; font-size: .8rem; }
+    p { margin: .45rem 0 0; white-space: pre-wrap; }
+  }
+}
+
 // Footer
 footer.footer {
   background-color: #0f1218 !important;

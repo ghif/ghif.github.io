@@ -1,0 +1,633 @@
+---
+title: "Implementing Neural Radiance Fields (NeRF) with Keras 3"
+author: "MUHAMMAD GHIFARY"
+date: 2026-08-19
+description: "Imported and normalized from a Notion article."
+categories:
+  - computer-vision
+  - implementation
+draft: false
+---
+
+
+## Introduction
+
+Imagine walking around your living room with just a handful of photo views. Could you magically reconstruct it in 3D, spin it on your phone, and view it from any angle you choose?
+
+That’s the magic of **novel view synthesis —** a frontier of vision and graphics R&D focused on generating realistic, previously unseen perspectives from existing images. It’s what powers immersive VR walkthroughs, cinematic camera relighting, and virtual twins of real-world scenes.
+
+But with only a few snapshots, how can we handle missing corners, occlusions, or complex lighting? That’s where **Neural Radiance Fields (NeRF)** steps in ([Mildenhall et al., ECCV 2020](https://arxiv.org/abs/2003.08934)). It reframed the problem by modeling a scene as a continuous volumetric function from 5D inputs, i.e., point location$(x, y, z) \in \mathbb{R}^3$and viewing direction$(\theta, \phi) \in \mathbb{R}^2$, to RGB colors ($\mathbf{c} \in \mathbb{R}^3$) and volume density or depth$(\sigma \in \mathbb{R})$, then using differentiable volume rendering to paint brand-new views.
+
+Historically, novel view synthesis was performed through hole-filled meshes or patchwork image blending. NeRF skips those processes by learning light interaction, geometry, and view-dependent effects in a single neural network, producing photo-realistic novel views from sparse input — no stitch, no mesh, just neural rendering magic.
+
+This article will elaborate the technical details of the basic NeRF implementation with [Keras 3](https://keras.io/).
+
+## Novel View Synthesis with NeRF
+
+Before delving into the detailed implementation, let’s formulate the novel view synthesis problem and how NeRF tries to solve it. Novel view synthesis is a task which consists of generating images of a specific scene from a specific point of view, when the only available information is pictures taken from different points of view.
+
+![Source: [https://paperswithcode.com/task/novel-view-synthesis](https://paperswithcode.com/task/novel-view-synthesis)](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/image.png)
+
+Source: [https://paperswithcode.com/task/novel-view-synthesis](https://paperswithcode.com/task/novel-view-synthesis)
+
+Initially, we have a set of source images$\{ \mathbf{I}_i \}_i^N$and their corresponding camera poses$\{ \mathbf{P}_i \}$. The goal is to predict the novel view image$\mathbf{I}$from a new target pose$\mathbf{P}$.
+
+Formally, novel view synthesis attempts to construct a function$F$leveraging a dataset of image views$\mathcal{D} = \{ \mathbf{I}_i, \mathbf{P}_i\}_i^N$such that
+
+$$
+\mathbf{I}(u, v) = F(\mathbf{P}(u, v); \mathcal{D})
+$$
+
+where$(u, v)$are pixel coordinates and the space of$\mathbf{I}$represents a scene. Early methods factorize this into: 
+
+- 3D geometry estimation (e.g., depth or point clouds)
+- View rendering (warping textures onto geometry)
+- Hole-filling (inpainting unseen regions)
+
+NeRF frames this problem into modeling a scene as a 5D continuous function$f_\omega: \mathbb{R}^5 \rightarrow \mathbb{R}^4$, which a trainable neural network with parameter$\omega$.
+
+The 5D input space comprises a point location randomly sampled on the camera ray (which is basically a straight line),$\mathbf{r} = (x, y, z)$and the ray’s viewing angle$\mathbf{d}= (\phi, \theta)$. In practice, the 2D viewing angle can be converted into a 3D unit directional vector$\mathbf{d} = (d_x, d_y, d_z)$.
+
+The 2D output space contains the volume density$\sigma \in \mathbb{R}$and the RGB color$\mathbf{c} \in \mathbb{R}^3$.
+
+In other words, the neural network mapping looks like the following:
+
+$$
+f_\omega: (\mathbf{r}, \mathbf{d}) \rightarrow (\sigma, \mathbf{c})
+$$
+
+Through differentiable volume rendering (will be explained later), the model is optimized to match observed pixel colors—unifying geometry, view-dependent effects, and rendering in one trainable neural net. 
+
+By doing so, NeRF can yield:
+
+- High photographic quality
+- Realistic specular and lighting variations
+- No explicit geometry required
+
+## Camera Ray Data as Inputs
+
+One may ask where we can the data representing the inputs$\mathbf{r}$and$\mathbf{d}$. It all starts with the camera parameters (poses, intrinsics, and bounds) — those can be obtained by using COLMAP structure-from-motion (SfM) on real-world image samples or generated through 3D modeling software if using synthetic scenes. 
+
+### Ray Origin and Directions
+
+Firstly, we need to figure out the information of ray origin$\mathbf{o} \in \mathbb{R}^3$and its direction$\mathbf{d} \in \mathbb{R}^3$, which can be derived from the camera extrinsics and intrinsics. Think of a camera as a mapping between the real-world and 2D image.
+
+**Camera Poses (Extrinsics)**
+
+A camera pose is formally represented by a$4 \times 4$transformation matrix depicting both the position and orientation in the real world:
+
+$$
+\mathbf{P} = 
+\begin{bmatrix}   
+\mathbf{R} & \mathbf{t} \\
+\mathbf{0}^\top & 1\\
+\end{bmatrix}
+$$
+
+where
+
+-$\mathbf{R} \in \mathbb{R}^{3 \times 3}$is the rotation matrix
+-$\mathbf{t} \in \mathbb{R}^3$is the translation vector
+
+It provides a transformation from the camera coordinate system to the world coordinate system, i.e., 
+
+$$
+\mathbf{x}_{\text{world}} = \mathbf{R}^\top \mathbf{x}_{\text{cam}} + \mathbf{t}
+$$
+
+**Ray Origin**
+
+From the pose matrix, the ray origin$\mathbf{o} \in \mathbb{R}^3$is simply the translation vector$\mathbf{t}$.
+
+**Ray Direction**
+
+To calculate the ray direction, we need the information of *focal length*$l$, which is part of the camera intrinsics (camera’s internal configuration). Assuming a pinhole camera, the focal length allows us to convert pixel coordinates$(u, v)$into normalized ray directions:
+
+$$
+\mathbf{d}_{\text{cam}} = 
+\begin{bmatrix}
+\frac{u-W/2}{l} \\
+\frac{v-H/2}{l} \\
+-1
+\end{bmatrix}
+$$
+
+This direction is then rotated into world space to get the value for$\mathbf{d}$:
+
+$$
+\mathbf{d} = \mathbf{R}^\top \mathbf{d}_{\text{cam}}
+$$
+
+Since this operation works on pixel level, each pixel has a different value for$\mathbf{d}$.
+
+Here is the Python code snippet with Keras Ops API implementing the computation of ray origin and directions:
+
+```python
+from keras import ops
+
+def get_rays(height, width, focal, pose):
+    u, v = ops.meshgrid(
+        ops.arange(width, dtype="float32"),
+        ops.arange(height, dtype="float32"),
+        indexing="xy",
+    )
+    transformed_u = (u - width * 0.5) / focal
+    transformed_v = (v - height * 0.5) / focal
+    directions = ops.stack(
+        [transformed_u, -transformed_v, -ops.ones_like(u)], axis=-1
+    )
+    camera_matrix = pose[:3, :3]
+    translations = pose[:3, -1]
+    transformed_dirs = directions[..., None, :]
+    camera_dirs = transformed_dirs * camera_matrix
+    ray_directions = ops.sum(camera_dirs, axis=-1)
+    ray_origins = ops.broadcast_to(translations, ops.shape(ray_directions))
+    return (ray_origins, ray_directions)
+```
+
+### **Sampling Points along Ray**
+
+Now that we know which way each ray goes. Then, we sample a set of 3D points along each one. This approach comes from volume ray casting, which is a common rendering technique in computer graphics.
+
+Each ray is parameterized as:
+
+$$
+\begin{equation}
+\mathbf{r}(t) = \mathbf{o} + t \cdot  \mathbf{d}
+\end{equation}
+$$
+
+where$t \in [t_{near}, t_{far}]$represents the depth along the ray. The depth bounds$t_{near}, t_{far}$are also part of the camera parameters captured through SfM (or created synthetically).
+
+For each pixel, we can construct a set of finite ray samples from selected depth values$t_i$, where$\forall i = 1, \ldots, N$. Assuming that it performs a linear sampling, the following visualization illustrate the sampling process:
+
+```
+				Camera
+           ●
+           |
+           |   t1      t2      t3       tN
+           |----●-------●-------●--------●----→ ray direction
+               near                        far
+```
+
+The number of samples$N$needs to be specified manually to obtain the desired points. Then, we compute$\mathbf{r}(t_1), \ldots, \mathbf{r}(t_N)$using equation (1). Furthermore, we can also add a uniform noise to each$t_i$so that the samples correspond to a continuous distribution, as is illustrated below.
+
+![Source: [https://keras.io/examples/vision/nerf/](https://keras.io/examples/vision/nerf/)](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/r9TS2wv.gif)
+
+Source: [https://keras.io/examples/vision/nerf/](https://keras.io/examples/vision/nerf/)
+
+The follow code snippet implements the generation of the depth parameters$t_i$(`generate_t_vals`) and also the ray samples (`sample_rays`).
+
+```python
+import keras
+
+def generate_t_vals(near, far, batch_size, num_samples, rand_sampling=True):
+    t_vals = ops.linspace(near, far, num_samples, dtype="float32")
+    if rand_sampling:
+        noise = keras.random.uniform(shape=ops.shape(t_vals)) * (far - near) / num_samples
+        t_vals = t_vals + noise
+    
+    t_vals = ops.broadcast_to(t_vals, (batch_size, num_samples))
+
+    return t_vals
+
+... 
+t_vals = generate_t_vals(near, far, batch_size, num_samples, rand_sampling=True)
+...
+
+def sample_rays(ray_origins, ray_directions, t_vals):
+    rays = ray_origins[..., None, :] + (
+        ray_directions[..., None, :] * t_vals[..., :, None]
+    )
+    dir_shape = ops.shape(rays[..., :3])
+    dirs = ops.broadcast_to(ray_directions[..., None, :], dir_shape)
+    return rays, dirs
+```
+
+The `sample_rays()` function above produces two outputs: `rays`$\{ \mathbf{r}_i \}_{i=1}^{N}$— the set of ray samples  — and `dirs`$\{ \mathbf{d}_i \}_{i=1}^{N}$— the set of (duplicated) ray directions, which later on become the inputs to the neural net. For each pixel, we now have the input data to the NeRF network with dimension$2 \times (N \times 3)$(adding those of ray samples and directions). If we consider an entire image with height$H$and width$W$, then we have$2 \times (H \times W \times N \times 3)$input samples.
+
+### **Positional Embeddings**
+
+The final piece that we need to process the input data is the positional embeddings. Without it, the neural net struggles to learn high-frequency functions like detailed textures or sharp geometry from low-dimensional input spaces like$\mathbb{R}^3$. This is due to **spectral bias** — networks tend to learn smooth, low-frequency variations first ([Tancik et al. NeurIPS 2020](https://papers.neurips.cc/paper_files/paper/2020/file/55053683268957697aa39fba6f231c68-Paper.pdf)).
+
+Positional embeddings (also called Fourier features) try to overcome this by mapping each input coordinate to a richer, high-frequency feature representation feeding it into the neural net.
+
+![Source: [Mildenhall et al., ECCV 2020](https://arxiv.org/abs/2003.08934)](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/Screenshot_2025-06-26_at_08.24.37.png)
+
+Source: [Mildenhall et al., ECCV 2020](https://arxiv.org/abs/2003.08934)
+
+More formally, given a 3D point$\mathbf{x} \in \mathbb{R}^3$, the positional embedding function$\gamma: \mathbb{R}^3 \rightarrow \mathbb{R}^{6L}$convert it into:
+
+$$
+\begin{equation}
+\gamma(\mathbf{x}) = \left[\sin(2^0 \pi \mathbf{x}), \cos(2^1 \pi \mathbf{x}), \ldots, \sin(2^{L-1} \pi \mathbf{x}, \cos(2^{L-1} \pi \mathbf{x}) \right]
+\end{equation}
+$$
+
+where$L$is the number of frequency bands (e.g.,$L=10)$.
+
+This mapping is then applied to both the ray samples$\{ \mathbf{r}_i \}_{i=1}^{N}$and directions$\{ \mathbf{d}_i \}_{i=1}^{N}$.
+
+The final representations for the neural net are the concatenation between the original samples and their embeddings:
+
+- Ray sample:$\mathbf{z}_r = [\mathbf{\mathbf{r}}, \gamma(\mathbf{r})] \in \mathbb{R}^{6L_r + 3}$- Ray direction:$\mathbf{z}_d = [\mathbf{d}, \gamma(\mathbf{d}) ] \in \mathbb{R}^{6L_d + 3}$where$L_r$and$L_d$are the number of frequency bands for the ray sample and direction, respectively.
+
+Here is the code implementation:
+
+```python
+def encode_position(x, pos_encode_dims):
+    positions = [x]
+    for i in range(pos_encode_dims):
+        for fn in [ops.sin, ops.cos]:
+            positions.append(fn(2.0**i * x))
+    return ops.concatenate(positions, axis=-1)
+```
+
+## Network Architecture and Training
+
+The NeRF network is a deep multilayer perceptron (MLP) featuring skip connections to enhance the gradient flow and preserve spatial detail deep into the network. By incorporating position embeddings, the network function becomes something like this:
+
+$$
+f_\omega: (\mathbf{z}_r, \mathbf{z}_d) \rightarrow (\sigma, \mathbf{c})
+$$
+
+### Architecture
+
+Here is the network architecture and its implementation with Keras:
+
+![Source: [https://pyimagesearch.com/2021/11/17/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-2/](https://pyimagesearch.com/2021/11/17/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-2/)](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/image%201.png)
+
+Source: [https://pyimagesearch.com/2021/11/17/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-2/](https://pyimagesearch.com/2021/11/17/computer-graphics-and-deep-learning-with-nerf-using-tensorflow-and-keras-part-2/)
+
+```python
+def create_nerf_complete_model(num_layers, hidden_dim, skip_layer, lxyz, ldir, bn=False):
+    ray_input = keras.Input(shape=(None, 2 * 3 * lxyz + 3))
+    dir_input = keras.Input(shape=(None, 2 * 3 * ldir + 3))
+
+    x = ray_input
+    for i in range(num_layers):
+        if bn:
+            x = layers.Dense(hidden_dim)(x)
+            x = layers.BatchNormalization()(x)
+            x = layers.ReLU()(x)
+        else:
+            x = layers.Dense(hidden_dim, activation="relu")(x)
+
+        # Check if we have to include residual connections
+        if i % skip_layer == 0 and i > 0:
+            x = layers.concatenate([x, ray_input], axis=-1)
+        
+    # Get the sigma value
+    sigma = layers.Dense(1)(x)
+
+    # Create a feature vector
+    feature = layers.Dense(hidden_dim)(x)
+
+    # Concatenate the feature vector with the direction input
+    feature = layers.concatenate([feature, dir_input], axis=-1)
+    if bn:
+        x = layers.Dense(hidden_dim//2)(feature)
+        x = layers.BatchNormalization()(x)
+        x = layers.ReLU()(x)
+    else:
+        x = layers.Dense(hidden_dim//2, activation="relu")(feature)
+
+    # Get the rgb value
+    rgb = layers.Dense(3)(x)
+
+    outputs = layers.concatenate([rgb, sigma], axis=-1)
+
+    nerf_model = keras.Model(inputs=[ray_input, dir_input], outputs=outputs)
+    return nerf_model
+```
+
+The following code illustrates the forward pass through the NeRF network:
+
+```python
+t_vals = generate_t_vals(near, far, batch_size, num_samples, rand_sampling=True) # generate depth parameters t
+rays, dirs = sample_rays(ray_origins, ray_directions, t_vals) # generate ray samples r [batch_size, N * (6 * L + 3)] and directions d [batch_size, N * (6 * L + 3)]
+
+model = create_nerf_complete_model(num_layers, hidden_dim, skip_layer, lxyz, ldir) # define NeRF network
+
+(rgbs, sigmas) = model([rays, dirs]) # forward pass
+```
+
+### Volume Rendering
+
+After querying the NeRF network at sampled points along each ray, we obtain for each sample$i$:
+
+-$\mathbf{c}_i = (r, g, b)$: emitted color, which may be view-dependent
+-$\sigma_i$: volume density (opacity)
+
+The goal is to accumulate these into a single pixel color$\hat{C}(r)$, achieved through the classical volume rendering. In continuous space, the equation is given by:
+
+$$
+C(\mathbf{r}) = \int_{t_n}^{_f} T(t) \sigma\left(\mathbf{r}(t)\right) c\left(\mathbf{r}(t), \mathbf{d}\right) dt
+$$
+
+with transmittance, i.e., the probability the ray reaches point$t$without being blocked:
+
+$$
+T(t) = \exp 
+\left( - \int_{t_n}^{t_f}
+\sigma( \mathbf{r}(s) ) ds
+\right)
+$$
+
+Since only$N$ray samples are incorporated, we implement the equation in discrete space:
+
+$$
+\begin{equation}
+\hat{C}(\mathbf{r}) = \sum_{i=1}^N T_i \alpha_i \mathbf{c}_i
+\end{equation}
+$$
+
+where
+
+-$T_i = \prod_{j=1}^{i-1} (1 - \alpha_j)$: accumulated transparency up to$i$-$\alpha_i = 1 - \exp(-\sigma_i \delta_i)$: opacity for the segment
+-$\delta_i = t_{i+1} - t_i$: distance/segment between adjacent intervals
+
+The `volume_render()` function below implements equation (3).
+
+```python
+def volume_render(preds, t_vals):
+    # Get rgb and sigma from the predictions
+    rgb = ops.sigmoid(preds[..., :-1])
+    sigma_a = ops.relu(preds[..., -1])
+
+    # Get the distance of adjacent intervals
+    delta = t_vals[..., 1:] - t_vals[..., :-1]
+    const = ops.broadcast_to([1e10], shape=(delta.shape[0], 1))
+    delta = ops.concatenate([delta, const], axis=-1)
+
+    alpha = 1.0 - ops.exp(-sigma_a * delta)
+    exp_term = 1.0 - alpha
+    epsilon = 1e-10
+
+    # Compute transmittance: Cumulative prod with exclusive mode
+    tm = ops.cumprod(exp_term + epsilon, axis=-1)
+    tm = ops.roll(tm, shift=1, axis=-1)
+    transmittance = ops.concatenate([ops.ones((tm.shape[0], 1)), tm[:, 1:]], axis=-1)
+
+    # Compute weights
+    weights = alpha * transmittance
+    rgb_w = ops.sum(weights[..., None] * rgb, axis=-2)    
+    depth_map = ops.sum(weights * t_vals, axis=-1)
+    return (rgb_w, depth_map, weights)
+```
+
+### NeRF Training
+
+The NeRF network is trained by minimizing a photometric loss defined as:
+
+$$
+\mathcal{L}(\omega) = \sum_{\mathbf{r} \in \mathrm{R}} \left\| \hat{C}_{\omega}(\mathbf{r}) - C_{gt}(\mathbf{r}) \right\|_2^2
+$$
+
+where
+
+-$\hat{C}_\omega(\mathbf{r})$is the rendered color for ray$\mathbf{r}$produced by the network with parameter$\omega$-$C_{gt}(\mathbf{r})$is the corresponding ground-truth pixel color
+
+Because the volume rendering operation used in NeRF is **fully differentiable**—integrating densities and colors along each ray—the loss function itself is differentiable. This allows us to apply standard **gradient-based optimization** methods (e.g., Adam) to train the NeRF model end-to-end by backpropagating errors through both the rendering and network branches
+
+### Hierarchical Sampling: Coarse and Fine Models
+
+NeRF uses a two-stage hierarchical sampling strategy — employing both a **coarse** and fine networks — to efficiently allocate computational effort where it matters most. 
+
+- **Coarse network** ($f_{\omega_c}$) : Scout where interesting geometry might lie
+- **Fine network** ($f_{\omega_f}$): Render those regions with high fidelity
+
+Without this strategy, i.e., only relying on a single big network, it will require more computational resources and potentially waste samples  on empty space.
+
+To do so, NeRF performs the following steps:
+
+1. **Uniform sampling along rays**
+    
+    This step basically executes the `generate_t_vals()` and `sample_rays()` functions discussed before, with the number of  samples$N_{\mathrm{coarse}}$. The generated samples are denoted as$\{ \mathbf{r}_t\}_{t=i}^{N_{\mathrm{coarse}}}$.
+    
+2. **Query the coarse network**
+    
+    Use the coarse MLP$f_{\omega_c}$to predict density$\sigma_i$and color$\mathbf{c}_i$.
+    
+3. **Volume rendering (coarse pass)**
+    
+    Compute weights$w_i = T_i \alpha_i$from the predicted densities using the volume rendering equation (3). These weights represent how much each point contributes to the final pixel color and serve as a proxy for surface probability along the ray.
+    
+4. **Construct a probability density function (PDF) from coarse weights and sample from it**
+    
+    Convert the normalized weights into a probability density function (PDF) and then into a cumulative distribution function (CDF) using cumulative summation. After that, sample additional$N_{\mathrm{fine}}$points from the CDF using inverse transformation sampling, biasing new sample locations toward high-weight region, i.e., likely to contain surface.
+    
+5. **Query the fine network**
+    
+    Concatenate the original coarse samples with the new fine samples, sort them along the ray, and query the fine MLP to obtain improved$(\sigma_i, \mathbf{c}_i)$predictions.
+    
+6. **Volume rendering (fine pass)**
+    
+    Perform a second round of volume rendering using the fine samples to produce the final pixel color$\hat{C}_{\mathrm{fine}}$.
+    
+
+Here is the code snippet implementing these steps.
+
+```python
+# Define coarse and fine models
+...
+coarse_model = create_nerf_complete_model(
+    num_layers=NUM_LAYERS,
+    hidden_dim=HIDDEN_DIM,
+    skip_layer=SKIP_LAYER,
+    lxyz=L_XYZ,
+    ldir=L_DIR,
+    bn=BATCH_NORM
+)
+fine_model = create_nerf_complete_model(
+    num_layers=NUM_LAYERS,
+    hidden_dim=HIDDEN_DIM,
+    skip_layer=SKIP_LAYER,
+    lxyz=L_XYZ,
+    ldir=L_DIR,
+    bn=BATCH_NORM
+)
+
+...
+
+# Coarse model forward pass 
+t_vals = generate_t_vals(...)
+rays, dirs = sample_rays(ray_origins, ray_directions, t_vals)
+rays_enc = encode_position(rays, pos_encode_dims=l_xyz)
+dirs_enc = encode_position(dirs, pos_encode_dims=l_dir)
+predictions_coarse = coarse_model([rays_enc, dirs_enc], training=training)
+rgb_coarse, depth_coarse, weights_coarse = volume_render(predictions_coarse, t_vals)
+
+# Sample PDF
+t_vals_coarse_mid = (0.5 * (t_vals[..., 1:] + t_vals[..., :-1]))
+t_vals_fine = sample_pdf(t_vals_coarse_mid, weights_coarse, self.ns_fine)
+t_vals_fine_all = ops.sort(ops.concatenate([t_vals, t_vals_fine], axis=-1), axis=-1)
+
+# Fine model forward pass
+rays_fine, dirs_fine = sample_rays(ray_origins, ray_directions, t_vals_fine_all)
+rays_fine_enc = encode_position(rays_fine, pos_encode_dims=l_xyz)
+dirs_fine_enc = encode_position(dirs_fine, pos_encode_dims=l_dir)
+predictions_fine = fine_model([rays_fine_enc, dirs_fine_enc], training=training)
+```
+
+The following is the implementation of ray point samplings from a probability density function (PDF) constructed from the coarse weights:
+
+```python
+def sample_pdf(t_vals_mid, weights, ns_fine):
+    # Get batch_size, H, W
+    batch_size = ops.shape(weights)[0]
+    if len(ops.shape(weights)) == 4: # (b, h, w, num_samples)
+        image_height, image_width = ops.shape(weights)[1:3]
+    
+    # add a small value to the weights to prevent it from nan
+    weights += 1e-5
+    
+    # normalize the weights to get the pdf
+    pdf = weights / tf.reduce_sum(weights, axis=-1, keepdims=True)
+    
+    # from pdf to cdf transformation
+    cdf = tf.cumsum(pdf, axis=-1)
+    
+    # start the cdf with 0sa
+    cdf = tf.concat([tf.zeros_like(cdf[..., :1]), cdf], axis=-1)
+
+    # get the sample points
+    if len(ops.shape(weights)) == 4:
+        u_shape = [batch_size, image_height, image_width, ns_fine]
+    else:
+        u_shape = [batch_size, ns_fine]
+
+    u = tf.random.uniform(shape=u_shape)
+    
+    # get the indices of the points of u when u is inserted into cdf in a
+    # sorted manner
+    indices = tf.searchsorted(cdf, u, side="right")
+
+    # define the boundaries
+    below = tf.maximum(0, indices-1)
+    above = tf.minimum(cdf.shape[-1]-1, indices)
+    indices_g = tf.stack([below, above], axis=-1)
+    
+    # gather the cdf according to the indices
+    cdf_g = tf.gather(cdf, indices_g, axis=-1, batch_dims=len(indices_g.shape)-2)
+
+    # gather the tVals according to the indices
+    indices_gt = tf.minimum(t_vals_mid.shape[-1] - 1, indices_g)
+    t_vals_mid_g = tf.gather(t_vals_mid, indices_gt, axis=-1,
+        batch_dims=len(indices_g.shape)-2)
+    
+    # create the samples by inverting the cdf
+    denom = cdf_g[..., 1] - cdf_g[..., 0]
+    denom = tf.where(denom < 1e-5, tf.ones_like(denom), denom)
+    t = (u - cdf_g[..., 0]) / denom
+    samples = (t_vals_mid_g[..., 0] + t * 
+        (t_vals_mid_g[..., 1] - t_vals_mid_g[..., 0]))
+
+    # return the samples
+    return samples
+```
+
+This hierarchical sampling strategy introduces a slight modification to the loss function by incorporating the outputs of both the coarse and fine networks. The combined photometric loss is defined as follows:
+
+$$
+\mathcal{\bar{L}}(\omega) = \sum_{\mathbf{r} \in \mathrm{R}} \left\| \hat{C}_{\omega_c}(\mathbf{r}) - C_{gt}(\mathbf{r}) \right\|_2^2 +
+\left\| \hat{C}_{\omega_f}(\mathbf{r}) - C_{gt}(\mathbf{r}) \right\|_2^2
+$$
+
+To optimize this combined loss, the training loop can be implemented by overriding the `train_step()` method in a custom `keras.Model` subclass. This method handles the forward pass through both networks, computes the joint loss, and applies gradient-based updates$\omega_t = \omega_{t-1} - \alpha \nabla_\omega \mathcal{\bar{L}}(\omega)$accordingly.
+
+```python
+def train_step(self, inputs):
+	# Get the image and the rays
+	(images, rays) = inputs
+	(ray_origins, ray_directions, t_vals) = rays
+
+	with tf.GradientTape() as tape:
+		# Get the predictions from the model
+		rgbs, _, _, _ = self.forward_pass(ray_origins, ray_directions, t_vals, self.l_xyz, self.l_dir, training=True)
+		rgb_coarse, rgb_fine = rgbs
+		loss_coarse = self.loss_fn(images, rgb_coarse)
+		loss_fine = self.loss_fn(images, rgb_fine)
+            
+		# Combine the coarse and fine losses
+    loss = loss_coarse + loss_fine
+
+		# Apply gradient updates for the model
+		tv_nerf = self.coarse_model.trainable_variables + self.fine_model.trainable_variables
+		grads = tape.gradient(loss, tv_nerf)
+		self.optimizer.apply_gradients(zip(grads, tv_nerf))
+
+		# Get the PSNR of the reconstructed images and the source images
+		psnr = ops.psnr(images, rgb_fine, max_val=1.0)
+
+		# Compute the metrics
+		self.loss_coarse_tracker.update_state(loss_coarse)
+		self.loss_tracker.update_state(loss_fine)
+		self.psnr_tracker.update_state(psnr)
+		return {
+			"loss_coarse": self.loss_coarse_tracker.result(),
+			"loss": self.loss_tracker.result(),
+			"psnr": self.psnr_tracker.result(),
+		}
+```
+
+## Experiments on a Synthetic Lego Scene
+
+We conducted NeRF training on the synthetic Lego scene dataset, which consists of 106 images at a resolution of 100 x 100 pixels, each accompanied by its corresponding camera pose. The dataset was split into training and validation sets using an 80:20 ratio, resulting in 84 training samples and 22 validation samples. To further reduce the computational complexity, all images were downsamples to a resolution of (H = 50, W = 50) pixels.
+
+Next, we executed the data processing pipeline described earlier to obtain the the positionally encoded coarse ray samples. By setting the number of coarse samples to$N_{\mathrm{coarse}} = 64$and using positional embedding with$L_{r} = 10$(hence, the dimensionality of each ray becomes$6 * 10 + 3 = 63$),  the shape of the full training dataset$Z_{train}$is:
+
+$$
+\mathrm{dim}(Z_{train}) = [\underbrace{84}_{\texttt{\#train}}, \underbrace{50}_{H}, \underbrace{50}_{W},
+\underbrace{64}_{N_{\mathrm{coarse}}}, 
+\underbrace{63}_{\texttt{pos-emb dimension}}]
+$$
+
+**Notes on batch training**
+
+Since NeRF operates at the pixel level, the effective number of training samples is not just the number of images  `#train = 84` , but rather the total number of rays in every pixel, which equals to `#train x H x W = 84 x 50 x 50 = 210000`. To enable efficient batch processing, the full training set is reshaped to
+
+$$
+\mathrm{dim}(Z_{train}) = [210000, 64, 63]
+$$
+
+This reshaping step is essential for enabling mini-batch training — without it, feeding the full 5D tensor into the model would quickly exhaust GPU memory! 
+
+By setting the training `epoch = 300` and `batch_size = 1024` , we get the following results:
+
+[Rendering results during training, displayed per epoch](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/lego_batch_h256_training.mp4)
+
+Rendering results during training, displayed per epoch
+
+![Comparison between the ground truth and reconstructed images](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/Screenshot_2025-06-27_at_15.29.14.png)
+
+Comparison between the ground truth and reconstructed images
+
+### 360 Horizontal View Rendering
+
+After training for just 1-2 hours on Google Colab using an NVIDIA A100 GPU, we can infer the 360 horizontal renders shown below. For significantly better rendering quality — especially sharper edges and finer details — the network should be trained for a longer duration and with higher-solution images. As noted in the original NeRF paper ([Mildenhall et al., ECCV 2020](https://arxiv.org/abs/2003.08934)), training a single scene typically takes around 1-2 days on an NVIDIA V100 GPU.
+
+[360 horizontal renders (height: 50, weight: 50) trained with Colab GPU A100](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/lego_batch_h256_rgb_video_v2.mp4)
+
+360 horizontal renders (height: 50, weight: 50) trained with Colab GPU A100
+
+Using the original image resolution (`height: 100, width: 100`) and training on a [Cloud TPU v3 (8 TensorCores)](https://cloud.google.com/tpu/docs/v3) over an extended period (`1000 epochs`), we can certainly achieve substantially higher-quality renders:
+
+[360 horizontal renders (height: 100, width: 100) trained with cloud [TPU v3](https://cloud.google.com/tpu/docs/v3) (8 TensorCores)](Implementing%20Neural%20Radiance%20Fields%20(NeRF)%20with%20Ke/lego_batch_h256_tpu_rgb_video_tpu.mp4)
+
+360 horizontal renders (height: 100, width: 100) trained with cloud [TPU v3](https://cloud.google.com/tpu/docs/v3) (8 TensorCores)
+
+The full code implementation used in this article can be explored at  [https://github.com/ghif/nerf-keras](https://github.com/ghif/nerf-keras).
+
+## Conclusion
+
+This article walked you through the complete implementation of a basic NeRF, demystifying every major component: problem setup, ray generation and sampling, positional embeddings, network architecture, volume rendering, hierarchical sampling, and training setup.
+
+These days, NeRF has evolved remarkably and several exciting developments are pushing the field forward for better generalization, faster training, and real-time rendering, such as:
+
+- ([Cong et al. ICCV2023](https://arxiv.org/pdf/2308.11793)): Generalization and Volume Rendering advancements, such as transformer-based architectures for cross-scene NeRF, enable **few-shot synthesis** of new content and improved boilerplate-free deployments.
+- ([Wang et al. WACV2024](https://arxiv.org/abs/2311.12490)): Hyb‑NeRF uses multiresolution *hybrid encoding* (e.g., hash grids) to drastically speed up inference while maintaining visual quality.
+- ([Ding et al. 2025](https://arxiv.org/pdf/2504.00950)): Neural Pruning methods apply structured parameter reduction during training, achieving up to 50% model size reduction and 35% faster training, with minimal accuracy loss.
+- ([Qazi et al. 2025](https://arxiv.org/pdf/2505.06894)): NeuGen introduces brain-inspired normalization to improve domain generalization, enabling NeRF-like models to perform robustly across diverse environments.
+
+See also the curated list of papers: https://github.com/awesome-NeRF/awesome-NeRF.

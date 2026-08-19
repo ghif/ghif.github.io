@@ -1,0 +1,60 @@
+---
+title: "Activate PGVector Extension in PostgreSQL for RAG"
+author: "MUHAMMAD GHIFARY"
+date: 2025-02-25
+description: "Imported and normalized from a Notion article."
+categories:
+  - generative-ai
+  - implementation
+draft: false
+---
+
+
+Last time we have seen how to setup PostgreSQL in mac OS. The following article is to enable an extension called PGVector, which is used to 
+
+### Step 1: Install pgvector from the source
+
+```bash
+cd /tmp
+git clone --branch v0.8.0 https://github.com/pgvector/pgvector.git
+cd pgvector
+make
+make install # may need sudo
+```
+
+### Step 2: Restart PostgreSQL service
+
+```bash
+	brew services restart postgresql@15
+```
+
+### Step 4: Create extension
+
+```bash
+# Start PostgreSQL service
+brew services start postgresql@15
+
+# Connect to your database
+psql -d <db-name> -U <username>
+
+# Create the vector extension
+CREATE EXTENSION vector;
+
+# Verify installation
+\dx vector
+```
+
+If the installation succeed, we should see the following output after executing `\dx vector`:
+
+```bash
+                           List of installed extensions
+  Name  | Version | Schema |                     Description                      
+--------+---------+--------+------------------------------------------------------
+ vector | 0.8.0   | public | vector data type and ivfflat and hnsw access methods
+```
+
+Check Postgres log:
+
+```bash
+tail -f /opt/homebrew/var/log/postgresql@15.log
+```

@@ -1,0 +1,172 @@
+---
+title: "Setting Up a Python environment on Mac OS for AI/ML Development"
+author: "MUHAMMAD GHIFARY"
+date: 2025-01-26
+description: "Imported and normalized from a Notion article."
+categories:
+  - implementation
+draft: false
+---
+
+
+I’ve lost count of how many times I’ve set up Python environments on macOS, yet I still sometimes struggle to remember all the steps to recreate the suitable setup, especially when starting fresh on a new machine. So, I decided to jot down the process—both for myself and for anyone else looking to configure their Python environment, particularly for AI and machine learning projects. Let’s dive in!
+
+1. **Installing Homebrew**
+
+[Homebrew](https://docs.brew.sh/Homebrew-and-Python) is a fantastic package manager that simplifies software program installation via the command line on macOS (and Linux, too). Think of it as your app store, but for command-line tools. I follow the guideline from https://mac.install.guide/homebrew/3.
+
+To get started, open Terminal and run:
+
+```bash$/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Once installed, we integrate Homebrew into `$PATH` by executing these two commands:
+
+```bash$(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zprofile$eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+To ensure everything is set up correctly, check Homebrew’s status:
+
+```bash$brew doctor
+```
+
+Now we can see
+
+```bash
+Your system is ready to brew.
+```
+
+1. **Installing Python with Pyenv**
+
+While Homebrew allows for direct Python installation (can easily done through `brew install python`), managing multiple Python versions across various projects can be cumbersome. Homebrew-installed Python is not well-suited to perform such tasks.
+
+I prefer using another tool like `Pyenv`. It’s a tool designed specifically for managing multiple Python versions, which is a lifesaver when juggling projects that require different versions of Python.
+
+Here’s how I set it up.
+
+First, install `Pyenv` with Homebrew:
+
+```bash$brew install pyenv
+```
+
+Next, configure our shell to initialize Pyenv. Add the following lines to `~/.zprofile`
+
+```bash
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d$PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+```
+
+After saving the file, reload the shell configuration `source ~/.zprofile` or just restart the terminal.
+
+Check if the Pyenv is properly installed.
+
+```$pyenv --version
+pyenv 2.5.1
+```
+
+Before using `pyenv` to install Python, we must use Homebrew to install the `xz` package. Pyenv’s Homebrew formula does not specify all needed dependencies during installation with Homebrew.
+
+```$brew install xz
+```
+
+Now, we can comfortably install any version of Python with `pyenv`. For example, 
+
+```$pyenv install 3.11
+```
+
+We can see a list of installed Python versions.
+
+```$pyenv versions
+```
+
+Interestingly, I still get the following error when executing `which python` or `python --version`.
+
+```
+python not found
+```
+
+It turns out that I just need to setup some other environment variables related to Pyenv. So no need to be panic!
+
+In doing so, open `~/.zshrc` and ensure it contains:
+
+```bash
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+```
+
+Then save the file and reload the shell `source ~/.zshrc` or restart the terminal.
+
+Now I can see something like this:
+
+```$which python
+/Users/mghifary/.pyenv/shims/python$python --version
+Python 3.11.11
+```
+
+Success! Pyenv is now managing our Python installation.
+
+1. **Setting Up a Virtual Environment**
+
+Creating a virtual environment ensures that our project dependencies are isolated, preventing conflicts. Here’s how:
+
+Create a virtual environment by executing the `venv` module:
+
+```
+python -m venv ~/.tf-metal
+```
+
+Activate the environment:
+
+```
+source ~/.tf-metal/bin/activate
+```
+
+The terminal prompt should now reflect the activated environment, typically by prefixing it with (.tf-metal).
+
+1. **Installing TensorFlow with GPU Support on macOS**
+
+Once the virtual environment is ready, we can install some relevant libraries for implementing and running AI/ML programs. To leverage GPU acceleration on macOS, especially with Apple Silicon, we’ll need to install TensorFlow along with the Metal plugin. Here’s the process:
+
+Install TensorFlow for macOS:
+
+```
+(.tf-metal)$python -m install tensorflow-macos
+```
+
+Install the TensorFlow Metal plugin: 
+
+```
+(.tf-metal)$python -m install tensorflow-metal
+```
+
+These installations enable TensorFlow to utilize the GPU via Apple’s Metal API.
+
+It’s essential to confirm that TensorFlow can detect our GPU. Here’s a quick test:
+
+```python
+import tensorflow as tf
+print(tf.__version__)
+
+# List physical devices
+physical_devices = tf.config.list_physical_devices('GPU')
+print("Num GPUs Available: ", len(physical_devices))
+
+# Check if Metal is being used
+for device in physical_devices:
+    print(device)
+```
+
+```
+2.16.2
+Num GPUs Available:  1
+PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')
+```
+
+Note: As of now, it seems that TensorFlow with Metal support is compatible up to Python 3.11. Attempts to install `tensorflow-metal` with Python 3.12 were unsuccessful.
+
+Now we’ve established a robust Python environment on the macOS system, optimized for AI/ML development with GPU acceleration. 
+
+Happy coding! 💻

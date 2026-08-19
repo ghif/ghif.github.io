@@ -1,0 +1,109 @@
+---
+title: "Recent Advancements in Deep Learning Optimization"
+author: "MUHAMMAD GHIFARY"
+date: 2026-08-19
+description: "Imported and normalized from a Notion article."
+categories:
+  - deep-learning
+  - mathematics
+draft: false
+---
+
+
+<aside>
+💡
+
+This article was written with the help of [OpenAI’s deep research](https://openai.com/index/introducing-deep-research/), an agentic AI tool that employs reasoning to synthesize extensive online information and execute complex multi-step research tasks.
+
+</aside>
+
+Deep learning continues to advance, with optimization algorithms playing a crucial role in enhancing model efficiency. Recent developments in optimization techniques have introduced new methods that improve convergence rates, reduce computational costs, and enhance model generalization.
+
+This article discusses the latest advancements in deep learning optimization, including novel optimizers such as Lion and Sophia, as well as second-order techniques that contribute to more efficient training processes.
+
+## New and Improved Optimization Algorithms
+
+### 1. Lion (Evolved Sign Momentum)
+
+Lion is a recently developed optimizer identified through AutoML  ([Chen et al., 2023](https://arxiv.org/pdf/2302.06675)). It updates weights based on the sign of the gradient rather than its magnitude, reducing computational overhead while maintaining effective training performance. Lion has been shown to achieve improved accuracy in image classification tasks, particularly in Vision Transformer (ViT) models ([Dosovitskiy et al., 2020](https://arxiv.org/abs/2010.11929)), with reduced computational requirements compared to AdamW ([Loshchilov & Hutter, 2019](https://arxiv.org/pdf/1711.05101v3)).
+
+### 2. LAMB (Layer-wise Adaptive Moments for Batch Training)
+
+LAMB is designed for large-batch training and has been particularly useful for transformer-based models such as BERT ([You et al., 2020](https://arxiv.org/pdf/1904.00962)). It incorporates layer-wise normalization to maintain stable learning dynamics in large-scale training scenarios, enabling efficient training with significantly larger batch sizes compared to traditional optimizers.
+
+### **3. AdaFactor: Memory-Efficient Optimization**
+
+AdaFactor, a variant of Adam, reduces memory overhead by storing only row- and column-wise squared gradient sums rather than full matrices ([Shazeer & Stern, 2018](https://proceedings.mlr.press/v80/shazeer18a/shazeer18a.pdf)). It reduces memory usage to sublinear in model size while delivering similar convergence as Adam. This makes it particularly beneficial for training large-scale models, such as T5, on resource-limited hardware.
+
+### 4. AdaBelief
+
+AdaBelief, another variant of Adam, adapts step sizes by how much gradient deviates from an expected trend ([Zhuang et al. 2020](https://arxiv.org/pdf/2010.07468)). It treats the exponential moving average of past gradients as a prediction of the next gradient. This approach merges the benefits of adaptive methods and SGD: AdaBelief attains faster convergence like Adam but with SGD-like generalization. On ImageNet, AdaBelief achieved accuracy on par with SGD (unusual for an adaptive optimizer). It’s also noted for stability in GAN training, outperforming a well-tuned Adam on CIFAR-10 GANs.
+
+**Other Adam improvements:** AdamW ([Loshchilov & Hutter, 2019](https://arxiv.org/pdf/1711.05101v3)) decoupled weight decay from the gradient update, improving regularization and becoming a default in vision transformers. AMSGrad ([Reddi et al. 2018](https://openreview.net/pdf?id=ryQu7f-RZ)) was introduced to handle the convergence failure by Adam in some simple cases; AMSGrad fixes this by enforcing a non-increasing second-moment term, provably restoring convergence in theory. RAdam (Rectified Adam) addressed Adam’s reliance on learning-rate warmup by analytically adjusting the adaptive learning rate variance, leading to more stable training without manual warmup ([Liu et al., 2020](https://arxiv.org/pdf/1908.03265)). Lookahead is another innovation where one optimizer’s updates are periodically “averaged” into a slow-moving set of weights improving stability and often final accuracy. Each of these refinements targets specific weaknesses in Adam (e.g., instability, generalization, or need for hyperparameter tricks) to make optimization more robust.
+
+## Advancements in Learning Rate Adaptation and Stability
+
+### Momentum-based Optimizers
+
+Momentum-based approaches, including Nesterov acceleration and sign-based methods such Lion and signSGD, contribute to improve training stability and convergence speed. These techniques help mitigate the effects of noisy gradients.
+
+### Gradient Clipping for Stability
+
+Gradient clipping techniques, including per-layer norm clipping and adaptive clipping, have been widely adopted to prevent instability caused by exploding gradients in deep networks.
+
+### Dynamic Learning Rate Schedules
+
+Recent research has introduced advanced learning rate scheduling strategies, such as cosine annealing, cyclical decay, and adaptive step size adjustments. These approaches improve convergence rates and enhance overall training stability.
+
+## Developments in Second-Order Optimization
+
+Second-order optimization methods, which utilize curvature information, have traditionally been computationally expensive. However, recent advancements have made them more practical:
+
+### 1. Shampoo: Scalable Second-Order Optimization
+
+Shampoo employs a Kronecker factorization to approximate second-order gradients, enabling improved optimization efficiency in large-scale deep learning models ([Anil et al., 2021](https://arxiv.org/pdf/2002.09018)).
+
+### 2. K-FAC (Kronecker-Factored Approximated Curvature)
+
+K-FAC is designed to approximate the Fisher information matrix, reducing the number of required training iterations, particularly in convolutional neural networks ([Martens & Grosse et al., 2015](https://arxiv.org/pdf/1503.05671), [Eschenhagen et al., 2024](https://arxiv.org/pdf/2311.00636)).
+
+### **3. Sophia (Second-Order Clipped Optimization for Large Models)**
+
+Sophia is an optimizer designed for training large language models ([Liu et al., 2023](https://arxiv.org/pdf/2305.14342)). By approximating the Hessian matrix and applying element-wise clipping, it reduces the number of required training steps compared to Adam, leading to improved computational efficiency in large-scale settings.
+
+### 4. Hybrid Approaches
+
+Recent research has explored combining first- and second-order methods, such as SOAP (Scalable Optimizer for Adaptive Preconditioning), which integrates Shampoo’s curvature-based updates with Adam’s adaptive momentum ([Vyas et al., 2024](https://arxiv.org/pdf/2409.11321)). These hybrid approaches have demonstrated improved convergence efficiency in large-batch training scenarios.
+
+## Empirical Evaluations and Real-World Applications
+
+### Computer Vision
+
+Studies indicate that Lion has achieved improved accuracy in image classification tasks, particularly in training Vision Transformer models, while reducing computational resource requirements.
+
+### Natural Language Processing
+
+Sophia has demonstrated improved efficiency in training large-scale language models, reducing training time and computational costs in comparison to Adam.
+
+### Generative Models
+
+AdaBelief and Lion have been evaluated in generative adversarial network (GAN) training, where they have contributed to improved stability and enhanced output quality.
+
+### Reinforcement Learning
+
+Preliminary evaluations suggest that sign-based optimizers, such as Lion, may offer advantages in reinforcement learning tasks by handling noisy gradient estimates more effectively.
+
+## Considerations for Optimizer Selection
+
+Selecting an appropriate optimizer depends on the specific task and computational constraints:
+
+- **For Natural Language Processing (NLP) Models**: AdamW is a widely used default optimizer. AdaFactor is suitable for large-scale models where memory efficiency is a priority. Sophia may be considered for reducing training time in large-scale pretraining.
+- **For Computer Vision Models**: SGD with momentum remains a preferred choice for moderate-sized datasets. Lion has demonstrated potential improvements in Vision Transformer training.
+- **For Reinforcement Learning**: Adam and RMSprop are commonly used, through recent studies indicate potential benefits of alternative optimizers such as AdaBelief and Lion.
+- **For Large-Scale Distributed Training**: LAMB and Distributed Shampoo are designed for efficient training with large batch sizes on multi-GPU or TPU systems.
+
+## Conclusion
+
+Advancements in deep learning optimization continue to improve training efficiency, model performance, and computational resource utilization. New optimizers such as Lion and Sophia, along with second-order methods like Shampoo and K-FAC, provide promising alternatives to traditional approaches. Future research is likely to further refine these methods and develop more adaptive optimization strategies suited to emerging deep learning techniques.
+
+Practitioners and researchers should evaluate these optimization techniques in the context of their specific applications to achieve optimal performance outcomes.

@@ -1,0 +1,41 @@
+---
+title: "[Paper Review] 2025 State of AI Code Quality"
+author: "MUHAMMAD GHIFARY"
+date: 2025-11-13
+description: "Imported and normalized from a Notion article."
+categories:
+  - reading-notes
+  - opinions
+draft: false
+---
+
+
+I have just reviewed an interesting [report from Qodo: “2025 State of AI Code Quality”](https://www.qodo.ai/reports/state-of-ai-code-quality/) that surveyed 609 developers on how AI tools are being used. 
+
+The bottom line: **AI is mainstream, but trust is still the biggest blocker to realizing its promised efficiency gains**. I identify, at least, 3 critical themes that can maximize AI workflow value:
+
+1. **Context is the Foundation of Trust**
+
+The primary complaint about current AI tools isn’t how much code they generate, but how **relevant** it is.
+
+- **The context gap is huge:** 65% of developers using AI for refactoring and approximately 60% using it for testing, writing, or reviewing report that the assistant “misses relevant context”.
+- **The top fix:** “Improved contextual understanding” is the #1 requested fix (26% of all votes), rising to about 30% when “customization to team standards” is included.
+- **Actionable insight:** AI must act like a teammate who knows the codebase. A learned, repo-wide context engine is necessary for accuracy, quality, and trust. Manually selecting context is broken; 54% of developers who do this still AI misses relevance.
+
+**2. Confidence Drives Adoption (The Hallucination Hurdle)**
+
+If AI output isn’t accurate, adoption stalls and engineers waste time reviewing everything.
+
+- **The confidence metric:** Developers who experience fewer than 20% hallucinations are 2.5x more likely to merge code without reviewing it (24% vs 9% of others).
+- **The red zone:** A massive 76% of developers fall into the “high hallucinations, low confidence” group. This means they use AI, but don’t trust the results, leading to manual review, delays, and limited ROI.
+- **Confidence and morale:** High-confidence engineers are 1.3x more likely to say AI makes their job more enjoyable (46% vs. 35% of those with low confidence).
+
+**3. Automated Review is the Quality Multiplier**
+
+Speed alone doesn’t guarantee quality; automated review converts raw velocity into durable code quality.
+
+- **Productivity & quality synergy:** When teams report “considerable” productivity gains, 70% also report better code quality — a 3.5x jump over stagnant teams.
+- **The AI review benefit:** With AI review integrated, quality improvements soar to 81% for fast teams (compared to 55% for equally fast teams without review).
+- **Even without a speed boost**, teams using AI review see 2x the quality gains (36% vs 17%). This continuous, opinionated review is the force-multiplier we need.
+
+In summary, AI tools are generating a quarter or more of our code. To close the trust gap and truly transform our development process, we must **focus less on raw speed and more on AI tools that provide deep, automated contextual awareness and robust, continuous quality review**. This creates a “confidence flywheel” that reinforces accuracy, quality, and trust.

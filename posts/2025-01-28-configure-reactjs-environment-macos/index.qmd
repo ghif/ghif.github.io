@@ -1,0 +1,93 @@
+---
+title: "Configure ReactJS Environment for Front-end Development on macOS"
+author: "MUHAMMAD GHIFARY"
+date: 2025-01-28
+description: "Imported and normalized from a Notion article."
+categories:
+  - implementation
+draft: false
+---
+
+
+Below is a step-by-step guide on configuring a ReactJS development environment on **macOS**. I’ll cover installing Node.js via **NVM** (Node Version Manager), setting up environment variables, and finally creating a new React application. By the end, you’ll have a working React environment ready for front-end development.
+
+1. **Prerequisites**
+
+**Homebrew**: Make sure we have Homebrew installed. If not, open Terminal and install it:
+
+```bash$/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+1. **Install NVM via Homebrew**
+
+**NVM** lets us install and manage multiple Node.js versions simultaneously. This is recommended over installing Node.js directly through Homebrew because you can easily switch between Node versions and keep your system organized.
+
+To install NVM, run the following command:
+
+```$brew install nvm
+```
+
+1. **Configure Environment Variables**
+
+After installing NVM, we need to configure the shell so it can find and load NVM each time we open a new Terminal session.
+
+In my machine (Apple Silicon), the NVM is installed at `/opt/homebrew/opt/nvm`. Add the following lines into the config file ~/.zshrc so that NVM is linked to the installation path:
+
+```bash
+export NVM_DIR=/opt/homebrew/opt/nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+```
+
+And then reload the shell so the changes take effect: `source ~/.zshrc` .
+
+1. **Install Node.js using NVM**
+
+Now that the NVM is set up, we can install Node.js:
+
+```bash$nvm install --lts
+```
+
+The command above installs the latest stable version of Node.js, which comes bundled with **npm** (Node Package Manager).
+
+To verify the installation, check with the following commands:
+
+```bash$node -v
+```
+
+```
+v22.13.1
+```
+
+```bash$npm -v
+```
+
+```
+10.9.2
+```
+
+1. **Create a React Project**
+
+There are several ways to bootstrap a React application. One of the most popular approaches is through Create React App (CRA).
+
+Install Create React App:
+
+```bash$npm install -g create-react-app
+```
+
+Create a new React project:
+
+```bash$create-react-app my-react-app
+```
+
+Navigate into the project:
+
+```bash$cd my-react-app
+```
+
+Start the development server:
+
+```bash$npm start
+```
+
+This opens a local server (usually `http://localhost:3000/`) running the new React application.

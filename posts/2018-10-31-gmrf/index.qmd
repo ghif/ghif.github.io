@@ -1,6 +1,6 @@
 ---
 title: Inferensi Probabilistik dengan Gaussian Markov Random Fields
-date: '2018-09-12'
+date: '2018-10-31'
 categories:
   - machine-learning
   - mathematics

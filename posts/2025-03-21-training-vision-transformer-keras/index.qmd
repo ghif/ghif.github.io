@@ -1,7 +1,7 @@
 ---
 title: "Melatih Vision Transformer dengan Keras 3"
 author: "MUHAMMAD GHIFARY"
-date: 2026-08-19
+date: 2025-03-21
 description: "Imported and normalized from a Notion article."
 categories:
   - deep-learning

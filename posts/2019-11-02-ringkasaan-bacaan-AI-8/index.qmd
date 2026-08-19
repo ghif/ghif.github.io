@@ -1,6 +1,6 @@
 ---
 title: Ringkasan Mingguan Bacaan AI (2 November 2019)
-date: '2019-10-26'
+date: '2019-11-02'
 categories:
   - reading-notes
   - research-notes

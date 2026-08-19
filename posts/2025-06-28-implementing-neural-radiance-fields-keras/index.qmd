@@ -1,7 +1,7 @@
 ---
 title: "Implementing Neural Radiance Fields (NeRF) with Keras 3"
 author: "MUHAMMAD GHIFARY"
-date: 2026-08-19
+date: 2025-06-28
 description: "Imported and normalized from a Notion article."
 categories:
   - computer-vision

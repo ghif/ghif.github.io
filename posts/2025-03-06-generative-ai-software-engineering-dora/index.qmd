@@ -1,7 +1,7 @@
 ---
 title: "Generative AI-Powered Software Engineering: Latest Trends and DORA Impact"
 author: "MUHAMMAD GHIFARY"
-date: 2026-08-19
+date: 2025-03-06
 description: "Imported and normalized from a Notion article."
 categories:
   - generative-ai

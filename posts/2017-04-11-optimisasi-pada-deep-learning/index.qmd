@@ -1,7 +1,7 @@
 ---
 title: "Optimisasi Pada Deep Learning"
 author: "Muhammad Ghifary"
-date: 2023-11-24
+date: '2017-04-11'
 categories:
   - deep-learning
   - mathematics

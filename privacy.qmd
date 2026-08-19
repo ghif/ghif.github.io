@@ -4,9 +4,9 @@ title: "Privacy"
 
 ## Analytics
 
-Ghif Lab uses Google Analytics to understand aggregate website traffic and improve the site. Google Analytics may collect information such as page views, approximate location, device type, and referral source.
+Ghif Lab uses Google Analytics 4 (GA4) to understand aggregate website traffic and improve the site. GA4 may collect page views, approximate location, device type, referral source, and information about how visitors interact with pages. The site uses Google Analytics cookies. Advertising features and personalized advertising signals are not used.
 
-No medical records, private documents, or user-submitted content are collected by this website.
+No medical records, private documents, or user-submitted content are collected by this website. You can limit analytics cookies through your browser settings or use a browser privacy extension.
 
 ## External services
 

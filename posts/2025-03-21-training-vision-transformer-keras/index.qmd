@@ -72,15 +72,15 @@ def extract_patches(images, patch_size):
 
 ### II. Patch Encoder
 
-Langkah ini mengkonversi *patch* menjadi vektor lain melalui proyeksi linear untuk membentuk sebuah *embedding*. Misalkan terdapat sebuah patch pada posisi ke-$t$:$\mathbf{x}_p^{(t)} \in \mathbb{R}^d$, *embedding* dari patch tersebut,$\mathbf{z}_p^{(t)} \in \mathbb{R}^k$, didapatkan dengan:
+Langkah ini mengkonversi *patch* menjadi vektor lain melalui proyeksi linear untuk membentuk sebuah *embedding*. Misalkan terdapat sebuah patch pada posisi ke- $t$: $\mathbf{x}_p^{(t)} \in \mathbb{R}^d$, *embedding* dari patch tersebut, $\mathbf{z}_p^{(t)} \in \mathbb{R}^k$, didapatkan dengan:
 
 $$
 \mathbf{z}_p^{(t)} = \mathbf{W}_p \mathbf{x}_p^{(t)}
 $$
 
-dimana$\mathbf{W}_p \in \mathbb{R}^{k \times d}$merupakan bagian dari parameter yang akan dilatih. Pada implementasi dimensi$k$akan dibuat sama dengan dimensi$d$.
+dimana $\mathbf{W}_p \in \mathbb{R}^{k \times d}$ merupakan bagian dari parameter yang akan dilatih. Pada implementasi dimensi $k$ akan dibuat sama dengan dimensi $d$.
 
-Kemudian, *embedding* dari patch akan dikombinasikan dengan *position embedding$\mathbf{z}_t^{(t)} \in \mathbb{R}^k$:*
+Kemudian, *embedding* dari patch akan dikombinasikan dengan *position embedding $\mathbf{z}_t^{(t)} \in \mathbb{R}^k$:*
 
 $$
 \mathbf{z}_t^{(t)} = \mathrm{Embedding}(t)

@@ -110,8 +110,8 @@ Secara umum teknik yang digunakan serupa dengan teknik mesin pencari (*search en
 💡 1. Bentuk *database* kumpulan dokumen dalam bentuk vektor (*vector store*)
 2. Pada saat *prompting*,
      a. Ubah teks query menjadi vektor.
-     b. Ambil sejumlah$k$dokumen yang relevan dari *vector store*.
-     c. Masukan$k$dokumen tersebut menjadi bagian dari konteks pada *prompt*.
+     b. Ambil sejumlah $k$ dokumen yang relevan dari *vector store*.
+     c. Masukan $k$ dokumen tersebut menjadi bagian dari konteks pada *prompt*.
 
 </aside>
 
@@ -174,7 +174,7 @@ $$
 \mathrm{MMR} = \arg \max_{d_i \in R \setminus S} \left[ \lambda (\mathrm{Sim}_1 (d_i, q)) - (1 - \lambda) \max_{d_j \in S} \mathrm{Sim}_2 (d_i, d_j) \right]
 $$
 
-dimana$\lambda \in [0, 1]$merupakan parameter yang mengontrol relevansi dan keragaman dari hasil pencarian,$q$merupakan vektor *query* dan$\{ d_i\}_{i=1}^n$merupakan himpunan vektor *document* pada *vector store.*
+dimana $\lambda \in [0, 1]$ merupakan parameter yang mengontrol relevansi dan keragaman dari hasil pencarian, $q$ merupakan vektor *query* dan $\{ d_i\}_{i=1}^n$ merupakan himpunan vektor *document* pada *vector store.*
 
 ```python
 from langchain_community.vectorstores import Chroma

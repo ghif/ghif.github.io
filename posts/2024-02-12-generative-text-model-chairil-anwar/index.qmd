@@ -26,25 +26,25 @@ $$
 P_{\theta}(w | h)
 $$
 
-dimana$w$merupakan token berikutnya (dapat berupa karakter, kata, sub-frasa, dsb) dan$h$merupakan histori dari token-token sebelumnya.
+dimana $w$ merupakan token berikutnya (dapat berupa karakter, kata, sub-frasa, dsb) dan $h$ merupakan histori dari token-token sebelumnya.
 
-Perhatikan contoh kalimat di bawah ini yang tersusun dari$w$dan$h$dimana **token didefinisikan sebagai karakter**.
+Perhatikan contoh kalimat di bawah ini yang tersusun dari $w$ dan $h$ dimana **token didefinisikan sebagai karakter**.
 
 $$
 \underbrace{\text{kalau sampai waktuku ku mau tak seorang kan}\text{ } \text{meray}}_{h} \underbrace{\text{u}}_{w}
 $$
 
-Misalkan terdapat sebuah model bahasa yang dilatih dengan teks di atas, maka$P_\theta(w="u"|h="kalau ... meray")$akan memberikan nilai probabilitas yang tinggi.
+Misalkan terdapat sebuah model bahasa yang dilatih dengan teks di atas, maka $P_\theta(w="u"|h="kalau ... meray")$ akan memberikan nilai probabilitas yang tinggi.
 
-Jika didetailkan,$h$terdiri dari kumpulan token$w_1, \ldots, w_{n-1}$dan$w=w_n$sehingga model bahasa dapat ditulis sebagai
+Jika didetailkan, $h$ terdiri dari kumpulan token $w_1, \ldots, w_{n-1}$ dan $w=w_n$ sehingga model bahasa dapat ditulis sebagai
 
 $$
 P_\theta(w_n | w_{1:n-1})
 $$
 
-Model di atas disebut sebagai model$n$-gram — terdapat sejumlah$n$buah token pada probabilitas bersyarat.
+Model di atas disebut sebagai model $n$ -gram — terdapat sejumlah $n$ buah token pada probabilitas bersyarat.
 
-Kita dapat melakukan aproksimasi terhadap model$n$-gram dengan asumsi Markov — probabilitas token berikutnya hanya bergantung pada 1 token sebelumnya.
+Kita dapat melakukan aproksimasi terhadap model $n$ -gram dengan asumsi Markov — probabilitas token berikutnya hanya bergantung pada 1 token sebelumnya.
 
 $$
 P_\theta(w_n | w_{1:n-1}) \approx P_\theta(w_n | w_{n-1})
@@ -60,7 +60,7 @@ Teks-teks puisi tersebut akan diproses menjadi sekuens karakter dikarenakan mode
 
 ### Konversi Karakter ke Bilangan Bulat
 
-Pekerjaan pertama yang dilakukan adalah mengkonversi representasi teks menjadi bilangan bulat. Hal ini dikarenakan model bahasa berbasis *deep learning* hanya dapat beroperasi pada representasi numerik. Secara formal kita membutuhkan fungsi enkodifikasi$f_\mathrm{encode}$yang memetakan teks$\mathcal{T}$menjadi bilangan bulat$\mathcal{Z}$.
+Pekerjaan pertama yang dilakukan adalah mengkonversi representasi teks menjadi bilangan bulat. Hal ini dikarenakan model bahasa berbasis *deep learning* hanya dapat beroperasi pada representasi numerik. Secara formal kita membutuhkan fungsi enkodifikasi $f_\mathrm{encode}$ yang memetakan teks $\mathcal{T}$ menjadi bilangan bulat $\mathcal{Z}$.
 
 $$
 f_\mathrm{encode}: \mathcal{T} \rightarrow \mathcal{Z}
@@ -120,16 +120,16 @@ $$
 \mathcal{B} = \{ (x_1, y_1), (x_2, y_2), \ldots, (x_B, y_B) \}
 $$
 
-dimana pasangan sekuens$(x_b, y_b)$berbentuk
+dimana pasangan sekuens $(x_b, y_b)$ berbentuk
 
 $$
 x_b = z^{(b)}_{t:t+T} \\
 y_b = z^{(b)}_{t+1:t+T+1}
 $$
 
-dengan besaran$T$sebagai panjang total sekuens pada suatu *batch*.
+dengan besaran $T$ sebagai panjang total sekuens pada suatu *batch*.
 
-Perhatikan bahwa konfigurasi pasangan sekuens di atas menunjukkan karakteristik model bahasa Bigram:$x_b(t) = z(t)$$y_b(t) = z(t+1)$Implementasi dari pembentukan *batch* dapat dilihat pada kode berikut:
+Perhatikan bahwa konfigurasi pasangan sekuens di atas menunjukkan karakteristik model bahasa Bigram:$x_b(t) = z(t) $$ y_b(t) = z(t+1)$Implementasi dari pembentukan *batch* dapat dilihat pada kode berikut:
 
 ```python
 def get_batch(data, batch_size=4, block_size=8):
@@ -152,7 +152,7 @@ def get_batch(data, batch_size=4, block_size=8):
     return x, y
 ```
 
-Sebagai contoh, berikut ini *batch* yang dihasilkan secara acak dengan ukuran *batch*$B=4$(`batch_size`) dan panjang sekuens$T=8$(`block_size`).
+Sebagai contoh, berikut ini *batch* yang dihasilkan secara acak dengan ukuran *batch* $B=4$ (`batch_size`) dan panjang sekuens $T=8$ (`block_size`).
 
 ```bash
 >>> xb, yb = get_batch(data, batch_size=4, block_size=8)
@@ -208,7 +208,7 @@ $$
 
 Arsitektur dari fungsi *decoder* juga dapat didefinisikan sebagai sebuah *dense layer.* Namun demikian, fungsi aktivasi yang digunakan adalah fungsi [*softmax](https://app.notion.com/p/Percepatan-Komputasi-Deep-Learning-pada-Apple-Silicon-M-9cda26681fa249ce9a791aecb79b6ded?pvs=21)* dimana indeks dari elemen terbesar pada vektor luaran merupakan representasi angka dari suatu karakter.
 
-Lebih jelasnya, misalkan$\mathbf{v} \in \mathbb{R}^d$merupakan vektor *embeddings* dan$\mathbf{p} \in \mathbb{R}^d$merupakan *positional encoding*. Fungsi *decoder* pertama-tama memetakan ke representasi vektor$\mathbf{z} \in \mathbb{R}^{|v|}$dimana$|v|$merupakan ukuran *vocabulary,* lalu mengambil indeks yang menunjuk kepada nilai terbesar dari$\mathrm{softmax}(\mathbf{z}):$$$
+Lebih jelasnya, misalkan $\mathbf{v} \in \mathbb{R}^d$ merupakan vektor *embeddings* dan $\mathbf{p} \in \mathbb{R}^d$ merupakan *positional encoding*. Fungsi *decoder* pertama-tama memetakan ke representasi vektor $\mathbf{z} \in \mathbb{R}^{|v|}$ dimana $|v|$ merupakan ukuran *vocabulary,* lalu mengambil indeks yang menunjuk kepada nilai terbesar dari$\mathrm{softmax}(\mathbf{z}):$$$
 {z} = \mathbf{W}(\mathbf{v} + \mathbf{p}) \\
 \mathrm{softmax}(\mathbf{z}) = \frac{\exp(z_i)}{\sum_{j=1}^{|v|} \exp(z_j)} \\
 f_{\theta_{decoder}} = \arg \max \mathrm{softmax}(\mathbf{z})
@@ -429,13 +429,13 @@ Suatu kata “memperhatikan” kata lain pada kalimat yang sama (Sumber: [https:
 
 Secara matematis, mekanisme *attention* yang paling sederhana dapat diinterpretasikan sebagai skor *alignment* antar 2 elemen (karakter/token/kata) yang menggambarkan tingkat perhatian.
 
-Misalkan terdapat sebuah sekuens sepanjang$T$dalam representasi *embeddings*:
+Misalkan terdapat sebuah sekuens sepanjang $T$ dalam representasi *embeddings*:
 
 $$
 Z = \{ \mathbf{z}_1, \mathbf{z}_2, \ldots, \mathbf{z}_T \}
 $$
 
-dimana$\mathbf{z}_i \in \mathbb{R}^d$merupakan vektor *embeddings* ke-$i$. Kita dapat tulis sekuens tersebut dalam bentuk matriks$\mathbf{Z} \in \mathbb{R}^{d \times T}$:
+dimana $\mathbf{z}_i \in \mathbb{R}^d$ merupakan vektor *embeddings* ke- $i$. Kita dapat tulis sekuens tersebut dalam bentuk matriks $\mathbf{Z} \in \mathbb{R}^{d \times T}$:
 
 $$
 \mathbf{Z} = 
@@ -452,7 +452,7 @@ $$
 \alpha_{ij} = \mathrm{align}(\mathbf{z}_i, \mathbf{z}_j)
 $$
 
-Mempertimbangkan seluruh elemen pada sekuens, skor *alignment* dapat ditulis dengan sebuah matriks *attention*$\mathbf{A} \in \mathbb{R}^{T \times T}$:
+Mempertimbangkan seluruh elemen pada sekuens, skor *alignment* dapat ditulis dengan sebuah matriks *attention* $\mathbf{A} \in \mathbb{R}^{T \times T}$:
 
 $$
 \mathbf{A} = \begin{bmatrix}
@@ -463,39 +463,39 @@ $$
 \end{bmatrix}
 $$
 
-Perhatikan bahwa pembentukan matriks$\mathbf{A}$hanya menggunakan satu sekuens yaitu$Z$, dimana penghitungan *alignment* menggunakan elemen pada dirinya sendiri:$\mathbf{z}_i, \mathbf{z}_j \in Z, \forall i,j = 1, \ldots, T$. Jenis mekanisme *attention* tersebut disebut sebagai **self-attention**.
+Perhatikan bahwa pembentukan matriks $\mathbf{A}$ hanya menggunakan satu sekuens yaitu $Z$, dimana penghitungan *alignment* menggunakan elemen pada dirinya sendiri: $\mathbf{z}_i, \mathbf{z}_j \in Z, \forall i,j = 1, \ldots, T$. Jenis mekanisme *attention* tersebut disebut sebagai **self-attention**.
 
-Mekanisme *attention* juga dapat dibentuk dari dua sekuens yang berbeda. Misalkan terdapat sekuens lain,$S = \{ \mathbf{s}_1, \mathbf{s}_2, \ldots, \mathbf{s}_U \}$, skor *alignment* dihitung dengan menggunakan sekuens$Z$dan$S$:
+Mekanisme *attention* juga dapat dibentuk dari dua sekuens yang berbeda. Misalkan terdapat sekuens lain, $S = \{ \mathbf{s}_1, \mathbf{s}_2, \ldots, \mathbf{s}_U \}$, skor *alignment* dihitung dengan menggunakan sekuens $Z$ dan $S$:
 
 $$
 \alpha_{ij} = \mathrm{align}(\mathbf{z}_i, \mathbf{s}_j)
 $$
 
-untuk$i=1, \ldots, T$dan$j=1, \ldots, U$. Kumpulan dari skor *alignment* tersebut akan membentuk matriks *attention*$\mathbf{A} \in \mathbb{R}^{T \times U}$. *Attention* jenis ini disebut dengan **cross-attention**.
+untuk $i=1, \ldots, T$ dan $j=1, \ldots, U$. Kumpulan dari skor *alignment* tersebut akan membentuk matriks *attention* $\mathbf{A} \in \mathbb{R}^{T \times U}$. *Attention* jenis ini disebut dengan **cross-attention**.
 
-Di bawah ini contoh visualisasi dari matriks$\mathbf{A}$berjenis *cross-attention*. Dapat dilihat bahwa matriks *attention* memiliki karakteristik serupa dengan matriks korelasi.
+Di bawah ini contoh visualisasi dari matriks $\mathbf{A}$ berjenis *cross-attention*. Dapat dilihat bahwa matriks *attention* memiliki karakteristik serupa dengan matriks korelasi.
 
 ![Contoh matriks *cross-attention* (Sumber: [Bahdanau et al. 2015](https://arxiv.org/pdf/1409.0473.pdf))](media/Untitled 1.png)
 
 Contoh matriks *cross-attention* (Sumber: [Bahdanau et al. 2015](https://arxiv.org/pdf/1409.0473.pdf))
 
-Selanjutnya, matriks *attention*$\mathbf{A}$digunakan untuk menghasilkan representasi *hidden*/*latent* yang juga dalam bentuk vektor. Hal tersebut dapat dilakukan dengan menghitung matriks dot-product yang menghasilkan matriks *hidden:*
+Selanjutnya, matriks *attention* $\mathbf{A}$ digunakan untuk menghasilkan representasi *hidden*/*latent* yang juga dalam bentuk vektor. Hal tersebut dapat dilakukan dengan menghitung matriks dot-product yang menghasilkan matriks *hidden:*
 
 $$
 \mathbf{H} = \mathbf{Z} \mathbf{A}
 $$
 
-Matriks$\mathbf{H}$berdimensi$d \times T$dengan mekanisme **self-attention** atau berdimensi$d \times U$dengan mekanisme **cross-attention**.
+Matriks $\mathbf{H}$ berdimensi $d \times T$ dengan mekanisme **self-attention** atau berdimensi $d \times U$ dengan mekanisme **cross-attention**.
 
 ### *Attention Head: Query, Key, Value*
 
-Satu hal penting yang belum dibahas sebelumnya adalah bagaimana menghitung skor *alignment$\alpha_{ij} = \mathrm{align}(\cdot, \cdot)$* yang membentuk matriks *attention*$\mathbf{A}$. Arsitektur Transformer berbasis *self-attention* sebagai bahan dasar penyusun model, dimana matriks *attention*$\mathbf{A}$dibentuk dengan menggunakan cara khusus, yang menjadi inovasi utama dari paper (Vaswani et al. 2017).
+Satu hal penting yang belum dibahas sebelumnya adalah bagaimana menghitung skor *alignment $\alpha_{ij} = \mathrm{align}(\cdot, \cdot)$ * yang membentuk matriks *attention* $\mathbf{A}$. Arsitektur Transformer berbasis *self-attention* sebagai bahan dasar penyusun model, dimana matriks *attention* $\mathbf{A}$ dibentuk dengan menggunakan cara khusus, yang menjadi inovasi utama dari paper (Vaswani et al. 2017).
 
 Cara khusus tersebut yaitu menggunakan mekanisme semacam *lookup-table* sebagai bagian dari arsitektur model*,* yaitu terdapat elemen **Query**, **Key, Value (QKV).** Jadi, pada arsitektur Transformer seakan-akan ada proses *information retrieval* yang terjadi: “temukan **Key** yang mirip dengan **Query**, lalu kembalikan nilai **Value”.**
 
 Keseluruhan elemen QKV diimplementasikan dengan transformasi linear. Lebih jelasnya, kita definisikan 3 matriks transformasi linear yang masing-masing berasosiasi dengan Query, Key, dan Value:$\mathbf{W}_q \in \mathbb{R}^{d \times d_q} \\
 \mathbf{W}_k \in \mathbb{R}^{d \times d_k} \\
-\mathbf{W}_v \in \mathbb{R}^{d \times d_v}$Ketiga matriks tersebut menjadi bagian dari parameter model yang akan dilatih dengan *backpropagation*. Dikarenakan mekanisme yang digunakan adalah *self-attention*, maka kita dapat samakan seluruh dimensi dari$d_q, d_k, d_v$menjadi satu nilai$d_h$. Kita istilahkan dimensi tersebut sebagai *head size*. 
+\mathbf{W}_v \in \mathbb{R}^{d \times d_v} $Ketiga matriks tersebut menjadi bagian dari parameter model yang akan dilatih dengan *backpropagation*. Dikarenakan mekanisme yang digunakan adalah *self-attention*, maka kita dapat samakan seluruh dimensi dari$ d_q, d_k, d_v $menjadi satu nilai$ d_h$. Kita istilahkan dimensi tersebut sebagai *head size*. 
 
 Komputasi transformasi linear tersebut menghasilkan 3 luaran:
 
@@ -505,15 +505,15 @@ $$
 \mathbf{V} = \mathbf{W}^\top_v \mathbf{Z}
 $$
 
-dimana$\mathbf{Q}, \mathbf{K}, \mathbf{V} \in \mathbb{R}^{d_h \times T}$.
+dimana $\mathbf{Q}, \mathbf{K}, \mathbf{V} \in \mathbb{R}^{d_h \times T}$.
 
-Sekarang kita dapat definisikan skor *alignment* atau matriks *self-attention$\mathbf{A} \in \mathbb{R}^{T \times T}$.* Transformer memanfaatkan **Scaled Dot-Product Attention** yang dirumuskan dengan:
+Sekarang kita dapat definisikan skor *alignment* atau matriks *self-attention $\mathbf{A} \in \mathbb{R}^{T \times T}$.* Transformer memanfaatkan **Scaled Dot-Product Attention** yang dirumuskan dengan:
 
 $$
 \mathbf{A} = \mathrm{softmax}\left(\frac{\mathbf{Q}^\top \mathbf{K}}{\sqrt{d_h}}\right)
 $$
 
-Terakhir, matriks *attention*$\mathbf{A}$digunakan sebagai bobot dari matriks *value*$\mathbf{V}$untuk menghasilkan representasi *hidden/latent* yang dinamakan sebagai **attention head**:
+Terakhir, matriks *attention* $\mathbf{A}$ digunakan sebagai bobot dari matriks *value* $\mathbf{V}$ untuk menghasilkan representasi *hidden/latent* yang dinamakan sebagai **attention head**:
 
 $$
 \mathrm{Head}(\mathbf{Z}) = \mathbf{H} = \mathbf{V} \mathbf{A}
@@ -563,7 +563,7 @@ $$
 \mathrm{MultiHead}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \mathbf{W}_c  \mathrm{Concat}(\mathrm{Head}_1, \ldots, \mathrm{Head}_{h}) 
 $$
 
-dimana$h$merupakan jumlah total *heads* dan$\mathbf{W}_c \in \mathbb{R}^{d \times d}$merupakan matriks proyeksi hasil penggabungkan beberapa attention *heads* yang menjadi bagian dari parameter model yang akan dilatih. Perhatikan bahwa dimensi vektor hasil penggabungan *heads* harus sama dengan dimensi vektor *embeddings*:$h \times d_h = d$.
+dimana $h$ merupakan jumlah total *heads* dan $\mathbf{W}_c \in \mathbb{R}^{d \times d}$ merupakan matriks proyeksi hasil penggabungkan beberapa attention *heads* yang menjadi bagian dari parameter model yang akan dilatih. Perhatikan bahwa dimensi vektor hasil penggabungan *heads* harus sama dengan dimensi vektor *embeddings*: $h \times d_h = d$.
 
 Komputasi Multi-Head Attention ditunjukkan pada gambar dan kode implementasi di bawah ini.
 

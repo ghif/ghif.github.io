@@ -58,7 +58,7 @@ In shorts,
 - Gemma 3 uses a decoder-only transformer architecture (i.e., the standard LLM style) but augmented for multimodal input (text + image) via a vision encoder.
 - It integrates a SigLIP vision encoder (or variant) to process images into a fixed sequence of “soft tokens” that then feed into the transformer.
 - The attention mechanism is optimized for long-context usage achieved via a hybrid local/global attention scheme (5 local sliding-window layers with window size ~1024 tokens, then 1 global attention layer) to reduce KV-cache burden.
-- Architectural changes to attention, e.g., Grouped-Query Attention (GQA), and replacing previous “soft-capping” mechanisms with a QK-norm (normalisation on$Q \times K$for better scaling / stability.
+- Architectural changes to attention, e.g., Grouped-Query Attention (GQA), and replacing previous “soft-capping” mechanisms with a QK-norm (normalisation on $Q \times K$ for better scaling / stability.
 
 ### A bit deeper on Gemma 3’s attention mechanism
 

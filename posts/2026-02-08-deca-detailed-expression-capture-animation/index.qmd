@@ -38,7 +38,7 @@ DECA operates on a coarse-to-fine principle. It doesn’t try to solve everythin
 
 At the heart of DECA is the FLAME (Faces Learned with Articulated Model and Expressions) model ([Li et al. 2017](https://download.is.tue.mpg.de/flame/flame_paper.pdf)). FLAME is a parametric model, meaning it generates a 3D mesh based on a set of low-dimensional parameters.
 
-Mathematically, a 3D mesh$M$with$N$vertices is generated as:
+Mathematically, a 3D mesh $M$ with $N$ vertices is generated as:
 
 $$
 M(\beta, \theta, \psi) = W \left(T_r(\beta, \theta, \psi), J(\beta), \theta, \mathcal{W} \right)
@@ -46,13 +46,13 @@ $$
 
 where:
 
--$\beta$(Shape parameters): Controls identity-specific shape (e.g., big nose, wide jaw).
--$\psi$(Expression parameters): Controls facial expressions (e.g., smile, frown).
--$\theta$(Pose parameters): Controls the rotation of the neck and jaw.
+- $\beta$ (Shape parameters): Controls identity-specific shape (e.g., big nose, wide jaw).
+- $\psi$ (Expression parameters): Controls facial expressions (e.g., smile, frown).
+- $\theta$ (Pose parameters): Controls the rotation of the neck and jaw.
 
 I discussed about FLAME in more details in my [previous article](https://app.notion.com/p/Unmasking-FLAME-The-Articulated-3D-Face-Model-Powered-by-Apple-MLX-2f8a59d373608031b513fb39205f7021?pvs=21).
 
-In DECA, the goal of the neural network is to predict these parameters ($\beta$,$\psi$,$\theta$) along with camera parameters$c$and lighting$l$from a single input image.
+In DECA, the goal of the neural network is to predict these parameters ($\beta$, $\psi$, $\theta$) along with camera parameters $c$ and lighting $l$ from a single input image.
 
 ## Coarse Reconstruction Stream
 
@@ -88,20 +88,20 @@ class ResnetEncoder(nn.Module):
 
 ### The Decoder
 
-Once the parameters are predicted, DECA uses a differentiable renderer$(\mathcal{R})$. This allows the model to “draw” the 3D face back into 2D ($I_r$). By comparing this rendered image to the original input image, the network learns to align the 3D model to the 2D photo. This analysis-by-synthesis loop allows the model to learn without 3D ground truth by minimizing the photometric difference between the input image and the rendering.
+Once the parameters are predicted, DECA uses a differentiable renderer $(\mathcal{R})$. This allows the model to “draw” the 3D face back into 2D ($I_r$). By comparing this rendered image to the original input image, the network learns to align the 3D model to the 2D photo. This analysis-by-synthesis loop allows the model to learn without 3D ground truth by minimizing the photometric difference between the input image and the rendering.
 
 The rendering process involves 3 primary components:
 
-1. **Geometry Rendering**: The FLAME model generates vertices$M \in \mathbb{R}^{3N}$which are projected into 2D image space using an orthographic camera model$c=[s, t_x, t_y]$:
+1. **Geometry Rendering**: The FLAME model generates vertices $M \in \mathbb{R}^{3N}$ which are projected into 2D image space using an orthographic camera model $c=[s, t_x, t_y]$:
 
 $$
 v=s\cdot \Pi (M_i) + t
 $$
 
-where$\Pi$is the 3D-to-2D projection matrix.
+where $\Pi$ is the 3D-to-2D projection matrix.
 
-1. **Albedo Mapping**: A UV albedo map$A(\alpha)$is generated from the predicted albedo parameters$\alpha$. This map represents the intrinsic surface color of the face.
-2. **Shading & Lighting**: DECA uses Spherical Harmonics (SH) to model global illumination. The shaded face image$B$in UV coordinates is computed as:
+1. **Albedo Mapping**: A UV albedo map $A(\alpha)$ is generated from the predicted albedo parameters $\alpha$. This map represents the intrinsic surface color of the face.
+2. **Shading & Lighting**: DECA uses Spherical Harmonics (SH) to model global illumination. The shaded face image $B$ in UV coordinates is computed as:
 
 $$
 \begin{equation}B(\alpha, \mathbf{1}, N_{\mathrm{uv}})_{i, j} = A(\alpha)_{i,j} \odot \sum_{k=1}^{9} \mathbf{1}_k H_k (N_{i,j}) \end{equation}
@@ -109,9 +109,9 @@ $$
 
 where:
 
--$N_{i,j}$is the surface normal at pixel$(i,j)$in UV space.
--$H_k:\mathbb{R}^3 \rightarrow \mathbb{R}$are the SH basis functions.
--$\mathbf{1}_k \in \mathbb{R}^3$are the predicted lighting coefficients.
+- $N_{i,j}$ is the surface normal at pixel $(i,j)$ in UV space.
+- $H_k:\mathbb{R}^3 \rightarrow \mathbb{R}$ are the SH basis functions.
+- $\mathbf{1}_k \in \mathbb{R}^3$ are the predicted lighting coefficients.
 
 The final rendered image is then produced by the rendering function:
 
@@ -123,7 +123,7 @@ $$
 
 This is where DECA shines. A standard parametric model is too smooth. To capture wrinkles, DECA also predicts a UV displacement map.
 
-The detail reconstruction uses another encoder to extract a latent detail code$\delta$. This code, combined with the expression$\psi$and pose$\theta$parameters, is fed into a generator.
+The detail reconstruction uses another encoder to extract a latent detail code $\delta$. This code, combined with the expression $\psi$ and pose $\theta$ parameters, is fed into a generator.
 
 Why include expression and pose? Because wrinkles are dynamic. A forehead wrinkle appears when we raise our eyebrows. By conditioning the generator on expression, DECA learns expression-dependent details.
 
@@ -154,7 +154,7 @@ class Generator(nn.Module):
         return img * self.out_scale
 ```
 
-The output is a displacement map$D$. The final detailed mesh vertices$V_{\mathrm{detail}}$are calculated by displacing the coarse vertices$V_{\mathrm{coarse}}$along their normals$N_{\mathrm{uv}}$:
+The output is a displacement map $D$. The final detailed mesh vertices $V_{\mathrm{detail}}$ are calculated by displacing the coarse vertices $V_{\mathrm{coarse}}$ along their normals $N_{\mathrm{uv}}$:
 
 $$
 \begin{equation}V_{\mathrm{detail}} = V_{\mathrm{coarse}} + D \odot N_{\mathrm{uv}}\end{equation}
@@ -211,21 +211,21 @@ When DECA is run on a face image, the following sequence of operations occurs:
 
 ### Step 1: Preprocessing & Encoding
 
-The input image$I$is cropped and resized to$224 \times 224$. The ResNet-50 encoder predicts a vector of parameters$\Theta$:
+The input image $I$ is cropped and resized to $224 \times 224$. The ResNet-50 encoder predicts a vector of parameters $\Theta$:
 
 $$
 \Theta = \{ \beta, \psi, \theta, c, l, \delta \}
 $$
 
-where$\beta \in \mathbb{R}^{100}$(shape),$\psi \in \mathbb{R}^{50}$(expression),$\theta \in \mathbb{R}^{6}$(pose),$c \in \mathbb{R}^{3}$(camera),$l \in \mathbb{R}^{27}$(lighting), and$\delta \in \mathbb{R}^{128}$(detail).
+where $\beta \in \mathbb{R}^{100}$ (shape), $\psi \in \mathbb{R}^{50}$ (expression), $\theta \in \mathbb{R}^{6}$ (pose), $c \in \mathbb{R}^{3}$ (camera), $l \in \mathbb{R}^{27}$ (lighting), and $\delta \in \mathbb{R}^{128}$ (detail).
 
 ### Step 2: FLAME Decoding (Coarse Geometry)
 
-The FLAME model uses$\beta, \psi, \theta$to generate the coarse vertices$V_{\mathrm{coarse}}$in world coordinates.
+The FLAME model uses $\beta, \psi, \theta$ to generate the coarse vertices $V_{\mathrm{coarse}}$ in world coordinates.
 
 ### Step 3: Orthographic Projection
 
-The camera parameters$c = [s, t_x, t_y]$are used to project the 3D vertices into 2D Normalized Device Coordinates (NDC):
+The camera parameters $c = [s, t_x, t_y]$ are used to project the 3D vertices into 2D Normalized Device Coordinates (NDC):
 
 $$
 V_{\mathrm{ndc}} = s \cdot (V_{coarse} + [t_x, t_y, 0]^\top)
@@ -233,7 +233,7 @@ $$
 
 ### Step 4: Detail Generation & Displacement
 
-The detail encoder predicts$\delta$, which is combined with expression$\psi$and pose$\theta$. The Generator outputs a UV displacement map$D$. The vertices are then updated through Equation (2).
+The detail encoder predicts $\delta$, which is combined with expression $\psi$ and pose $\theta$. The Generator outputs a UV displacement map $D$. The vertices are then updated through Equation (2).
 
 ### Step 5: Differentiable Rendering & Lighting
 
@@ -255,7 +255,7 @@ y_{\mathrm{pixel}} = y_{\mathrm{ndc}} \cdot \frac{W}{2} + \frac{W}{2}
 $$
 
 1. Bounding Box Optimization: Instead of checking every pixel in the image, we only iterate over the pixels within the triangle’s actual screen-space bounding box.
-2. Barycentric Weight Calculation: For each pixel$P$in the bounding box, we calculate weights ($w_0, w_1, w_2$) such that:
+2. Barycentric Weight Calculation: For each pixel $P$ in the bounding box, we calculate weights ($w_0, w_1, w_2$) such that:
 
 $$
 P = w_0 P_0 + w_1 P_1 + w_2 P_2
@@ -272,14 +272,14 @@ v = \frac{(v_0 \cdot v_0)(v_1 \cdot v_2) - (v_0 \cdot v_1)(v_0 \cdot v_2)}{denom
 w_0 = 1 - u - v, \quad w_1 = v, \quad w_2 = u
 $$
 
-1. Point-in-Triangle Test: A pixel is “inside” if$w_i \ge 0$for all$i$.
+1. Point-in-Triangle Test: A pixel is “inside” if $w_i \ge 0$ for all $i$.
 2. Perspective Correct Depth: To handle the 3D depth correctly during 2D projection, the inverse-depth interpolation is used:
 
 $$
 Z_p = \frac{1}{\frac{w_0}{z_0} + \frac{w_1}{z_1} + \frac{w_2}{z_2}}
 $$
 
-1. Z-Buffering: If the calculated$Z_p$is smaller (closer to the camera) than the value currently in the depth buffer, the pixel is updated with new depth, triangle index, and barycentric coordinates.
+1. Z-Buffering: If the calculated $Z_p$ is smaller (closer to the camera) than the value currently in the depth buffer, the pixel is updated with new depth, triangle index, and barycentric coordinates.
 
 The following is the C++ kernel implementation. 
 

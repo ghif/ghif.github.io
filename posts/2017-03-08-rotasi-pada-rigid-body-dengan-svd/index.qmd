@@ -28,7 +28,7 @@ $$
 \end{align}
 $$
 
-dimana $\mathbf{p}_i = [x^p_i, y^p_i, z^p_i]^{\top}$ merupakan titik ke-$i$. 
+dimana $\mathbf{p}_i = [x^p_i, y^p_i, z^p_i]^{\top}$ merupakan titik ke- $i$. 
 
 ![Sumber: www.kwo3d.com/theory/jkinem/rotmat.html](media/rotmat_f01.gif)
 
@@ -235,7 +235,7 @@ Mungkin ada yang bertanya-tanya mengapa $\mathbf{A} = \mathbf{I}$ berimplikasi n
 $\displaystyle \max_{\mathbf{R}} \mathrm{Tr}\left( \mathbf{R} \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top \right) = \mathrm{Tr} \left( \mathbf{\Sigma} \right) = \sum_{i=1}^m \sigma_{i}$ ?
 
 
-Perhatikan bahwa semua matriks yang menyusun $\mathbf{A}$ merupakan matriks ortogonal, sehingga matriks$\mathbf{A}$ juga ortogonal. 
+Perhatikan bahwa semua matriks yang menyusun $\mathbf{A}$ merupakan matriks ortogonal, sehingga matriks $\mathbf{A}$ juga ortogonal. 
 Dengan demikian, penjumlahan elemen-elemen kolom dari $\mathbf{A}$ memenuhi $\displaystyle \sum_{i=1}^m a_{ij}^2 = 1$, yang berimplikasi $\displaystyle -1 \leq a_{ij} \leq 1$.
 Maka kita dapat simpulkan bahwa
 

@@ -45,7 +45,7 @@ $$
 x_l = x_{l-1} + \mathcal{R}_{\theta_{l-1}}(x_{l-1})
 $$
 
-dimana$\mathcal{R}_\theta(x)$merepresentasikan fungsi non-linear berparameter$\theta$yang disebut sebagai *residual* (dari sinilah asal muasal penamaan *residual networks*), yang bisa saja terdiri dari beberapa tumpukan layer linear atau convolutional disertai dengan fungsi aktivasi.
+dimana $\mathcal{R}_\theta(x)$ merepresentasikan fungsi non-linear berparameter $\theta$ yang disebut sebagai *residual* (dari sinilah asal muasal penamaan *residual networks*), yang bisa saja terdiri dari beberapa tumpukan layer linear atau convolutional disertai dengan fungsi aktivasi.
 
 Residual merupakan konsep yang sudah tidak asing baik di statistik/machine learning maupun di pengolahan citra (*image processing*). Pada statistik, residual diinterpretasikan sebagai selisih antara nilai observasi dan prediksi. Pada pengolahan citra, residual dapat dipahami sebagai fungsi koreksi dari citra *noise* ke citra asli (contoh: *image denoising*, *deblurring*, dsb).
 
@@ -59,13 +59,13 @@ $$
 
  *Skip connection* mampu memitigasi efek *vanishing gradient* ketika dilatih dengan *backpropagation*. Secara matematis ini ternyata bisa diekspresikan.
 
-Pertama-tama, kita definisikan fungsi *loss* dalam konteks *supervised learning*$\mathcal{E}: \mathcal{Y} \times \mathcal{Y}$yang mengukur *loss* antara target$\mathcal{y}$dan prediksi$\hat{y} = f_\Theta(x)$:
+Pertama-tama, kita definisikan fungsi *loss* dalam konteks *supervised learning* $\mathcal{E}: \mathcal{Y} \times \mathcal{Y}$ yang mengukur *loss* antara target $\mathcal{y}$ dan prediksi $\hat{y} = f_\Theta(x)$:
 
 $$
 \mathcal{E}(y, f_\Theta(x))
 $$
 
-Misalkan$f_\Theta$merupakan *neural networks* dengan total layer sebanyak$L$. *Backpropagation* untuk memperbarui parameter pada layer$l$(dimana$l << L$) dihitung menggunakan *gradient* yang didapatkan dari *chain rule*:
+Misalkan $f_\Theta$ merupakan *neural networks* dengan total layer sebanyak $L$. *Backpropagation* untuk memperbarui parameter pada layer $l$ (dimana $l << L$) dihitung menggunakan *gradient* yang didapatkan dari *chain rule*:
 
 $$
 \begin{equation}
@@ -75,7 +75,7 @@ $$
 
 ### Plain block tidak imun terhadap *vanishing gradient*
 
-Jika$f_\Theta$tersusun dari kumpulan *plain blocks,* secara rekursif kita dapat tuliskan ekspresi matematis di bawah ini:
+Jika $f_\Theta$ tersusun dari kumpulan *plain blocks,* secara rekursif kita dapat tuliskan ekspresi matematis di bawah ini:
 
 $$
 f_\Theta(x) = x_L = \mathcal{P}_{\theta_{L-1}}(x_{L-1})
@@ -92,17 +92,17 @@ $$
 \frac{\partial \mathcal{E}}{\partial x_{L}} \frac{\partial x_L}{\partial x_{L-1}} \cdots\frac{\partial x_{l+1}}{\partial x_{l}}
 $$
 
-Sekarang kita perhatikan secara intuitif bagaimana *vanishing gradient* bisa terjadi. Asumsikan semua turunan partial dari *block*$L$hingga ke bawahnya memiliki nilai 0.1. Dengan demikian, 
+Sekarang kita perhatikan secara intuitif bagaimana *vanishing gradient* bisa terjadi. Asumsikan semua turunan partial dari *block* $L$ hingga ke bawahnya memiliki nilai 0.1. Dengan demikian, 
 
 $$
 \frac{\partial x_L}{\partial x_{L-1}} \cdots\frac{\partial x_{l+1}}{\partial x_{l}} = (0.1) * ... * (0.1) = (0.1)^{L-l}
 $$
 
-Anggap$L = 100$dan$l=2$. Dengan mudah kita simpulkan bahwa efek multiplikatif tersebut menghasilkan angka yang sangat kecil, yaitu$(0.1)^{98}$. Inilah yang disebut sebagai *vanishing gradient*.
+Anggap $L = 100$ dan $l=2$. Dengan mudah kita simpulkan bahwa efek multiplikatif tersebut menghasilkan angka yang sangat kecil, yaitu $(0.1)^{98}$. Inilah yang disebut sebagai *vanishing gradient*.
 
 ### Residual block dalam mengatasi vanishing gradient
 
-Dengan menggunakan *residual block,*$f_\Theta$menjadi *residual networks* yang secara rekursif dapat diekspresikan sebagai berikut:
+Dengan menggunakan *residual block,* $f_\Theta$ menjadi *residual networks* yang secara rekursif dapat diekspresikan sebagai berikut:
 
 $$
 f_\Theta(x) = x_L = x_{L-1} + \mathcal{R}_{\theta_{L-1}}(x_{L-1})
@@ -120,7 +120,7 @@ $$
 \frac{\partial \mathcal{E}}{\partial x_{L}} \left(1 +  \frac{\partial}{\partial x_l} \sum_{i=l}^{L-1}\mathcal{R}(x_i) \right)
 $$
 
-Dengan adanya efek aditif, nilai$\frac{\partial}{\partial x_l} \sum_{i=l}^{L-1}\mathcal{R}(x_i)$akan lebih lambat “menghilang”. Selain itu, *gradient* pada *block* paling atas$L$memberikan pengaruh langsung terhadap *block*$l$. 
+Dengan adanya efek aditif, nilai $\frac{\partial}{\partial x_l} \sum_{i=l}^{L-1}\mathcal{R}(x_i)$ akan lebih lambat “menghilang”. Selain itu, *gradient* pada *block* paling atas $L$ memberikan pengaruh langsung terhadap *block* $l$. 
 
 Dengan demikian, *residual networks* lebih imun terhadap *vanishing gradient* dibandingkan *plain networks*!
 

@@ -14,7 +14,7 @@ Generative Adversarial Networks (GAN) merupakan salah satu model generatif yang 
 
 GAN pertama kali diperkenalkan oleh [Ian Goodfellow et al.](https://arxiv.org/abs/1406.2661) pada tahun 2014. Setelahnya perkembangan penelitian mengenai GAN begitu cepat, tidak hanya untuk domain gambar visual tetapi juga pada data audio dan teks.
 
-Tujuan utama dari GAN adalah membentuk sebuah model generatif berbasis variabel laten yang kita namakan generator$G:\mathcal{Z} \rightarrow \mathcal{X}$. Model tersebut perlu menghasilkan distribusi probabilitas$\mathbb{P}_G$yang belajar dari data$\mathcal{D}$sehingga mampu mendekati distribusi dari data$\mathbb{P}_\mathcal{D}$. Hal ini sama dengan [Variational Autoencoder](https://app.notion.com/p/Variational-Autoencoder-8092774fb03e4b6691ca476f3f24bad1?pvs=21) (VAE) dimana peran model generatif dilakukan oleh *decoder*.
+Tujuan utama dari GAN adalah membentuk sebuah model generatif berbasis variabel laten yang kita namakan generator $G:\mathcal{Z} \rightarrow \mathcal{X}$. Model tersebut perlu menghasilkan distribusi probabilitas $\mathbb{P}_G$ yang belajar dari data $\mathcal{D}$ sehingga mampu mendekati distribusi dari data $\mathbb{P}_\mathcal{D}$. Hal ini sama dengan [Variational Autoencoder](https://app.notion.com/p/Variational-Autoencoder-8092774fb03e4b6691ca476f3f24bad1?pvs=21) (VAE) dimana peran model generatif dilakukan oleh *decoder*.
 
 Perbedaan mendasar antara GAN dengan VAE ataupun model generatif lainnya yaitu pada cara GAN dalam mencapai tujuan. GAN memanfaatkan **mekanisme adversarial** untuk mencapai objektif
 
@@ -22,11 +22,11 @@ $$
 \min_{G} d(\mathbb{P}_G, \mathbb{P}_\mathcal{D})
 $$
 
-dimana$d(\cdot, \cdot)$merupakan sebuah fungsi jarak. Nanti kita akan lihat fungsi jarak tersebut didefinisikan secara implisit pada mekanisme adversarial.
+dimana $d(\cdot, \cdot)$ merupakan sebuah fungsi jarak. Nanti kita akan lihat fungsi jarak tersebut didefinisikan secara implisit pada mekanisme adversarial.
 
 ## Mekanisme Adversarial
 
-Seperti yang sempat dijelaskan, GAN memiliki sebuah *generator network*$G$yang memetakan representasi ruang laten ke ruang data. Cara generator untuk menghasilkan sebuah sampel yang dipicu oleh variabel laten adalah sebagai berikut:
+Seperti yang sempat dijelaskan, GAN memiliki sebuah *generator network* $G$ yang memetakan representasi ruang laten ke ruang data. Cara generator untuk menghasilkan sebuah sampel yang dipicu oleh variabel laten adalah sebagai berikut:
 
 $$
 \begin{aligned}\mathbf{z}\sim \mathcal{N}(0, 1) 
@@ -35,25 +35,25 @@ $$
 \end{aligned}
 $$
 
-Apabila$G$belum dilatih, tentunya ia belum mampu menghasilkan sampel yang diinginkan. 
+Apabila $G$ belum dilatih, tentunya ia belum mampu menghasilkan sampel yang diinginkan. 
 
-GAN melatih generator$G$dengan cara yang unik, yaitu memanfaatkan *network* lain yang dinamakan *adversarial network* atau *discriminator*$D:\mathcal{X}\rightarrow \mathbb{R}$.
+GAN melatih generator $G$ dengan cara yang unik, yaitu memanfaatkan *network* lain yang dinamakan *adversarial network* atau *discriminator* $D:\mathcal{X}\rightarrow \mathbb{R}$.
 
 Mengapa disebut *adversarial network*?
 
-Jika kita artikan dalam bahasa kita sehari-hari, mekanisme adversarial menggambarkan hubungan yang memiliki konflik atau memiliki tujuan yang bertentangan. Jadi, seakan-akan *discriminator*$D$menjadi “teman berantem” dari  *generator*$G$untuk membuat dirinya menjadi lebih baik.
+Jika kita artikan dalam bahasa kita sehari-hari, mekanisme adversarial menggambarkan hubungan yang memiliki konflik atau memiliki tujuan yang bertentangan. Jadi, seakan-akan *discriminator* $D$ menjadi “teman berantem” dari  *generator* $G$ untuk membuat dirinya menjadi lebih baik.
 
-Andaikan generator$G$berperan seperti pelukis yang dapat “memalsukan” gambar lukisan. Discriminator$D$berperan seperti kurator yang menilai apakah suatu lukisan benar-benar berasal dari pelukis asli atau versi yang dipalsukan. GAN mencapai tujuannya apabila *discriminator*$D$tidak lagi mampu membedakan antara yang asli dan yang palsu — saya jadi teringat film [Mencuri Raden Saleh (2022)](https://www.imdb.com/title/tt13484872/) dan [Bean (1997)](https://www.imdb.com/title/tt0118689/).
+Andaikan generator $G$ berperan seperti pelukis yang dapat “memalsukan” gambar lukisan. Discriminator $D$ berperan seperti kurator yang menilai apakah suatu lukisan benar-benar berasal dari pelukis asli atau versi yang dipalsukan. GAN mencapai tujuannya apabila *discriminator* $D$ tidak lagi mampu membedakan antara yang asli dan yang palsu — saya jadi teringat film [Mencuri Raden Saleh (2022)](https://www.imdb.com/title/tt13484872/) dan [Bean (1997)](https://www.imdb.com/title/tt0118689/).
 
 ## Arsitektur GAN
 
-Tentunya mekanisme adversarial di atas perlu kita nyatakan secara formal dalam bentuk matematis agar dapat diimplementasikan. Pertama, perlu diperjelas bahwa *discriminator*  merupakan sebuah *binary* *classifier*  berbentuk fungsi probabilitas$*D:\mathcal{X} \rightarrow [0,1]$,* dimana luaran 1 berarti ‘asli’, 0 berarti ‘palsu’. Untuk melatih *binary classifier* tersebut, cara standar yang digunakan adalah meminimalkan fungsi *loss* dalam bentuk *binary cross-entropy* sebagai berikut: 
+Tentunya mekanisme adversarial di atas perlu kita nyatakan secara formal dalam bentuk matematis agar dapat diimplementasikan. Pertama, perlu diperjelas bahwa *discriminator*  merupakan sebuah *binary* *classifier*  berbentuk fungsi probabilitas $*D:\mathcal{X} \rightarrow [0,1]$,* dimana luaran 1 berarti ‘asli’, 0 berarti ‘palsu’. Untuk melatih *binary classifier* tersebut, cara standar yang digunakan adalah meminimalkan fungsi *loss* dalam bentuk *binary cross-entropy* sebagai berikut: 
 
 $$
 \begin{equation}\ell(D) = -y_{\mathrm{asli}} \log D(x_{\mathrm{asli}}) - (1-y_{\mathrm{palsu}}) \log (1 - D(x_{\mathrm{palsu}}))\end{equation}
 $$
 
-dimana$y_{asli}, y_{palsu}$merupakan label yang menunjukkan keaslian/kepalsuan dari suatu sampel.
+dimana $y_{asli}, y_{palsu}$ merupakan label yang menunjukkan keaslian/kepalsuan dari suatu sampel.
 
 Dengan mempertimbangkan fakta-fakta berikut:
 
@@ -61,13 +61,13 @@ $$
 \begin{aligned}x_{\mathrm{palsu}} = G(z) \\ y_{\mathrm{asli}} = 1 \\ y_{\mathrm{palsu}} = 0\end{aligned}
 $$
 
-dan$x_{\mathrm{asli}}$ditulis menjadi$x$serta menegasikan fungsi *loss* di atas, terbentuk sebuah fungsi objektif di bawah ini:
+dan $x_{\mathrm{asli}}$ ditulis menjadi $x$ serta menegasikan fungsi *loss* di atas, terbentuk sebuah fungsi objektif di bawah ini:
 
 $$
 \begin{equation}\mathcal{V}(D, G) = -\ell(D, G)= \log(D(x)) + \log(1-D(G(z)))\end{equation}
 $$
 
-Pada persamaan terakhir dapat dilihat bahwa *generator$G$* masuk dalam perhitungan.
+Pada persamaan terakhir dapat dilihat bahwa *generator $G$ * masuk dalam perhitungan.
 
 Kita dapat visualisasikan proses pembentukan fungsi objektif di atas dengan diagram arsitektur di bawah ini:
 
@@ -75,7 +75,7 @@ Kita dapat visualisasikan proses pembentukan fungsi objektif di atas dengan diag
 
 **Gambar 1.** Arsitektur GAN
 
-Untuk melatih *generator* dan *discriminator* tentunya kita membutuhkan sejumlah sampel$x \sim \mathbb{P}_{\mathcal{D}}(x)$dan$z\sim\mathcal{N}(0,1)$. Dengan demikian persamaan [(2)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21) menjadi
+Untuk melatih *generator* dan *discriminator* tentunya kita membutuhkan sejumlah sampel $x \sim \mathbb{P}_{\mathcal{D}}(x)$ dan $z\sim\mathcal{N}(0,1)$. Dengan demikian persamaan [(2)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21) menjadi
 
 $$
 \begin{equation}\displaystyle \mathcal{V}(D, G)= \underbrace{\mathbb{E}_{x\sim \mathbb{P}_{\mathcal{D}}(x)}\left[ \log(D(x))\right]}_{\mathrm{data}} + \underbrace{\mathbb{E}_{z\sim \mathcal{N}(0, 1)}\left[\log(1-D(G(z))) \right]}_{\mathrm{model}}\end{equation}
@@ -85,7 +85,7 @@ yang merupakan bentuk akhir fungsi objektif **dari GAN.
 
 Bagaimanakah problem optimisasi pada GAN?
 
-Ingat kembali **mekanisme adversarial: discriminator$D$mencoba untuk menjadi *classifier* yang baik dalam membedakan sampel asli atau palsu. Hal ini ekuivalen dengan memaksimalkan nilai fungsi$\mathcal{V}(D, G).$Di sisi lain, *generator*$G$selalu berusaha untuk menghasilkan sampel palsu yang sangat mirip dengan yang asli untuk mengelabui *discriminator*$D$. Ini berarti sama dengan meminimalkan nilai fungsi$\mathcal{V}(D, G)$.
+Ingat kembali **mekanisme adversarial: discriminator $D$ mencoba untuk menjadi *classifier* yang baik dalam membedakan sampel asli atau palsu. Hal ini ekuivalen dengan memaksimalkan nilai fungsi $\mathcal{V}(D, G).$ Di sisi lain, *generator* $G$ selalu berusaha untuk menghasilkan sampel palsu yang sangat mirip dengan yang asli untuk mengelabui *discriminator* $D$. Ini berarti sama dengan meminimalkan nilai fungsi $\mathcal{V}(D, G)$.
 
 Dengan demikian, problem optimisasi pada GAN merupakan problem *minimax*:
 
@@ -95,13 +95,13 @@ $$
 \end{equation}
 $$
 
-Problem optimisasi di atas dapat diselesaikan dengan *back-propagation*. Jika optimisasi berjalan dengan baik, semestinya nilai optimum fungsi objektif$\mathcal{V}(D,G)$berada di sekitar 0.5, yaitu pertengahan antara nilai asli dan palsu.
+Problem optimisasi di atas dapat diselesaikan dengan *back-propagation*. Jika optimisasi berjalan dengan baik, semestinya nilai optimum fungsi objektif $\mathcal{V}(D,G)$ berada di sekitar 0.5, yaitu pertengahan antara nilai asli dan palsu.
 
 ## Minimax mampu menghasilkan model generatif
 
-Sekilas mungkin belum terlalu jelas hubungan optimisasi [(4)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21) dengan terbentuknya model generatif yang menghasilkan sampel seperti data yang dipelajari. Dengan kata lain, apakah optimisasi (4) berimplikasi$\mathbb{P}_G \approx \mathbb{P}_{\mathcal{D}}$.
+Sekilas mungkin belum terlalu jelas hubungan optimisasi [(4)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21) dengan terbentuknya model generatif yang menghasilkan sampel seperti data yang dipelajari. Dengan kata lain, apakah optimisasi (4) berimplikasi $\mathbb{P}_G \approx \mathbb{P}_{\mathcal{D}}$.
 
-Sekarang kita coba lihat sisi lain dari fungsi objektif persamaan [(3)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21). Pada besaran yang dilabel sebagai “*model*” kita modifikasi agar mengobservasi sampel langsung dari ruang data. Kita awali dengan asumsi bahwa generator$G$memiliki *inverse*$G^{-1}:\mathcal{X} \rightarrow \mathcal{Z}$. Dengan asumsi tersebut kita dapat melakukan deduksi sebagai berikut:
+Sekarang kita coba lihat sisi lain dari fungsi objektif persamaan [(3)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21). Pada besaran yang dilabel sebagai “*model*” kita modifikasi agar mengobservasi sampel langsung dari ruang data. Kita awali dengan asumsi bahwa generator $G$ memiliki *inverse* $G^{-1}:\mathcal{X} \rightarrow \mathcal{Z}$. Dengan asumsi tersebut kita dapat melakukan deduksi sebagai berikut:
 
 $$
 \begin{aligned}
@@ -110,7 +110,7 @@ dz = (G^{-1})^\prime(x) dx
 \end{aligned}
 $$
 
-Lalu kita substitusi kuantitas yang berkaitan dengan$z$pada persamaan (3):
+Lalu kita substitusi kuantitas yang berkaitan dengan $z$ pada persamaan (3):
 
 $$
 \begin{aligned}\displaystyle \mathcal{V}(D, G)= \mathbb{E}_{x\sim \mathbb{P}_{\mathcal{D}}(x)}\left[ \log(D(x))\right] + \mathbb{E}_{z\sim \mathcal{N}(0, 1)}\left[\log(1-D(G(z))) \right]
@@ -123,27 +123,27 @@ $$
 \end{aligned}
 $$
 
-Selanjutnya kita menganalisa tujuan akhir dari fungsi$\mathcal{V}(D, G)$dalam 2 tahapan.
+Selanjutnya kita menganalisa tujuan akhir dari fungsi $\mathcal{V}(D, G)$ dalam 2 tahapan.
 
-### 1. Memaksimalkan$\mathcal{V}(D,G)$terhadap discriminator$D$Tahap pertama adalah dengan mencari nilai maksimum$\mathcal{V}(D,G)$terhadap perubahan pada discriminator$D$. Dalam hal ini kita “bekukan” generator$G$.
+### 1. Memaksimalkan $\mathcal{V}(D,G)$ terhadap discriminator $D$ Tahap pertama adalah dengan mencari nilai maksimum $\mathcal{V}(D,G)$ terhadap perubahan pada discriminator $D$. Dalam hal ini kita “bekukan” generator $G$.
 
 $$
 \begin{equation}\max_D \int_x \mathcal{U}(D) = (\mathbb{P}_\mathcal{D}(x) \log(D(x))+\mathbb{P}_G(x)\log(1-D(x)) )dx\end{equation}
 $$
 
-Untuk mencari nilai ekstrem$\mathcal{V}(D,G)$, gunakan turunan parsial$\frac{\partial \mathcal{V}(D, G)}{\partial D} = 0$. 
+Untuk mencari nilai ekstrem $\mathcal{V}(D,G)$, gunakan turunan parsial $\frac{\partial \mathcal{V}(D, G)}{\partial D} = 0$. 
 
 $$
 \frac{\partial \mathcal{V}(D, G)}{\partial D} = \frac{\mathbb{P}_D(x)}{D(x)} - \frac{P_G(x)}{1-D(x)} = 0
 $$
 
-Dengan demikian kita mendapatkan persamaan untuk discriminator$D(x)$yang memaksimalkan fungsi objektif, yakni:
+Dengan demikian kita mendapatkan persamaan untuk discriminator $D(x)$ yang memaksimalkan fungsi objektif, yakni:
 
 $$
 \begin{equation}D^*(x)=\frac{\mathbb{P}_\mathcal{D}(x)}{\mathbb{P}_G(x) + \mathbb{P}_\mathcal{D}(x)}\end{equation}
 $$
 
-### 2. Meminimalkan$\mathcal{V}(D, G)$terhadap generator$G$Tahap kedua adalah dengan mencari nilai minimum$\mathcal{V}(D, G)$. Kita mulai dengan mensubstitusikan$D(x)$pada persamaan [(5)](https://app.notion.com/p/2f98147a03564c8291a9094ef384b5b3?pvs=21) dengan nilai ekstrim [(6)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21):
+### 2. Meminimalkan $\mathcal{V}(D, G)$ terhadap generator $G$ Tahap kedua adalah dengan mencari nilai minimum $\mathcal{V}(D, G)$. Kita mulai dengan mensubstitusikan $D(x)$ pada persamaan [(5)](https://app.notion.com/p/2f98147a03564c8291a9094ef384b5b3?pvs=21) dengan nilai ekstrim [(6)](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21):
 
 $$
 \mathcal{C}(G) = \int_x \mathbb{P}_\mathcal{D}(x) \log(\frac{\mathbb{P}_\mathcal{D}(x)}{\mathbb{P}_G(x)  + \mathbb{P}_\mathcal{D}(x)}) + \mathbb{P}_G(x)\log(\frac{\mathbb{P}_G(x)}{\mathbb{P}_G(x) + \mathbb{P}_\mathcal{D}(x)}) dx
@@ -160,13 +160,13 @@ $$
 \mathcal{C}(G)=\mathrm{KL}(\mathbb{P}_\mathcal{D}(x) \| 0.5(\mathbb{P}_G(x)+\mathbb{P}_\mathcal{D}(x))) + \mathrm{KL}( \mathbb{P}_G(x) \| 0.5(\mathbb{P}_G(x) + \mathbb{P}_\mathcal{D}(x))) - \log(4)
 $$
 
-Dengan sifat$\mathrm{KL}(\cdot \| \cdot) >=0$, kita dapat menyimpulkan bahwa
+Dengan sifat $\mathrm{KL}(\cdot \| \cdot) >=0$, kita dapat menyimpulkan bahwa
 
 $$
 \min_G \mathcal{C}(G) = -\log(4)
 $$
 
-dikarenakan semua kuantitas$\mathrm{KL}(\cdot \| \cdot)$bernilai 0.
+dikarenakan semua kuantitas $\mathrm{KL}(\cdot \| \cdot)$ bernilai 0.
 
 Implikasi lain dari fakta tersebut yaitu
 
@@ -192,7 +192,7 @@ Adapun beberapa hal yang perlu dipahami yaitu sebagai berikut.
 
 ### Model Generator dan Discriminator
 
-Baik model generator$G$dan discriminator$D$, DCGAN menggunakan *convolution layer* secara penuh — tidak melibatkan *fully-connected layer* dan juga *pooling layer* yang pada umumnya terdapat pada convolutional networks.
+Baik model generator $G$ dan discriminator $D$, DCGAN menggunakan *convolution layer* secara penuh — tidak melibatkan *fully-connected layer* dan juga *pooling layer* yang pada umumnya terdapat pada convolutional networks.
 
 ![**Gambar 2**. Model DCGAN [Radford et al. ICLR2016]](media/Screen_Shot_2023-06-01_at_20.12.23.png)
 
@@ -306,7 +306,7 @@ print(netD)
 
 ### Mekanisme Pembelajaran
 
-Implementasi pembelajaran mengikuti langkah analisis [*minimax*](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21) seperti yang dijelaskan sebelumnya, yang terdiri dari 2 tahap: 1)$\max_D \mathcal{V}(D,G)$dan 2)$\min_G \mathcal{V}(D, G)$.
+Implementasi pembelajaran mengikuti langkah analisis [*minimax*](https://app.notion.com/p/Generative-Adversarial-Networks-3828fa45b4db43e1a04dbcfb28eab79b?pvs=21) seperti yang dijelaskan sebelumnya, yang terdiri dari 2 tahap: 1) $\max_D \mathcal{V}(D,G)$ dan 2) $\min_G \mathcal{V}(D, G)$.
 
 ```python
 ## Step 1: Update D network by maximizing V(D, G) ##
@@ -347,8 +347,8 @@ D_G_z2 = output.mean().item()
 optimizerG.step()
 ```
 
-Perhatikan bahwa trik untuk mengaplikasikan mekanisme adversarial pada kode di atas yaitu dengan cara memberikan label untuk sampel asli dengan label “palsu” pada tahap ke-2:$\min_G \mathcal{V}(D, G)$.
+Perhatikan bahwa trik untuk mengaplikasikan mekanisme adversarial pada kode di atas yaitu dengan cara memberikan label untuk sampel asli dengan label “palsu” pada tahap ke-2: $\min_G \mathcal{V}(D, G)$.
 
-Luaran dari generator$G$selama proses pembelajaran dengan menggunakan dataset [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) dapat kita lihat pada visualisasi berikut:
+Luaran dari generator $G$ selama proses pembelajaran dengan menggunakan dataset [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) dapat kita lihat pada visualisasi berikut:
 
 <video controls preload="metadata" width="100%"><source src="media/dcgan_train_vid.mp4" type="video/mp4">Your browser does not support embedded video.</video>

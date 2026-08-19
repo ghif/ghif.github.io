@@ -21,13 +21,13 @@ In this article, we'll dive deep into the mechanics of FLAME, explore recent bre
 
 FLAME is a Linear Blend Skinning (LBS) model that captures the vast variety of human head shapes and expressions. Unlike older models that focused solely on the face, FLAME models the entire head — including the neck, jaw, and eyballs.
 
-At its heart, FLAME represents a 3D mesh$M(\vec{\beta}, \vec{\theta}, \vec{\psi})$, which is a function of:
+At its heart, FLAME represents a 3D mesh $M(\vec{\beta}, \vec{\theta}, \vec{\psi})$, which is a function of:
 
-- Shape parameters$\vec{\beta}$: Identity-specific features (height, face width, etc.).
-- Pose parameters$\vec{\theta}$: Rotations for the neck, jaw, and eyeballs.
-- Expression parameters$\vec{\psi}$: Dynamic movements like smiles or frowns.
+- Shape parameters $\vec{\beta}$: Identity-specific features (height, face width, etc.).
+- Pose parameters $\vec{\theta}$: Rotations for the neck, jaw, and eyeballs.
+- Expression parameters $\vec{\psi}$: Dynamic movements like smiles or frowns.
 
-The final position of a vertex$v$is calculated using the LBS formula:
+The final position of a vertex $v$ is calculated using the LBS formula:
 
 $$
 v_{\mathrm{final}} = \sum_{j=1}^{J} w_{j} G_j(\vec{\theta}, J) (v_{\mathrm{template}} + B_s(\vec{\beta}) + B_p(\vec{\theta}) + B_e(\vec{\psi}))
@@ -35,9 +35,9 @@ $$
 
 where
 
--$v_{\mathrm{template}}$is the average head shape.
--$B_s$,$B_p$,$B_e$are the Shape, Pose, and Expression blendshapes.
--$G_j$is the global transformation matrix for point$j$-$w_j$are the skinning weights.
+- $v_{\mathrm{template}}$ is the average head shape.
+- $B_s$, $B_p$, $B_e$ are the Shape, Pose, and Expression blendshapes.
+- $G_j$ is the global transformation matrix for point $j$ - $w_j$ are the skinning weights.
 
 ## Recent Advancements
 
@@ -82,7 +82,7 @@ Once the scans are co-registered, **Principal Component Analysis (PCA)** is pe
 
 ### 3. Optimization of Joints & LBS
 
-To make the model articulated, the researchers must solve for the **Joint Locations$J$, Skinning Weights$W$, and Pose$B$.** This is done by minimizing the reconstruction error across thousands of poses:
+To make the model articulated, the researchers must solve for the **Joint Locations $J$, Skinning Weights $W$, and Pose $B$.** This is done by minimizing the reconstruction error across thousands of poses:
 
 $$
 \arg\min_{W, J, B} \sum_{i} || \text{LBS}(W, J, B_i) - \text{Scan}_i ||^2

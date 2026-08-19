@@ -97,23 +97,23 @@ Robots need to train in simulators. Mesh simulators are "too clean"—they don't
 
 The fundamental building block of the 3DGS representation is the 3D Gaussians / Ellipsoids. Unlike isotropic points or voxels used in previous explicit methods, 3D Gaussians are anisotropic, meaning they can be stretched and scaled along independent axes. This anisotropy is crucial for modeling surface geometry efficiently: a single flat Gaussian can represent a large patch of a wall, while thin, elongated Gaussians can represent wires or hair strands.
 
-Mathematically, a 3D Gaussian is defined by a mean position$\mathbf{\mu}$and a covariance matrix$\mathbf{\Sigma}$. The influence of the Gaussian at any point$\mathbf{p}$in 3D space is given by the standard multivariate Gaussian distribution:
+Mathematically, a 3D Gaussian is defined by a mean position $\mathbf{\mu}$ and a covariance matrix $\mathbf{\Sigma}$. The influence of the Gaussian at any point $\mathbf{p}$ in 3D space is given by the standard multivariate Gaussian distribution:
 
 $$
 \begin{equation}G(\mathbf{p}) = \exp(-\frac{1}{2} (\mathbf{p} - \boldsymbol{\mu})^\top \mathbf{\Sigma}^{-1} (\mathbf{p} - \boldsymbol{\mu}))\end{equation}
 $$
 
-However, directly optimizing the covariance matrix$\boldsymbol{\Sigma} \in \mathbb{R}^{3 \times 3}$is problematic because it must remain **positive semi-definite** to represent a valid physical ellipsoid. To enforce this constraint during gradient descent optimization, (Kerbl et al. 2023) proposes decomposing$\boldsymbol{\Sigma}$into a scaling matrix$\mathbf{S} \in \mathbb{R}^{3 \times 3}$and a rotation matrix$\mathbf{R} \in \mathbb{R}^{3 \times 3}$:
+However, directly optimizing the covariance matrix $\boldsymbol{\Sigma} \in \mathbb{R}^{3 \times 3}$ is problematic because it must remain **positive semi-definite** to represent a valid physical ellipsoid. To enforce this constraint during gradient descent optimization, (Kerbl et al. 2023) proposes decomposing $\boldsymbol{\Sigma}$ into a scaling matrix $\mathbf{S} \in \mathbb{R}^{3 \times 3}$ and a rotation matrix $\mathbf{R} \in \mathbb{R}^{3 \times 3}$:
 
 $$
 \begin{equation} \boldsymbol{\Sigma} = \mathbf{R} \mathbf{S} \mathbf{S}^\top \mathbf{R}^\top \end{equation}
 $$
 
-Here,$\mathbf{S}$is a diagonal matrix representing the scaling factors along the three axes, and$\mathbf{R}$is a rotation matrix constructed from a unit quaternion$\mathbf{q} \in \mathbb{R}^4$. This decomposition allows the optimizer to adjust the size and orientation of the splats independently, enabling the representation to “flatten” along surfaces and align with geometric structures effectively.
+Here, $\mathbf{S}$ is a diagonal matrix representing the scaling factors along the three axes, and $\mathbf{R}$ is a rotation matrix constructed from a unit quaternion $\mathbf{q} \in \mathbb{R}^4$. This decomposition allows the optimizer to adjust the size and orientation of the splats independently, enabling the representation to “flatten” along surfaces and align with geometric structures effectively.
 
-Quaternions are critical for efficient optimization. Unlike$3 \times 3$rotation matrices, which break and shear when modified by gradient descent, quaternions maintain valid rotations without requiring expensive correction algorithms like Gram-Schmidt.
+Quaternions are critical for efficient optimization. Unlike $3 \times 3$ rotation matrices, which break and shear when modified by gradient descent, quaternions maintain valid rotations without requiring expensive correction algorithms like Gram-Schmidt.
 
-So, the optimization utilizes quaternions representing the blob pose. To convert it into its corresponding$3 \times 3$rotation matrix, the following rule can be applied: for a unit quaternion$\mathbf{q} = w + xi + yj + zk$, where$w$is the scalar (real) part and$x, y, z$are the vector (imaginary) parts, the corresponding$3 \times 3$rotation matrix is:
+So, the optimization utilizes quaternions representing the blob pose. To convert it into its corresponding $3 \times 3$ rotation matrix, the following rule can be applied: for a unit quaternion $\mathbf{q} = w + xi + yj + zk$, where $w$ is the scalar (real) part and $x, y, z$ are the vector (imaginary) parts, the corresponding $3 \times 3$ rotation matrix is:
 
 $$
 \mathbf{R} = \begin{bmatrix}
@@ -123,7 +123,7 @@ $$
 \end{bmatrix}
 $$
 
-Technically, 3D Gaussian blobs can be generated randomly by initializing the mean (a single point coordinate) and covariances. In standard practice, however, 3D Gaussian blobs are almost never generated randomly for complex real-world scenes. Instead, the pipeline relies heavily on **Structure-from-Motion (SfM)** algorithms, most notably COLMAP ([Schönberger et al. 2016](https://openaccess.thecvf.com/content_cvpr_2016/papers/Schonberger_Structure-From-Motion_Revisited_CVPR_2016_paper.pdf)). Before training begins, COLMAP analyzes the input images to calculate camera poses and generates a sparse point cloud of the scene. Each valid point in this cloud serves as the initial “seed” for a Gaussian blob — the point’s location becomes the Gaussian’s mean$\mu$, while its scale and opacity are initialized to generic low values. This provides the optimizer with a rough geometric scaffold, preventing it from getting stuck in local minima which frequently happens if training starts from random noise.
+Technically, 3D Gaussian blobs can be generated randomly by initializing the mean (a single point coordinate) and covariances. In standard practice, however, 3D Gaussian blobs are almost never generated randomly for complex real-world scenes. Instead, the pipeline relies heavily on **Structure-from-Motion (SfM)** algorithms, most notably COLMAP ([Schönberger et al. 2016](https://openaccess.thecvf.com/content_cvpr_2016/papers/Schonberger_Structure-From-Motion_Revisited_CVPR_2016_paper.pdf)). Before training begins, COLMAP analyzes the input images to calculate camera poses and generates a sparse point cloud of the scene. Each valid point in this cloud serves as the initial “seed” for a Gaussian blob — the point’s location becomes the Gaussian’s mean $\mu$, while its scale and opacity are initialized to generic low values. This provides the optimizer with a rough geometric scaffold, preventing it from getting stuck in local minima which frequently happens if training starts from random noise.
 
 The following is the JAX code snippet implementing the 3D Gaussian blob data structure. 
 
@@ -196,7 +196,7 @@ grads = jax.grad(loss_fn)(gaussians)
 
 Note that there are two attributes that have not been introduced before: `opacities` and `sh_coeefs`. Those are needed from the rendering through rasterization that will be explained in the next section.
 
-Below is the function to compute the covariance matrix$\mathbf{\Sigma}$from the quaternion$\mathbf{q}$of$N$Gaussian blobs. Here we employ JAX vectorizing map (`jax.vmap`) to allow more efficient batched computation.
+Below is the function to compute the covariance matrix $\mathbf{\Sigma}$ from the quaternion $\mathbf{q}$ of $N$ Gaussian blobs. Here we employ JAX vectorizing map (`jax.vmap`) to allow more efficient batched computation.
 
 ```python
 def get_covariance_3d(scales: jnp.ndarray, quaternions: jnp.ndarray):
@@ -262,27 +262,27 @@ Here is the step-by-step mathematical flow.
 
 First, we transform the geometry relative to the camera. If the camera moves forward, the Gaussians effectively move backward.
 
-For the position mean$\mu$, this is a standard matrix multiplication using the camera view matrix$\mathbf{W}$(pose):
+For the position mean $\mu$, this is a standard matrix multiplication using the camera view matrix $\mathbf{W}$ (pose):
 
 $$
 \boldsymbol{\mu}_{\mathrm{cam}} = \mathbf{W}^\top \boldsymbol{\mu}
 $$
 
-However, transforming the covariance matrix$\boldsymbol{\Sigma}$— the shape of the blob — is trickier. Because perspective projection is non-linear (objects shrink as the get further away), we cannot simply rotate the covariance.
+However, transforming the covariance matrix $\boldsymbol{\Sigma}$ — the shape of the blob — is trickier. Because perspective projection is non-linear (objects shrink as the get further away), we cannot simply rotate the covariance.
 
-To solve this, we use a linear approximation: **Jacobian of the affine projection** ($\mathbf{J}$). This matrix encodes how 3D space compresses into 2D space based on the camera’s focal length$f_x, f_y$and the point’s depth$z$.
+To solve this, we use a linear approximation: **Jacobian of the affine projection** ($\mathbf{J}$). This matrix encodes how 3D space compresses into 2D space based on the camera’s focal length $f_x, f_y$ and the point’s depth $z$.
 
-**The projection equation:** we compute the new 2D covariance$\boldsymbol{\Sigma}_{\mathrm{2D}}$by “sandwiching” the 3D covariance between the transformation matrices:
+**The projection equation:** we compute the new 2D covariance $\boldsymbol{\Sigma}_{\mathrm{2D}}$ by “sandwiching” the 3D covariance between the transformation matrices:
 
 $$
 \mathbf{\Sigma}_{\mathrm{2D}} = \mathbf{J} \mathbf{W} \mathbf{\Sigma} \mathbf{W}^\top \mathbf{J}^\top
 $$
 
--$\mathbf{\Sigma}$: The original$3 \times 3$shape of the blob
--$\mathbf{W}$: The$3 \times 3$rotation matrix of the camera
--$\mathbf{J}$: The$2 \times 3$Jacobian approximation
+- $\mathbf{\Sigma}$: The original $3 \times 3$ shape of the blob
+- $\mathbf{W}$: The $3 \times 3$ rotation matrix of the camera
+- $\mathbf{J}$: The $2 \times 3$ Jacobian approximation
 
-The result,$\mathbf{\Sigma}_{\mathrm{2D}}$, is a$2 \times 2$covariance matrix that describes a flat 2D Ellipse on your screen. If the calculated size of this 2D splat is smaller than a single pixel, we usually discard it to save performance.
+The result, $\mathbf{\Sigma}_{\mathrm{2D}}$, is a $2 \times 2$ covariance matrix that describes a flat 2D Ellipse on your screen. If the calculated size of this 2D splat is smaller than a single pixel, we usually discard it to save performance.
 
 The code snippet below implements the 2D projection of 3D Gaussian blobs given camera parameters using JAX:
 
@@ -355,18 +355,18 @@ def project_gaussians(gaussians: Gaussians, camera: Camera):
 
 1. **Sorting (The Depth Problem)**
 
-Since we are blending transparent blobs, order matters, i.e., Red behind Blue$\neq$Blue behind Red. Once all Gaussians are projected to 2D, the engine performs a Global Sort based on their depth ($z$-value) relative to the camera. In the official CUDA implementation, this uses a highly optimized GPU Radix Sort.
+Since we are blending transparent blobs, order matters, i.e., Red behind Blue $\neq$ Blue behind Red. Once all Gaussians are projected to 2D, the engine performs a Global Sort based on their depth ($z$ -value) relative to the camera. In the official CUDA implementation, this uses a highly optimized GPU Radix Sort.
 
 - **Input**: Unsorted list of 2D splats
 - **Output**: List of indices sorted from closest to furthest.
 
 1. **Tile-based Rasterization**
 
-A 4K screen has 8 million pixels. A scene might have 4 million Gaussians. A naive loop (for every pixel —> check every Gaussian) would be 8M$\times$4M operations. That is impossible.
+A 4K screen has 8 million pixels. A scene might have 4 million Gaussians. A naive loop (for every pixel —> check every Gaussian) would be 8M $\times$ 4M operations. That is impossible.
 
 3DGS uses a tiled approach, similar to modern GPU rasterizers:
 
-- The screen is divided into$16 \times 16$pixel tiles.
+- The screen is divided into $16 \times 16$ pixel tiles.
 - Identify which tiles a Gaussian overlaps with.
 - Each tile creates a generic “list” of Gaussians that touch it.
 
@@ -376,7 +376,7 @@ Now, a pixel only needs to check the Gaussians in its specific tile list, reduci
 
 This is the final step of the rendering: color calculation. For a single pixel, we iterate through the sorted Gaussians in its tile.
 
-The color$C$of a pixel is computed using standard **front-to-back composition**:
+The color $C$ of a pixel is computed using standard **front-to-back composition**:
 
 $$
 \begin{equation} C=\sum_{i \in N} \mathbf{c}_i \alpha_i \prod_{j=1}^{i-1} (1 - \alpha_j) \end{equation}
@@ -384,8 +384,8 @@ $$
 
 Let’s break down the terms:
 
--$c_i$: The **color** of the$i$-th Gaussian (from Spherical Harmonics)
--$\alpha_i$: The **effective opacity**. This combines the learned opacity$\sigma$with the Gaussian falloff distance$G$from the center of the blob:
+- $c_i$: The **color** of the $i$ -th Gaussian (from Spherical Harmonics)
+- $\alpha_i$: The **effective opacity**. This combines the learned opacity $\sigma$ with the Gaussian falloff distance $G$ from the center of the blob:
 
 $$
 \alpha_i = \sigma_i \cdot G(\mathbf{p})
@@ -393,13 +393,13 @@ $$
 
 (*Pixels at the center of the blob are opaque; pixels at the edge are transparent)*
 
--$\prod(1-\alpha_i)$: The **transmittance**$T$. This represents “how much light has not been blocked yet.”
+- $\prod(1-\alpha_i)$: The **transmittance**$T$. This represents “how much light has not been blocked yet.”
 
-The **optimization (early stopping)**: Because it renders front-to-back, we can tract the transmittance$T$:
+The **optimization (early stopping)**: Because it renders front-to-back, we can tract the transmittance $T$:
 
-- Start with$T=1.0$(100% light passes).
-- After Gaussian A ($\alpha=0.5$),$T$drops to$0.5$.
-- After Gaussian B ($\alpha=0.5$),$T$drops to$0.25$- **Stop condition**: if$T< 0.0001$, the pixel is fully saturated (opaque). We stop processing the list. This ignores objects hidden behind a wall, saving massive computation.
+- Start with $T=1.0$ (100% light passes).
+- After Gaussian A ($\alpha=0.5$), $T$ drops to $0.5$.
+- After Gaussian B ($\alpha=0.5$), $T$ drops to $0.25$ - **Stop condition**: if $T< 0.0001$, the pixel is fully saturated (opaque). We stop processing the list. This ignores objects hidden behind a wall, saving massive computation.
 
 ### Training Loop: How to Optimize the Blob Cloud
 
@@ -407,7 +407,7 @@ Unlike a neural network, which optimizes “weights” inside a black box, 3DGS 
 
 **Learnable Parameters**
 
-Recall equation (1) where a Gaussian is expressed with$G.$In a 3DGS scene, we have a set of$N$Gaussians, where$N$starts around 100k and grows to millions. Each Gaussian$G_i$is parameterized by a tuple of learnable variables$\Theta_i$:
+Recall equation (1) where a Gaussian is expressed with $G.$ In a 3DGS scene, we have a set of $N$ Gaussians, where $N$ starts around 100k and grows to millions. Each Gaussian $G_i$ is parameterized by a tuple of learnable variables $\Theta_i$:
 
 $$
 \Theta_i = \{ \mathbf{\mu}_i, \mathbf{s}_i, \mathbf{q}_i, \sigma_i, \mathbf{c}_i \}
@@ -415,19 +415,19 @@ $$
 
 where each represents:
 
-- Position$(\mathbf{\mu} \in \mathbb{R}^3)$: World coordinates$(x, y , z)$with learning rate scaled by scene extent.
-- Scale$(\mathbf{s} \in \mathbb{R}^3)$: Log-scale vector stored as$\ln(s)$to enforce$s > 0$.
-- Rotation$(\mathbf{q} \in \mathbb{R}^4)$: Unit quaternion normalized every step to ensure valid rotation.
-- Opacity$(\sigma \in \mathbb{R})$: Scalar probability stored as logit passed through Sigmoid.
-- Color$(\mathbf{c} \in \mathbb{R}^k)$: Spherical harmonics, usually degree 3 ($16 \times 3$coeffs).
+- Position $(\mathbf{\mu} \in \mathbb{R}^3)$: World coordinates $(x, y , z)$ with learning rate scaled by scene extent.
+- Scale $(\mathbf{s} \in \mathbb{R}^3)$: Log-scale vector stored as $\ln(s)$ to enforce $s > 0$.
+- Rotation $(\mathbf{q} \in \mathbb{R}^4)$: Unit quaternion normalized every step to ensure valid rotation.
+- Opacity $(\sigma \in \mathbb{R})$: Scalar probability stored as logit passed through Sigmoid.
+- Color $(\mathbf{c} \in \mathbb{R}^k)$: Spherical harmonics, usually degree 3 ($16 \times 3$ coeffs).
 
-As discussed earlier, we do not optimize the covariance matrix$\mathbf{\Sigma}$directly, because it must remain **positive semi-definite**. Instead, we optimize the scale and rotation, and construct the covariance matrix on the fly using equation (2).
+As discussed earlier, we do not optimize the covariance matrix $\mathbf{\Sigma}$ directly, because it must remain **positive semi-definite**. Instead, we optimize the scale and rotation, and construct the covariance matrix on the fly using equation (2).
 
 **Forward Pass (Differentiable Rasterization)**
 
-The forward pass process is basically the differentiable pipeline sequence of rendering through rasterization described in the previous section, from 2D projection to alpha blending. The final output of this pipeline produces a rendered RGB image$\mathbf{I}_{\mathrm{render}} \in \mathbb{R}^{H \times W \times 3}$.
+The forward pass process is basically the differentiable pipeline sequence of rendering through rasterization described in the previous section, from 2D projection to alpha blending. The final output of this pipeline produces a rendered RGB image $\mathbf{I}_{\mathrm{render}} \in \mathbb{R}^{H \times W \times 3}$.
 
-For each pixel location$\mathbf{p}$in$\mathbf{I}_\mathrm{render}$, the value is rendered by the compositing equation (3). We can rewrite the equation by introducing the pixel location and learnable parameters:
+For each pixel location $\mathbf{p}$ in $\mathbf{I}_\mathrm{render}$, the value is rendered by the compositing equation (3). We can rewrite the equation by introducing the pixel location and learnable parameters:
 
 $$
 \begin{equation} \mathbf{I}_{\mathrm{render}}(\mathbf{p}; \Theta) =  \sum_{i \in N} \mathbf{c}_i \alpha_i \prod_{j=1}^{i-1} (1 - \alpha_i) \end{equation}
@@ -439,19 +439,19 @@ $$
 \alpha_i = \sigma_i \cdot G(\mathbf{p}; \{ \mathbf{u}_i, \mathbf{s}_i, \mathbf{q}_i \})
 $$
 
-Denote by$\mathbf{I}_\mathrm{render}(\Theta)$the entire$H \times W \times 3$image induced the Gaussian’s learnable parameters$\Theta = \{ \Theta_i \}_{i=1}^N$.
+Denote by $\mathbf{I}_\mathrm{render}(\Theta)$ the entire $H \times W \times 3$ image induced the Gaussian’s learnable parameters $\Theta = \{ \Theta_i \}_{i=1}^N$.
 
 **Gradient-based Optimization**
 
-The rendered image$\mathbf{I}_\mathrm{render}(\Theta)$is then compared against the ground truth training image$\mathbf{I}_\mathrm{gt}$. 3DGS utilizes a loss function in the form of a combination of L1 distance (for raw pixel accuracy) and D-SSIM (Structural Similarity Index, for perceptual structure).
+The rendered image $\mathbf{I}_\mathrm{render}(\Theta)$ is then compared against the ground truth training image $\mathbf{I}_\mathrm{gt}$. 3DGS utilizes a loss function in the form of a combination of L1 distance (for raw pixel accuracy) and D-SSIM (Structural Similarity Index, for perceptual structure).
 
 $$
 \begin{equation} \mathcal{L}(\Theta) = (1 - \lambda) L_1(\mathbf{I}_\mathrm{render}(\Theta), \mathbf{I}_\mathrm{gt}) + \lambda L_{\mathrm{D-SSIM}} (\mathbf{I}_\mathrm{render}(\Theta), \mathbf{I}_\mathrm{gt}) \end{equation}
 $$
 
-Standard implementation uses$\lambda = 0.2$.
+Standard implementation uses $\lambda = 0.2$.
 
-The objective of 3DGS is therefore minimizing the loss function in equation (5) with respect to the gradient$\nabla_\Theta \mathcal{L}(\Theta)$, which guides the rendering quality closer to the ground truth. This tells every Gaussian blob exactly how to move, stretch, or change color to minimize the error. The gradient computation can be easily implemented through JAX autograd.
+The objective of 3DGS is therefore minimizing the loss function in equation (5) with respect to the gradient $\nabla_\Theta \mathcal{L}(\Theta)$, which guides the rendering quality closer to the ground truth. This tells every Gaussian blob exactly how to move, stretch, or change color to minimize the error. The gradient computation can be easily implemented through JAX autograd.
 
 Here is the JAX code snippet in implementing the gradient-based training step, using [Optax](https://github.com/google-deepmind/optax) library for the optimization helper.
 
@@ -507,7 +507,7 @@ Every 100 iterations, 3DGS performs **Density Control** based on the gradients o
 
 **B. Pruning (Cleanup)**: Remove Gaussians that are redundant or artifacts:
 
-1. Low Opacity: if$\sigma < \epsilon$(transparent), delete it.
+1. Low Opacity: if $\sigma < \epsilon$ (transparent), delete it.
 2. Screen-Space Size: if a Gaussian is huge (covering the whole screen), delete it.
 
 This dynamic growing and pruning allows the optimization to start with a sparse point cloud and organically evolve into a dense, detailed representation.

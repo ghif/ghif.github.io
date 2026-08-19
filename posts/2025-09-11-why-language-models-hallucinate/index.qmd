@@ -36,13 +36,13 @@ Argumen tersebut diformulasikan secara formal dengan mengaitkannya kepada konsep
 
 Menghasilkan IIV classifier dengan error yang kecil bukan perkara yang mudah. Ada kasus yang cukup jelas polanya untuk diklasifikasikan, ada pula kasus-kasus lain yang sulit dibedakan validitasnya karena tidak menunjukkan pola tertentu atau pola yang ambigu. Sebagai contoh, kasus “Birthdays” (no pattern) tidak memiliki pola yang benar-benar membedakan apakah sampel teks output masuk dalam kategori valid vs tidak valid.  Kasus semacam ini merupakan fakta arbitrer (*arbitrary facts*) dimana keterhubungan antar sampel nya memiliki pola yang cenderung acak. Distribusi data / teks bertipe fakta arbitrer inilah yang menjadi salah satu sumber kesalahan IIV classifier yang berasosiasi dengan halusinasi, walaupun informasi pada teks bersifat faktual.
 
-Pada intinya, semakin besar error yang dihasilkan IIV classifier, semakin besar pula kemungkinan LLM berhalusinasi. Pada studi tersebut, ditemukan hubungan yang menarik antara skor kesalahan IIV classifier dengan kesalahan dari hasil luaran LLM. Misalkan$\epsilon_{c} \in \mathbb{R}$merupakan skor kesalahan (*error rate*) yang dihasilkan oleh IIV classifier dan$\epsilon_g \in \mathbb{R}$merupakan skor kesalahan dari luaran LLM, teridentifikasi hubungan matematis yang menarik:
+Pada intinya, semakin besar error yang dihasilkan IIV classifier, semakin besar pula kemungkinan LLM berhalusinasi. Pada studi tersebut, ditemukan hubungan yang menarik antara skor kesalahan IIV classifier dengan kesalahan dari hasil luaran LLM. Misalkan $\epsilon_{c} \in \mathbb{R}$ merupakan skor kesalahan (*error rate*) yang dihasilkan oleh IIV classifier dan $\epsilon_g \in \mathbb{R}$ merupakan skor kesalahan dari luaran LLM, teridentifikasi hubungan matematis yang menarik:
 
 $$
 \epsilon_g \gtrsim 2 \cdot \epsilon_c
 $$
 
-Kajian teoritis mengindikasikan bahwa diperlukan suatu prosedur yang dapat menurunkan$\epsilon_c$baik secara langsung maupun tidak langsung untuk mengurangi halusinasi. Dapat disimpulkan pula bahwa apapun yang berkontribusi terhadap tingginya nilai$\epsilon_c$selain fakta arbitrer juga merupakan penyebab halusinasi, seperti performa model IIV yang buruk (*poor model*), kompleksitas komputasi, pergeseran distribusi data latih vs data lapangan, dan GIGO (Garbage In, Garbage Out).
+Kajian teoritis mengindikasikan bahwa diperlukan suatu prosedur yang dapat menurunkan $\epsilon_c$ baik secara langsung maupun tidak langsung untuk mengurangi halusinasi. Dapat disimpulkan pula bahwa apapun yang berkontribusi terhadap tingginya nilai $\epsilon_c$ selain fakta arbitrer juga merupakan penyebab halusinasi, seperti performa model IIV yang buruk (*poor model*), kompleksitas komputasi, pergeseran distribusi data latih vs data lapangan, dan GIGO (Garbage In, Garbage Out).
 
 ### 2. Kekurangan yang disebabkan pada pasca-pelatihan
 

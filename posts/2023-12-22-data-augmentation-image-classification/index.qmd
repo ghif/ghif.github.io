@@ -14,13 +14,13 @@ draft: false
 
 Salah satu cara populer dan efektif untuk mereduksi efek *overfitting* pada model klasifikasi berbasis *machine learning* adalah augmentasi data (*data augmentation*), yaitu memperbesar variasi dari data atau fitur tanpa harus mengoleksi tambahan data secara manual. Pada data citra, hal ini dapat dilakukan dengan melakukan berbagai transformasi citra.
 
-Secara matematis, augmentasi data diperoleh dengan mengaplikasikan fungsi transformasi$\tau_\alpha: \mathcal{X} \rightarrow \mathcal{X}$terhadap citra input$x \in \mathcal{X}$:
+Secara matematis, augmentasi data diperoleh dengan mengaplikasikan fungsi transformasi $\tau_\alpha: \mathcal{X} \rightarrow \mathcal{X}$ terhadap citra input $x \in \mathcal{X}$:
 
 $$
 \tilde{x} = \tau_\alpha(x)
 $$
 
-dimana indeks$\alpha$merepresentasikan berbagai jenis transformasi. Pada domain citra,$\alpha$merupakan salah satu dari fungsi-fungsi manipulasi standar pada citra seperti rotasi, translasi, dilatasi, dan sebagainya. Jenis transformasi biasanya ditentukan secara spesifik oleh *domain expert* yang dianggap paling sesuai untuk membangun model klasifikasi pada domain tersebut.
+dimana indeks $\alpha$ merepresentasikan berbagai jenis transformasi. Pada domain citra, $\alpha$ merupakan salah satu dari fungsi-fungsi manipulasi standar pada citra seperti rotasi, translasi, dilatasi, dan sebagainya. Jenis transformasi biasanya ditentukan secara spesifik oleh *domain expert* yang dianggap paling sesuai untuk membangun model klasifikasi pada domain tersebut.
 
 Mendesain fungsi transformasi citra untuk melakukan augmentasi data terkadang cukup kompleks dan memerlukan pemahaman cukup mendalam terhadap karakteristik citra. Akhir-akhir ini terdapat beberapa percobaan untuk menangani hal tersebut secara otomatis, dimana kita menyerahkan kepada algoritma untuk mendesain fungsi transformasi yang paling optimal.
 

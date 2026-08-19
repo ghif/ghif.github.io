@@ -60,7 +60,7 @@ Secara umum, bentuk algoritma iteratif untuk menyelesaikan problem optimisasi ($
 **Algoritma: Bentuk Umum Algoritma Optimisasi Solusi Iteratif**  
   
    - $\mathbf{x}^{(0)} := \mathrm{initialize}()$  
-   **For** $t = 1, \ldots, k$:  
+   **For**$t = 1, \ldots, k$:  
    - $x^{(t)} := x^{(t-1)} + \Delta x$
 
 :::
@@ -143,7 +143,7 @@ Dengan mensubstitusi $\Delta \mathbf{x}$ pada Algoritma $\ref{alg:iter}$ dengan 
 **Algoritma: Gradient Descent**  
   
    - $\mathbf{x}^{(0)} := \mathrm{initialize}()$  
-   **For** $t = 1, \ldots, k$:  
+   **For**$t = 1, \ldots, k$:  
    - $\mathbf{d} = \mathbf{g}^{(t-1)}$  
    - $\displaystyle \alpha := \min_{\alpha > 0} f( \mathbf{x}^{(t-1)} - \alpha \mathbf{d} )$  
    - $\mathbf{x}^{(t)} := \mathbf{x}^{(t-1)} - \alpha \mathbf{d}$
@@ -164,7 +164,7 @@ Jika matriks Hessian $\mathbf{H}$ diikutkan dan dihitung secara eksak
 **Algoritma: Metode Newton**  
   
    - $\mathbf{x}^{(0)} := \mathrm{initialize}()$  
-   **For** $t = 1, \ldots, k$:  
+   **For**$t = 1, \ldots, k$:  
    - $\mathbf{d} = \mathbf{H}^{-1 (t-1)} \mathbf{g}^{(t-1)}$  
    - $\displaystyle \alpha := \min_{\alpha > 0} f( \mathbf{x}^{(t-1)} - \alpha \mathbf{d})$  
    - $\mathbf{x}^{(t)} := \mathbf{x}^{(t-1)} - \alpha \mathbf{d}$

@@ -58,9 +58,9 @@ print("[vec @ mat] cpu: ", timeit.timeit(lambda: B_cpu @ a_cpu, number=100))
 print("[vec @ mat] mps: ", timeit.timeit(lambda: B_mps @ a_mps, number=100))
 ```
 
-Kode di atas menginstansiasi 2 vektor dan matriks masing-masing pada device “cpu” dan “mps” dimana$m$mendefinisikan dimensi dari vektor dan matriks tersebut:$\mathbf{a} \in \mathbb{R}^m$,$\mathbf{B}\in \mathbb{R}^{m \times m}$. Kemudian dilakukan operasi perkalian matriks dan vektor$\mathbf{B} \mathbf{a}$.
+Kode di atas menginstansiasi 2 vektor dan matriks masing-masing pada device “cpu” dan “mps” dimana $m$ mendefinisikan dimensi dari vektor dan matriks tersebut: $\mathbf{a} \in \mathbb{R}^m$, $\mathbf{B}\in \mathbb{R}^{m \times m}$. Kemudian dilakukan operasi perkalian matriks dan vektor $\mathbf{B} \mathbf{a}$.
 
-Dengan mencoba beberapa nilai dimensi$m$, didapatkan grafik waktu komputasi terhadap dimensi berikut ini:
+Dengan mencoba beberapa nilai dimensi $m$, didapatkan grafik waktu komputasi terhadap dimensi berikut ini:
 
 ![CPU vs MPS](media/cpu-mps1.png)
 

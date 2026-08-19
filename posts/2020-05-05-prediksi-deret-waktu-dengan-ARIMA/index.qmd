@@ -45,7 +45,7 @@ Sebuah deret waktu $x(t), t=0,1,2,\ldots$ dikatakan stasioner kuat apabila distr
 
 Namun demikian pada aplikasi praktis, asumsi stasioner kuat tidak selalu dibutuhkan. 
 Terkadang cukup dibutuhkan asumsi yang tidak terlalu ketat sehingga munculah tipe *stasioner lemah*.
-Sebuah deret waktu dikatakan stasioner lemah apabila [momen](https://en.wikipedia.org/wiki/Moment_(mathematics)) statistis order ke-$m$ pada deret tersebut independen terhadap waktu.
+Sebuah deret waktu dikatakan stasioner lemah apabila [momen](https://en.wikipedia.org/wiki/Moment_(mathematics)) statistis order ke- $m$ pada deret tersebut independen terhadap waktu.
 
 Sebagai contoh, deret waktu $x(t), t=0,1,2,\ldots$ bersifat stasioner order ke-2 apabila rata-rata dan varian independen terhadap waktu, dan nilai kovarian $\mathrm{Cov}(x_t, x_{t-s})$ hanya bergantung pada $s$.
 

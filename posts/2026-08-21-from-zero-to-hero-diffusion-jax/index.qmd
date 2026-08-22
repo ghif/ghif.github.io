@@ -17,6 +17,7 @@ draft: false
 All implementation code, configuration files, training pipelines, and evaluation scripts demonstrated in this article are available in the **[LDMAX (Latent Diffusion Models in JAX)](https://github.com/ghif/ldmax)** repository:
 - 🐙 **GitHub**: [**github.com/ghif/ldmax**](https://github.com/ghif/ldmax)
 - ⚡ **Core Stack**: JAX, Flax NNX, Optax, Orbax, Google Grain
+- A simple GUI for generating images from the trained models is also provided at [**LDMAX GUI**](https://ghif.github.io/ldmax/).
 :::
 
 
